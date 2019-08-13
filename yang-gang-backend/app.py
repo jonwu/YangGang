@@ -23,9 +23,8 @@ class TopRedditList(Resource):
         items = []
 
         # for submission in subreddit.stream.submissions():  # for streaming (in the future)
-        for submission in subreddit.top(limit=top_num):
+        for submission in subreddit.hot(limit=top_num):
             to_dict = vars(submission)
             sub_dict = {field: to_dict[field] for field in reddit_fields}
             items.append(sub_dict)
-
-        return json.dumps(items)
+        return items

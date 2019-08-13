@@ -12,6 +12,17 @@ const renderItem = () => {
 const TwitterScreen = () => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   return (
+    <WebView
+      allowsInlineMediaPlayback
+      thirdPartyCookiesEnabled
+      javaScriptEnabled
+      source={{
+        html:
+          '<a class="twitter-timeline" href="https://twitter.com/AndrewYang?ref_src=twsrc%5Etfw">Tweets by AndrewYang</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'
+      }}
+    />
+  );
+  return (
     <FlatList
       data={dummy}
       renderItem={renderItem}

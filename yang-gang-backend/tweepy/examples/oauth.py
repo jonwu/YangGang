@@ -1,6 +1,7 @@
 from __future__ import absolute_import, print_function
 
 import tweepy
+import json
 
 # == OAuth Authentication ==
 #
@@ -23,9 +24,9 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 user = api.get_user('AndrewYang')
-timeline = api.user_timeline('AndrewYang')
-
-print(timeline)
+timeline = api.user_timeline('AndrewYang', tweet_mode='extended')
+single = json.dumps(timeline[2]._json, indent=4, sort_keys=True)
+print(single)
 
 # If the authentication was successful, you should
 # see the name of the account print out

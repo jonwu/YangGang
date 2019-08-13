@@ -1,24 +1,24 @@
-import * as colors from './colors';
+import * as colors from "./colors";
 
 const shared = {
-  container: '1056px',
-  footnote: '10px',
-  small: '12px',
-  regular: '14px',
-  H5: '16px',
-  H4: '18px',
-  H3: '24px',
-  H2: '32px',
-  H1: '36px',
-  H0: '48px',
-  spacing_1: '24px',
-  spacing_2: '16px',
-  spacing_3: '12px',
-  spacing_4: '8px',
-  spacing_5: '4px',
-  separator: '1px',
-  borderWidth: '1px',
-  borderRadius: '4px',
+  container: 1056,
+  footnote: 10,
+  small: 12,
+  regular: 14,
+  H5: 16,
+  H4: 18,
+  H3: 24,
+  H2: 32,
+  H1: 36,
+  H0: 48,
+  spacing_1: 24,
+  spacing_2: 16,
+  spacing_3: 12,
+  spacing_4: 8,
+  spacing_5: 4,
+  separator: 1,
+  borderWidth: 1,
+  borderRadius: 4,
   red: colors.RED,
   blue: colors.BLUE,
   yellow: colors.YELLOW,
@@ -26,29 +26,34 @@ const shared = {
   orange: colors.ORANGE,
   light: colors.LIGHT,
   dark: colors.DARK,
+  yang: colors.YANG
 };
 
 const collections = {
   0: {
     id: 0,
-    name: 'Light Theme',
+    name: "Light Theme",
     text: colors.DARK,
     bg: colors.ROKA_SLATE,
     bg2: colors.WHITE,
+    bgTabs: colors.ROKA_SLATE,
+    bgHeader: colors.YANG,
     borderColor: colors.DARK(0.1),
     shadow: colors.DARK(0.1),
-    ...shared,
+    ...shared
   },
   1: {
     id: 1,
-    name: 'Dark Theme',
+    name: "Dark Theme",
     text: colors.LIGHT,
-    bg: colors.ONYX_EXTRA_SLATE,
+    bg: colors.BLACK,
     bg2: colors.ONYX_SLATE,
+    bgTabs: colors.BLACK,
+    bgHeader: colors.BLACK,
     borderColor: colors.LIGHT(0.05),
     shadow: colors.LIGHT(0.1),
-    ...shared,
-  },
+    ...shared
+  }
 };
 
 export default collections;

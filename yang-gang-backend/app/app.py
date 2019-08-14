@@ -1,10 +1,23 @@
 from flask import Flask
 from flask_restplus import Api, Resource
-from apscheduler.schedulers.background import BackgroundScheduler
+from flask_apscheduler import APScheduler
 from datetime import datetime
 from constants import reddit_fields, top_num
 import praw
-import atexit
+
+
+class Config(object):
+    JOBS = [
+        {
+            'id': 'fetch_hot_reddit',
+            'func': 'app:fetch_hot_reddit',
+            'args': (),
+            'trigger': 'interval',
+            'seconds': 5
+        }
+    ]
+
+    SCHEDULER_API_ENABLED = True
 
 app = Flask(__name__)
 api = Api(app=app, doc='/docs')
@@ -28,15 +41,14 @@ class HotRedditList(Resource):
 
 def fetch_hot_reddit():
     global reddit_items
-    # for submission in subreddit.stream.submissions():  # for streaming (in the future)
-    # FROM python:3.6-alpine
     reddit_items = [{field: vars(submission)[field] for field in reddit_fields} for submission in subreddit.hot(limit=top_num)]
     print('fetched new reddit items at {}'.format(datetime.now()))
 
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=fetch_hot_reddit, trigger="interval", seconds=10)
-scheduler.start()
+@app.before_first_request
+def init_scheduler():
+    app.config.from_object(Config())
 
-# Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    scheduler.start()

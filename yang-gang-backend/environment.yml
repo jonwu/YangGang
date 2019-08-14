@@ -1,0 +1,13 @@
+name: yanggang
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - APScheduler
+  - flask
+  - Flask-APScheduler
+  - flask-restplus
+  - gevent
+  - gunicorn
+  - praw
+  - tweepy

@@ -2,8 +2,9 @@ from flask import Flask
 from flask_restplus import Api, Resource
 from flask_apscheduler import APScheduler
 from datetime import datetime
-from constants import reddit_fields, top_num
+from constants import top_num
 import praw
+import json
 
 
 class Config(object):
@@ -41,8 +42,17 @@ class HotRedditList(Resource):
 
 def fetch_hot_reddit():
     global reddit_items
-    reddit_items = [{field: vars(submission)[field] for field in reddit_fields} for submission in subreddit.hot(limit=top_num)]
+
+    reddit_items = [{k:v for k,v in vars(submission).items() if is_jsonable(v)} for submission in subreddit.hot(limit=top_num)]
     print('fetched new reddit items at {}'.format(datetime.now()))
+
+
+def is_jsonable(x):
+    try:
+        json.dumps(x)
+        return True
+    except (TypeError, OverflowError):
+        return False
 
 
 @app.before_first_request

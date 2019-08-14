@@ -4,7 +4,9 @@ from flask_apscheduler import APScheduler
 from datetime import datetime
 from constants import top_num
 import praw
+import tweepy
 import json
+
 
 
 class Config(object):
@@ -38,6 +40,29 @@ class HotRedditList(Resource):
         returns a list of top_num reddit posts
         """
         return reddit_items
+
+
+@api.route("/tweets/")
+class TweetList(Resource):
+    def get(self):
+        """
+        returns a list of andrew yang tweets
+        """
+        consumer_key = "UgNuDDnG4aD0vuakNHHGzRqHI"
+        consumer_secret = "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+
+        # The access tokens can be found on your applications's Details
+        # page located at https://dev.twitter.com/apps (located
+        # under "Your access token")
+        access_token = "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+        access_token_secret = "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+
+        api = tweepy.API(auth)
+        timeline = api.user_timeline('AndrewYang', tweet_mode='extended')
+        return [x._json for x in timeline[:200]]
 
 
 def fetch_hot_reddit():

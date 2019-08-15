@@ -5,6 +5,10 @@ export const BLUE = (opacity = 1.0) => `rgba(51, 163, 243, ${opacity})`;
 export const YELLOW = (opacity = 1.0) => `rgba(255, 155, 60, ${opacity})`;
 export const GREEN = (opacity = 1.0) => `rgba(38, 194, 129, ${opacity})`;
 export const ORANGE = (opacity = 1.0) => `rgba(255, 155, 60, ${opacity})`;
+export const REDDIT_DARK_SLATE = (opacity = 1.0) =>
+  `rgba(26, 26, 27, ${opacity})`;
+export const REDDIT_SLATE = (opacity = 1.0) =>
+  `rgba(218, 224, 230, ${opacity})`;
 export const ONYX_SLATE = (opacity = 1.0) => `rgba(27, 40, 56, ${opacity})`;
 export const ONYX_EXTRA_SLATE = (opacity = 1.0) =>
   `rgba(24, 35, 50, ${opacity})`;

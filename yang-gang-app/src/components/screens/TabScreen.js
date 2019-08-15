@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Image, TouchableOpacity } from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  View,
+  Text,
+  SafeAreaView
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
 import TwitterScreen from "./TwitterScreen";
@@ -14,6 +20,7 @@ import pngLogoYang from "assets/logo-yang.png";
 import pngYinYang from "assets/yin.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
+// import { SafeAreaView } from "react-navigation";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -35,6 +42,15 @@ const generateStyles = theme => ({
   icon: {
     height: 24,
     width: 24
+  },
+  headerSafeArea: {
+    backgroundColor: theme.bgHeader()
+  },
+  header: {
+    height: 54,
+    backgroundColor: theme.bgHeader(),
+    alignItems: "center",
+    flexDirection: "row"
   }
 });
 
@@ -75,14 +91,17 @@ const TabScreen = () => {
   };
 
   return (
-    <TabView
-      lazy
-      style={{ backgroundColor: theme.bg() }}
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      renderTabBar={renderTabBar}
-      onIndexChange={index => setIndex(index)}
-    />
+    <React.Fragment>
+      <Header />
+      <TabView
+        lazy
+        style={{ backgroundColor: theme.bg() }}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        renderTabBar={renderTabBar}
+        onIndexChange={index => setIndex(index)}
+      />
+    </React.Fragment>
   );
 };
 
@@ -104,16 +123,32 @@ const ThemeIcon = () => {
     </TouchableOpacity>
   );
 };
-TabScreen.navigationOptions = ({ navigation }) => {
-  const { theme } = navigation.getScreenProps();
-  return {
-    headerTitle: <YangLogo />,
-    headerRight: <ThemeIcon />,
-    headerStyle: {
-      backgroundColor: theme.bgHeader(),
-      elevation: 0,
-      borderBottomWidth: 0
-    }
-  };
+
+const Header = () => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  return (
+    <SafeAreaView style={styles.headerSafeArea}>
+      <View style={styles.header}>
+        <View style={gstyles.flex} />
+        <View style={[gstyles.flex, { alignItems: "center" }]}>
+          <YangLogo />
+        </View>
+        <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
+          <ThemeIcon />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+TabScreen.navigationOptions = {
+  /* Your custom header */
+  header: <Header />
+  // headerTitle: <YangLogo />,
+  // headerRight: <ThemeIcon />,
+  // headerStyle: {
+  //   backgroundColor: theme.bgHeader(),
+  //   elevation: 0,
+  //   borderBottomWidth: 0
+  // }
 };
 export default TabScreen;

@@ -4,13 +4,17 @@ import TabScreen from "components/screens/TabScreen";
 import { useThemeKit } from "utils/ThemeUtils";
 
 const Root = () => {
-  const { theme, gstyles } = useThemeKit();
-  const StackNavigator = createStackNavigator({
-    Tabs: TabScreen
-  });
+  const StackNavigator = createStackNavigator(
+    {
+      Tabs: TabScreen
+    },
+    {
+      headerMode: "none"
+    }
+  );
   const App = createAppContainer(StackNavigator);
 
-  return <App screenProps={{ theme, gstyles }} />;
+  return <App />;
 };
 
 export default Root;

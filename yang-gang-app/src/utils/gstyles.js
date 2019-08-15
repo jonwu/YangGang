@@ -3,251 +3,278 @@ import { StyleSheet } from "react-native";
 
 export default theme => {
   return StyleSheet.create({
-    container: {
+    flex: {
       flex: 1
     },
     p1: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.regular
     },
     p1_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.regular
     },
     p1_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.regular
     },
     p1_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.regular,
-      fontWeight: "bold"
+      fontSize: theme.regular
     },
     p1_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.regular,
-      fontWeight: "bold"
+      fontSize: theme.regular
     },
     p1_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.regular,
-      fontWeight: "bold"
+      fontSize: theme.regular
     },
     caption: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.small
     },
     caption_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.small
     },
     caption_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.small
     },
     caption_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.small,
-      fontWeight: "bold"
+      fontSize: theme.small
     },
     caption_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.small,
-      fontWeight: "bold"
+      fontSize: theme.small
     },
     caption_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.small,
-      fontWeight: "bold"
+      fontSize: theme.small
     },
     footnote: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.footnote
     },
     footnote_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.footnote
     },
     footnote_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.footnote
     },
     footnote_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.footnote,
-      fontWeight: "bold"
+      fontSize: theme.footnote
     },
     footnote_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.footnote,
-      fontWeight: "bold"
+      fontSize: theme.footnote
     },
     footnote_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.footnote,
-      fontWeight: "bold"
+      fontSize: theme.footnote
     },
     h1: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.H1
     },
     h1_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.H1
     },
     h1_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.H1
     },
     h1_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.H1,
-      fontWeight: "bold"
+      fontSize: theme.H1
     },
     h1_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.H1,
-      fontWeight: "bold"
+      fontSize: theme.H1
     },
     h1_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.H1,
-      fontWeight: "bold"
+      fontSize: theme.H1
     },
     h0: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.H0
     },
     h0_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.H0
     },
     h0_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.H0
     },
     h0_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.H0,
-      fontWeight: "bold"
+      fontSize: theme.H0
     },
     h0_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.H0,
-      fontWeight: "bold"
+      fontSize: theme.H0
     },
     h0_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.H0,
-      fontWeight: "bold"
+      fontSize: theme.H0
     },
     h2: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.H2
     },
     h2_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.H2
     },
     h2_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.H2
     },
     h2_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.H2,
-      fontWeight: "bold"
+      fontSize: theme.H2
     },
     h2_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.H2,
-      fontWeight: "bold"
+      fontSize: theme.H2
     },
     h2_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.H2,
-      fontWeight: "bold"
+      fontSize: theme.H2
     },
     h3: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.H3
     },
     h3_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.H3
     },
     h3_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.H3
     },
     h3_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.H3,
-      fontWeight: "bold"
+      fontSize: theme.H3
     },
     h3_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.H3,
-      fontWeight: "bold"
+      fontSize: theme.H3
     },
     h3_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.H3,
-      fontWeight: "bold"
+      fontSize: theme.H3
     },
     h4: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.H4
     },
     h4_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.H4
     },
     h4_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.H4
     },
     h4_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.H4,
-      fontWeight: "bold"
+      fontSize: theme.H4
     },
     h4_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.H4,
-      fontWeight: "bold"
+      fontSize: theme.H4
     },
     h4_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.H4,
-      fontWeight: "bold"
+      fontSize: theme.H4
     },
     h5: {
+      fontFamily: "brandon-book",
       color: theme.text(),
       fontSize: theme.H5
     },
     h5_10: {
+      fontFamily: "brandon-book",
       color: theme.text(0.1),
       fontSize: theme.H5
     },
     h5_50: {
+      fontFamily: "brandon-book",
       color: theme.text(0.5),
       fontSize: theme.H5
     },
     h5_bold: {
+      fontFamily: "brandon-semibold",
       color: theme.text(),
-      fontSize: theme.H5,
-      fontWeight: "bold"
+      fontSize: theme.H5
     },
     h5_bold_10: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.1),
-      fontSize: theme.H5,
-      fontWeight: "bold"
+      fontSize: theme.H5
     },
     h5_bold_50: {
+      fontFamily: "brandon-semibold",
       color: theme.text(0.5),
-      fontSize: theme.H5,
-      fontWeight: "bold"
+      fontSize: theme.H5
     },
     flex_column: {
       display: "flex",

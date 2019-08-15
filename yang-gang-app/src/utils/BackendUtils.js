@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3000";
+const URL = "http://localhost:8000";
 const instance = axios.create({ timeout: 10000, baseURL: URL });
 
 instance.interceptors.request.use(
@@ -26,7 +26,7 @@ class BackendUtils {
     return instance.get(`/twitter`, { params });
   }
   getReddit(params) {
-    return instance.get(`/reddit`, { params });
+    return instance.get(`/hotreddit`, { params });
   }
   getYoutube(params) {
     return instance.get(`/youtube`, { params });

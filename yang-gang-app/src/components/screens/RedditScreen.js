@@ -7,13 +7,15 @@ import { updateReddit } from "modules/app/actions";
 import Separator from "components/items/Separator";
 
 const styles = theme => {};
-const renderItem = ({ item: reddit }) => {
-  return <RedditItem item={reddit} />;
-};
-const RedditScreen = () => {
+
+const keyExtractor = (item) => item.id
+const RedditScreen = ({navigation}) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const reddit = useSelector(state => state.app.reddit);
+  const renderItem = ({ item: reddit }) => {
+    return <RedditItem item={reddit} navigation={navigation} />;
+  };
 
   React.useEffect(() => {
     dispatch(updateReddit());
@@ -26,7 +28,7 @@ const RedditScreen = () => {
       renderItem={renderItem}
       ListHeaderComponent={Separator}
       ItemSeparatorComponent={Separator}
-      keyExtractor={item => item.created}
+      keyExtractor={item => item.id}
     />
   );
 };

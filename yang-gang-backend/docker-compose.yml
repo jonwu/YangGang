@@ -1,18 +1,10 @@
-version: '2'
+version: '3'
 services:
     web:
         build: ./app
         ports:
-            - "5000:5000"
-        volumes:
-            - .:/app
-        depends_on:
-            - redis
+            - "80:80"
     redis:
         image: redis
     poller:
         build: ./poller
-        volumes:
-            - .:/poller
-        depends_on:
-            - redis

@@ -1,0 +1,22 @@
+version: '3'
+services:
+    web:
+        image: 407985344618.dkr.ecr.us-east-2.amazonaws.com/yanggang:latest # for aws only
+        ports:
+            - "80:80"
+        logging: # for aws only
+            driver: awslogs
+            options:
+                awslogs-group: yang
+                awslogs-region: us-east-2
+                awslogs-stream-prefix: web
+    redis:
+        image: redis
+    poller:
+        image: 407985344618.dkr.ecr.us-east-2.amazonaws.com/poller:latest # for aws only
+        logging: # for aws only
+            driver: awslogs
+            options:
+                awslogs-group: yang
+                awslogs-region: us-east-2
+                awslogs-stream-prefix: poller

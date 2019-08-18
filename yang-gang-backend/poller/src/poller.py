@@ -10,6 +10,7 @@ import time
 
 # initialize redis
 r = Redis(host='redis', port=6379)
+# r = Redis(host='localhost', port=6379) # for aws only!!
 
 
 # constants
@@ -63,6 +64,7 @@ def fetch_twitter():
     print('fetched new twitter items at {}'.format(datetime.now()))
     r.set('twitter', json.dumps([x._json for x in timeline[:top_num]]))
 
+
 def fetch_youtube():
     youtube_request = requests.get(url=youtube_url, params=youtube_params)
     print('fetched new youtube items at {}'.format(datetime.now()))
@@ -72,7 +74,7 @@ def fetch_youtube():
 scheduler = BackgroundScheduler()
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=5, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=5, id='fetch_twitter')
-scheduler.add_job(fetch_youtube, 'interval', seconds=(60 * 30), id='fetch_youtube')
+scheduler.add_job(fetch_youtube, 'interval', minutes=30, id='fetch_youtube')
 fetch_hot_reddit()
 fetch_twitter()
 fetch_youtube()

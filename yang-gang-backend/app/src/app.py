@@ -6,6 +6,7 @@ import json
 app = Flask(__name__)
 api = Api(app=app, doc='/docs')
 r = Redis(host='redis', port=6379)
+# r = Redis(host='localhost', port=6379) # for aws only!!
 
 
 @api.route("/hotreddit/")
@@ -24,6 +25,7 @@ class TweetList(Resource):
         returns a list of andrew yang tweets
         """
         return json.loads(r.get('twitter').decode('utf-8'))
+
 
 @api.route("/youtube/")
 class YoutubeList(Resource):

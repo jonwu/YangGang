@@ -14,3 +14,4 @@ I've pretty much done all the steps, so we shouldn't have to repeat this again.
 
 Another useful link is:
 https://www.bogotobogo.com/DevOps/Docker/Docker-ECS-Service-Dicsovery-Redis-Flask.php
+

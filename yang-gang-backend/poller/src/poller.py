@@ -66,7 +66,6 @@ def fetch_twitter():
 def fetch_youtube():
     youtube_request = requests.get(url=youtube_url, params=youtube_params)
     print('fetched new youtube items at {}'.format(datetime.now()))
-    # data = youtube_request.json()
     r.set('youtube', json.dumps(youtube_request.json()))
 
 

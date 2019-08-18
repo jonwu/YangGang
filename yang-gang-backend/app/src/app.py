@@ -24,3 +24,11 @@ class TweetList(Resource):
         returns a list of andrew yang tweets
         """
         return json.loads(r.get('twitter').decode('utf-8'))
+
+@api.route("/youtube/")
+class YoutubeList(Resource):
+    def get(self):
+        """
+        returns a list of recent andrew yang youtube videos
+        """
+        return json.loads(r.get('youtube').decode('utf-8'))

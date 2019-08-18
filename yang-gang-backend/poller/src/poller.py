@@ -1,8 +1,9 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from redis import Redis
 import praw
 import json
+import requests
 import tweepy
 import time
 
@@ -28,6 +29,19 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
+youtube_api_key = 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
+youtube_url = 'https://www.googleapis.com/youtube/v3/search'
+seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+youtube_params = {
+    'part': 'snippet',
+    'order': 'viewCount',
+    'publishedAfter': seven_days_ago.isoformat(),
+    'q': 'andrew yang',
+    'type': 'video',
+    'maxResults': str(top_num),
+    'key': youtube_api_key
+}
+
 
 # reddit job helper functions
 def is_jsonable(x):
@@ -49,10 +63,17 @@ def fetch_twitter():
     print('fetched new twitter items at {}'.format(datetime.now()))
     r.set('twitter', json.dumps([x._json for x in timeline[:top_num]]))
 
+def fetch_youtube():
+    youtube_request = requests.get(url=youtube_url, params=youtube_params)
+    print('fetched new youtube items at {}'.format(datetime.now()))
+    # data = youtube_request.json()
+    r.set('youtube', json.dumps(youtube_request.json()))
+
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=5, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=5, id='fetch_twitter')
+scheduler.add_job(fetch_youtube, 'interval', seconds=5, id='fetch_youtube')
 scheduler.start()
 
 

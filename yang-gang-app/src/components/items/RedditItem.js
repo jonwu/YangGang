@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, Image, Dimensions, WebView, TouchableHighlight, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  WebView,
+  TouchableHighlight,
+  TouchableOpacity
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 const { width: DEVICE_WIDTH } = Dimensions.get("window");
@@ -33,13 +41,15 @@ const RedditItem = ({ item, navigation }) => {
   } else if (isEnabled) {
     content = <RedditImage item={item} />;
   } else if (thumbnail !== "self") {
-    content = <RedditThumbnail item={item} navigation={navigation}/>;
+    content = <RedditThumbnail item={item} navigation={navigation} />;
   } else {
     content = <RedditDescription item={item} />;
   }
-  return <ActionBarView>
-    {content}
-  </ActionBarView>
+  return (
+    <ActionBarView openLabel={"Open in Reddit"} openIcon={"logo-reddit"}>
+      {content}
+    </ActionBarView>
+  );
   // return <TouchableHighlight onPress={() => navigation.navigate('Webview', { uri: `https://reddit.com/${id}` })}>
   //   {content}
   // </TouchableHighlight>;
@@ -129,7 +139,7 @@ const RedditThumbnail = ({ item, navigation }) => {
     thumbnail_height,
     thumbnail_width,
     domain,
-    url,
+    url
   } = item;
 
   return (
@@ -139,14 +149,36 @@ const RedditThumbnail = ({ item, navigation }) => {
         <Text style={[gstyles.h4_bold, gstyles.right_2, gstyles.flex]}>
           {title}
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Webview', {uri: url})}>
-          <View style={{borderRadius: 4, borderWidth: 1, borderColor: theme.borderColor, overflow: 'hidden',  height: 75, width: 100 }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Webview", { uri: url })}
+        >
+          <View
+            style={{
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: theme.borderColor,
+              overflow: "hidden",
+              height: 75,
+              width: 100
+            }}
+          >
             <Image
               source={{ uri: thumbnail }}
               style={{ height: 75, width: 100 }}
             />
-            <View style={{position: 'absolute', width: '100%', padding: 4, bottom: 0, backgroundColor: theme.dark(0.5)}}>
-              <Text numberOfLines={1} style={[gstyles.caption_bold, {color: theme.light()}]}>
+            <View
+              style={{
+                position: "absolute",
+                width: 100,
+                padding: 4,
+                bottom: 0,
+                backgroundColor: theme.dark(0.5)
+              }}
+            >
+              <Text
+                numberOfLines={1}
+                style={[gstyles.caption_bold, { color: theme.light() }]}
+              >
                 {domain}
               </Text>
             </View>

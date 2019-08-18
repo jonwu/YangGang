@@ -21,7 +21,7 @@ import pngLogoYang from "assets/logo-yang.png";
 import pngYinYang from "assets/yin.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
-import Header from './Header';
+import Header from "./Header";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -43,7 +43,7 @@ const generateStyles = theme => ({
   icon: {
     height: 24,
     width: 24
-  },
+  }
 });
 
 const routes = [
@@ -61,16 +61,16 @@ const renderIcon = ({ route }) => {
   }
 };
 
-const TabScreen = ({navigation}) => {
+const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
   const renderScene = ({ route }) => {
     switch (route.key) {
-      case 'twitter':
+      case "twitter":
         return <TwitterScreen navigation={navigation} />;
-      case 'reddit':
+      case "reddit":
         return <RedditScreen navigation={navigation} />;
-      case 'youtube':
+      case "youtube":
         return <YoutubeScreen navigation={navigation} />;
       default:
         return null;
@@ -90,8 +90,12 @@ const TabScreen = ({navigation}) => {
 
   return (
     <React.Fragment>
-      <StatusBar barStyle="light-content"/>
-      <Header renderTitle={<YangLogo/>} renderRight={<ThemeIcon/>} navigation={navigation}/>
+      <StatusBar barStyle="light-content" />
+      <Header
+        renderTitle={<YangLogo />}
+        renderRight={<ThemeIcon />}
+        navigation={navigation}
+      />
       <TabView
         lazy
         style={{ backgroundColor: theme.bg() }}
@@ -116,7 +120,7 @@ const ThemeIcon = () => {
   const dispatch = useDispatch();
   return (
     <TouchableOpacity
-      style={{padding: 8}}
+      style={{ padding: 8 }}
       onPress={() => dispatch(updateTheme(nextThemeId))}
     >
       <Image source={pngYinYang} style={styles.icon} />

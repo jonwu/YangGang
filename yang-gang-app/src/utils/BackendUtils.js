@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// const URL = "http://localhost:5000";
-const URL = "http://10.130.33.218:5000";
+const URL = "http://localhost:5000";
+// const URL = "http://10.130.33.218:5000";
+// const URL = "http://192.168.1.5:5000";
 const instance = axios.create({ timeout: 10000, baseURL: URL });
 
 instance.interceptors.request.use(
@@ -24,7 +25,7 @@ instance.interceptors.request.use(
 
 class BackendUtils {
   getTwitter(id, params) {
-    return instance.get(`/twitter`, { params });
+    return instance.get(`/tweets`, { params });
   }
   getReddit(params) {
     return instance.get(`/hotreddit`, { params });

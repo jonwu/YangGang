@@ -4,12 +4,12 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import RedditItem from "components/items/RedditItem";
 import { updateReddit } from "modules/app/actions";
-import Separator from "components/items/Separator";
+import TwitterSeparator from "components/items/TwitterSeparator";
 
 const styles = theme => {};
 
-const keyExtractor = (item) => item.id
-const RedditScreen = ({navigation}) => {
+const keyExtractor = item => item.id;
+const RedditScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const reddit = useSelector(state => state.app.reddit);
@@ -26,8 +26,7 @@ const RedditScreen = ({navigation}) => {
     <FlatList
       data={reddit}
       renderItem={renderItem}
-      ListHeaderComponent={Separator}
-      ItemSeparatorComponent={Separator}
+      ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.id}
     />
   );

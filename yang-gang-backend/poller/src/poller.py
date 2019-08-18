@@ -72,7 +72,10 @@ def fetch_youtube():
 scheduler = BackgroundScheduler()
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=5, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=5, id='fetch_twitter')
-scheduler.add_job(fetch_youtube, 'interval', seconds=5, id='fetch_youtube')
+scheduler.add_job(fetch_youtube, 'interval', seconds=(60 * 30), id='fetch_youtube')
+fetch_hot_reddit()
+fetch_twitter()
+fetch_youtube()
 scheduler.start()
 
 

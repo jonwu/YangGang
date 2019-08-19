@@ -34,3 +34,11 @@ class YoutubeList(Resource):
         returns a list of recent andrew yang youtube videos
         """
         return json.loads(r.get('youtube').decode('utf-8'))
+
+@api.route("/youtube_day/")
+class YoutubeListDay(Resource):
+    def get(self):
+        """
+        returns a list of recent andrew yang youtube videos today
+        """
+        return json.loads(r.get('youtube_day').decode('utf-8'))

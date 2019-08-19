@@ -11,7 +11,7 @@ export function updateTheme(theme) {
 export function updateReddit() {
   return dispatch => {
     return BackendUtils.getReddit().then(response => {
-      const reddit = response.data;
+      const reddit = response.data.filter(item => !item.stickied);
       dispatch({
         type: ActionTypes.UPDATE_REDDIT,
         reddit

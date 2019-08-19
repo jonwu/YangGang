@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableHighlight } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
+import ActionBarView from "./ActionBarView";
+import { FontAwesome } from "@expo/vector-icons";
 
 const entities = new Entities();
 
@@ -23,6 +25,24 @@ const generateStyles = theme => ({
   }
 });
 
+const YoutubeItemContainer = ({ item, navigation }) => {
+  const { id } = item;
+  return (
+    <ActionBarView openLabel="Open in Youtube" openIcon={"youtube-square"}>
+      <TouchableHighlight
+        onPress={() =>
+          navigation.navigate("YoutubeWebview", {
+            uri: `https://youtube.com/embed/${id.videoId}?autoplay=1`
+            // uri: `https://youtube.com/embed/${id.videoId}`
+            // uri: `https://youtube.com/watch?v=${id.videoId}`
+          })
+        }
+      >
+        <YoutubeItem item={item} />
+      </TouchableHighlight>
+    </ActionBarView>
+  );
+};
 const YoutubeItem = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { snippet } = item;
@@ -48,4 +68,4 @@ const YoutubeItem = ({ item }) => {
   );
 };
 
-export default YoutubeItem;
+export default YoutubeItemContainer;

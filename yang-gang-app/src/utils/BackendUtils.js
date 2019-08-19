@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const URL = "http://localhost:5000";
+// const URL = "http://localhost:80";
 // const URL = "http://10.130.33.218:5000";
-// const URL = "http://192.168.1.5:5000";
+const URL = "http://192.168.1.5:80";
 const instance = axios.create({ timeout: 10000, baseURL: URL });
 
 instance.interceptors.request.use(
@@ -31,7 +31,7 @@ class BackendUtils {
     return instance.get(`/hotreddit`, { params });
   }
   getYoutube(params) {
-    return instance.get(`/youtube`, { params });
+    return instance.get(`/youtube_day`, { params });
   }
 }
 export default new BackendUtils();

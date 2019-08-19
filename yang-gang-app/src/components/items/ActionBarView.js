@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const generateStyles = theme => ({
   item: {
@@ -22,7 +22,7 @@ const ActionBarView = ({ children, openLabel, openIcon }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const actionBar = (
     <View style={styles.container}>
-      <ActionBarItem label={"Share"} />
+      <ActionBarItem label={"Share"} icon={"share-square"} />
       <ActionBarItem label={openLabel} icon={openIcon} />
     </View>
   );
@@ -47,11 +47,11 @@ const ActionBarItem = ({ label, icon }) => {
   return (
     <View style={styles.item}>
       {icon && (
-        <Ionicons
+        <FontAwesome
           name={icon}
-          color={theme.text(0.1)}
-          size={20}
-          style={gstyles.right_4}
+          size={16}
+          style={gstyles.right_5}
+          color={theme.text()}
         />
       )}
       {label && <Text style={gstyles.p1}>{label}</Text>}

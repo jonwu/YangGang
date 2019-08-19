@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 const { width: DEVICE_WIDTH } = Dimensions.get("window");
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
+import { FontAwesome } from "@expo/vector-icons";
 
 const generateStyles = theme => ({
   body: {
@@ -45,38 +46,64 @@ const RedditItem = ({ item, navigation }) => {
   } else {
     content = <RedditDescription item={item} />;
   }
+
   return (
-    <ActionBarView openLabel={"Open in Reddit"} openIcon={"logo-reddit"}>
-      {content}
+    <ActionBarView openLabel={"Open in Reddit"} openIcon={"reddit-square"}>
+      <TouchableHighlight
+        onPress={() =>
+          navigation.navigate("Webview", {
+            uri: `https://reddit.com/r/YangForPresidentHQ/comments/${id}`
+          })
+        }
+      >
+        {content}
+      </TouchableHighlight>
     </ActionBarView>
   );
-  // return <TouchableHighlight onPress={() => navigation.navigate('Webview', { uri: `https://reddit.com/${id}` })}>
-  //   {content}
-  // </TouchableHighlight>;
+  return (
+    <TouchableHighlight
+      onPress={() =>
+        navigation.navigate("Webview", { uri: `https://reddit.com/${id}` })
+      }
+    >
+      {content}
+    </TouchableHighlight>
+  );
 };
 
 const RedditImage = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { title, selftext, preview } = item;
   const source = preview != null && preview.images[0].source;
-
+  const contentWidth = DEVICE_WIDTH - theme.spacing_2 * 2;
   return (
-    <View>
+    <View style={{ backgroundColor: theme.bg2() }}>
       <View style={styles.body}>
         {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
         <Text style={[gstyles.h4_bold]}>{title}</Text>
       </View>
       {source && (
-        <Image
-          style={[
-            styles.thumbnail,
-            {
-              width: DEVICE_WIDTH,
-              height: (DEVICE_WIDTH * source.height) / source.width
-            }
-          ]}
-          source={{ uri: source.url }}
-        />
+        <View
+          style={{
+            borderRadius: 8,
+            overflow: "hidden",
+            alignSelf: "center"
+          }}
+        >
+          <Image
+            style={[
+              styles.thumbnail,
+              {
+                width: contentWidth,
+                height: Math.min(
+                  (contentWidth * source.height) / source.width,
+                  420
+                )
+              }
+            ]}
+            source={{ uri: source.url }}
+          />
+        </View>
       )}
     </View>
   );

@@ -98,7 +98,7 @@ const TabScreen = ({ navigation }) => {
       />
       <TabView
         lazy
-        style={{ backgroundColor: theme.bg() }}
+        style={{ backgroundColor: theme.bg2() }}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         renderTabBar={renderTabBar}

@@ -1,3 +1,2 @@
 #!/bin/sh
-cd src
-exec gunicorn -b :80 -w 1 --access-logfile - --error-logfile - app:app
+exec gunicorn -b :80 -w 4 --access-logfile - --error-logfile - app:app

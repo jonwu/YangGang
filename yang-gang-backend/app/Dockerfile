@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 COPY boot.sh ./
 RUN chmod +x boot.sh
 
-# expose 5000 port
-EXPOSE 5000
+# expose 80 port
+EXPOSE 80
 ENTRYPOINT ["./boot.sh"]
 

@@ -5,12 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
 const { width: DEVICE_WIDTH } = Dimensions.get("window");
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { transformN } from "utils/Utils";
+import moment from "moment";
 
 const generateStyles = theme => ({
   container: {
     flexDirection: "row",
-    padding: theme.spacing_3,
     backgroundColor: theme.bg2()
   },
   avatar: {
@@ -38,7 +39,8 @@ const TwitterItem = ({ item }) => {
     user,
     extended_entities,
     retweet_count,
-    favorite_count
+    favorite_count,
+    created_at
   } = item;
   let text = full_text;
   let name = user.name;
@@ -59,33 +61,63 @@ const TwitterItem = ({ item }) => {
     photos = extended_entities.media.filter(item => item.type === "photo");
     video = extended_entities.media.find(item => item.type === "video");
   }
-  return (
-    <View style={{ backgroundColor: theme.bg2() }}>
-      {/* <View
-        style={{
-          alignItems: "flex-end",
-          marginTop: theme.spacing_3,
-          marginRight: theme.spacing_3
-        }}
-      >
-        <Text style={[gstyles.caption_50]}>
-          {retweet_count} retweets, {favorite_count} hearts
-        </Text>
-      </View> */}
 
+  return (
+    <View style={{ backgroundColor: theme.bg2(), padding: theme.spacing_3 }}>
+      {retweeted_status != null && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginLeft: 36
+          }}
+        >
+          <MaterialCommunityIcons
+            name={"twitter-retweet"}
+            size={20}
+            style={{ marginTop: 3, marginRight: theme.spacing_5 }}
+            color={theme.text(0.5)}
+          />
+          <Text style={[gstyles.caption_50]}>Andrew Yang Retweeted</Text>
+        </View>
+      )}
       <View style={styles.container}>
         <Image style={styles.avatar} source={{ uri: avatar_url }} />
         <View style={styles.body}>
           <View style={styles.header}>
             <Text style={[gstyles.p1_bold, gstyles.right_5]}>{name}</Text>
-            <Text style={gstyles.p1_50}>{`@${screen_name}`} - Aug 8</Text>
+            <Text style={gstyles.p1_50}>
+              {`@${screen_name}`} - {moment(created_at).fromNow(true)}
+            </Text>
           </View>
           <Text style={gstyles.p1}>{text}</Text>
           <Photo medias={photos} />
           <TwitterVideo video={video} />
-          <Text style={[gstyles.caption, gstyles.top_3]}>
-            {retweet_count} retweets, {favorite_count} hearts
-          </Text>
+          <View
+            style={[
+              { alignItems: "center", flexDirection: "row" },
+              gstyles.top_3
+            ]}
+          >
+            <MaterialCommunityIcons
+              name={"twitter-retweet"}
+              size={20}
+              style={{ marginTop: 3, marginRight: theme.spacing_5 }}
+              color={theme.text(0.5)}
+            />
+            <Text style={[gstyles.caption_50, gstyles.right_3]}>
+              {transformN(retweet_count, 1)}
+            </Text>
+            <MaterialCommunityIcons
+              name={"heart-outline"}
+              size={16}
+              style={{ marginTop: 3, marginRight: theme.spacing_5 }}
+              color={theme.text(0.5)}
+            />
+            <Text style={[gstyles.caption_50, gstyles.right_3]}>
+              {transformN(favorite_count, 1)}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -223,14 +255,18 @@ const Photo = ({ medias }) => {
       {content}
     </View>
   );
-  TwitterVideo;
 };
 
-const TwitterItemContainer = ({ item }) => {
+const TwitterItemContainer = React.memo(({ item }) => {
   return (
-    <ActionBarView openLabel={"Open in Twitter"} openIcon={"twitter-square"}>
+    <ActionBarView
+      openLabel={"Open in Twitter"}
+      openIcon={"twitter-square"}
+      link={`https://twitter.com/AndrewYang/status/${item.id_str}`}
+      message={`${item.full_text}`}
+    >
       <TwitterItem item={item} />
     </ActionBarView>
   );
-};
+});
 export default TwitterItemContainer;

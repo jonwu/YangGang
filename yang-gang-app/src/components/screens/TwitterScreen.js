@@ -29,7 +29,7 @@ const TwitterScreen = ({ navigation }) => {
       data={tweets}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
-      keyExtractor={item => item.id_str}
+      keyExtractor={item => item.id.toString()}
     />
   );
 };

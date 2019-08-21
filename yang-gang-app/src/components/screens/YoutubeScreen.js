@@ -25,7 +25,7 @@ const Youtubecreen = ({ navigation }) => {
       data={youtube}
       renderItem={renderItem}
       ItemSeparatorComponent={Separator}
-      keyExtractor={item => item.id.videoId}
+      keyExtractor={item => item.id}
     />
   );
 };

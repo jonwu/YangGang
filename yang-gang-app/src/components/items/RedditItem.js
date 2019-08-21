@@ -6,19 +6,24 @@ import {
   Dimensions,
   WebView,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  Linking
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 const { width: DEVICE_WIDTH } = Dimensions.get("window");
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { transformN } from "utils/Utils";
+import moment from "moment";
 
 const generateStyles = theme => ({
   body: {
-    padding: theme.spacing_2,
-    backgroundColor: theme.bg2()
+    // padding: theme.spacing_2
+  },
+  allPads: {
+    padding: theme.spacing_2
   },
   thumbnail: {
     backgroundColor: theme.bg2()
@@ -28,8 +33,9 @@ const generateStyles = theme => ({
   }
 });
 
-const RedditItem = ({ item, navigation }) => {
-  const { title, selftext, preview, thumbnail, media, id } = item;
+const RedditItem = React.memo(({ item, navigation }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const { title, selftext, preview, thumbnail, media, id, score } = item;
   const isEnabled = preview != null && preview.enabled;
   const isRedditVideo = media && media.reddit_video != null;
   const isYoutube = media && media.type === "youtube.com";
@@ -48,7 +54,12 @@ const RedditItem = ({ item, navigation }) => {
   }
 
   return (
-    <ActionBarView openLabel={"Open in Reddit"} openIcon={"reddit-square"}>
+    <ActionBarView
+      openLabel={"Open in Reddit"}
+      openIcon={"reddit-square"}
+      link={`https://reddit.com/r/YangForPresidentHQ/comments/${id}`}
+      message={`${item.title}`}
+    >
       <TouchableHighlight
         onPress={() =>
           navigation.navigate("Webview", {
@@ -56,18 +67,62 @@ const RedditItem = ({ item, navigation }) => {
           })
         }
       >
-        {content}
+        <View
+          style={{ backgroundColor: theme.bg2(), padding: theme.spacing_2 }}
+        >
+          {content}
+          <RedditFooter item={item} />
+        </View>
       </TouchableHighlight>
     </ActionBarView>
   );
+});
+
+const RedditFooter = ({ item }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
-    <TouchableHighlight
-      onPress={() =>
-        navigation.navigate("Webview", { uri: `https://reddit.com/${id}` })
-      }
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingTop: theme.spacing_5
+      }}
     >
-      {content}
-    </TouchableHighlight>
+      <Text style={gstyles.caption_50}>
+        {moment(item.created_utc * 1000).fromNow()}
+      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center"
+        }}
+      >
+        <Entypo
+          name={"arrow-up"}
+          size={20}
+          style={{ marginRight: theme.spacing_5 }}
+          color={theme.text()}
+        />
+        <Text style={[gstyles.caption]}>{transformN(item.score, 1)}</Text>
+        <Entypo
+          name={"arrow-down"}
+          size={20}
+          style={{ marginTop: 2, marginLeft: theme.spacing_5 }}
+          color={theme.text()}
+        />
+      </View>
+    </View>
+  );
+};
+const RedditHeader = ({ item }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  return (
+    <View style={{ alignItems: "center", flexDirection: "row" }}>
+      <Text style={gstyles.caption_50}>
+        {moment(item.created_utc * 1000).fromNow()}
+      </Text>
+    </View>
   );
 };
 
@@ -78,7 +133,7 @@ const RedditImage = ({ item }) => {
   const contentWidth = DEVICE_WIDTH - theme.spacing_2 * 2;
   return (
     <View style={{ backgroundColor: theme.bg2() }}>
-      <View style={styles.body}>
+      <View style={gstyles.bottom_2}>
         {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
         <Text style={[gstyles.h4_bold]}>{title}</Text>
       </View>
@@ -90,19 +145,20 @@ const RedditImage = ({ item }) => {
             alignSelf: "center"
           }}
         >
-          <Image
-            style={[
-              styles.thumbnail,
-              {
-                width: contentWidth,
-                height: Math.min(
-                  (contentWidth * source.height) / source.width,
-                  420
-                )
-              }
-            ]}
-            source={{ uri: source.url }}
-          />
+          <View style={{ maxHeight: 420, overflow: "hidden" }}>
+            <Image
+              style={[
+                styles.thumbnail,
+                {
+                  width: contentWidth,
+                  height: Math.min(
+                    (contentWidth * source.height) / source.width
+                  )
+                }
+              ]}
+              source={{ uri: source.url }}
+            />
+          </View>
         </View>
       )}
     </View>

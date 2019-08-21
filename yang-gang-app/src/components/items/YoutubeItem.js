@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
 import ActionBarView from "./ActionBarView";
 import { FontAwesome } from "@expo/vector-icons";
+import { transformN } from "utils/Utils";
+import moment from "moment";
 
 const entities = new Entities();
 
@@ -25,16 +27,21 @@ const generateStyles = theme => ({
   }
 });
 
-const YoutubeItemContainer = ({ item, navigation }) => {
+const YoutubeItemContainer = React.memo(({ item, navigation }) => {
   const { id } = item;
   return (
-    <ActionBarView openLabel="Open in Youtube" openIcon={"youtube-square"}>
+    <ActionBarView
+      openLabel="Open in Youtube"
+      openIcon={"youtube-square"}
+      link={`https://youtube.com/watch?v=${id}`}
+      message={`${item.snippet.title}`}
+    >
       <TouchableHighlight
         onPress={() =>
-          navigation.navigate("YoutubeWebview", {
-            uri: `https://youtube.com/embed/${id.videoId}?autoplay=1`
+          navigation.navigate("Webview", {
+            // uri: `https://youtube.com/embed/${id}?autoplay=1`
             // uri: `https://youtube.com/embed/${id.videoId}`
-            // uri: `https://youtube.com/watch?v=${id.videoId}`
+            uri: `https://youtube.com/watch?v=${id}`
           })
         }
       >
@@ -42,17 +49,18 @@ const YoutubeItemContainer = ({ item, navigation }) => {
       </TouchableHighlight>
     </ActionBarView>
   );
-};
+});
 const YoutubeItem = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { snippet } = item;
+  const { snippet, statistics } = item;
   const {
     title,
     description,
     thumbnails,
     channelTitle,
     publishedId,
-    channelId
+    channelId,
+    publishedAt
   } = snippet;
   return (
     <View style={styles.container}>
@@ -62,7 +70,10 @@ const YoutubeItem = ({ item }) => {
           {entities.decode(title)}
         </Text>
         <Text style={[gstyles.caption_50]}>{channelTitle}</Text>
-        <Text style={[gstyles.caption_50]}>145K views - 1 day ago</Text>
+        <Text style={[gstyles.caption_50]}>
+          {transformN(statistics.viewCount, 10)} -{" "}
+          {moment(publishedAt).fromNow()}
+        </Text>
       </View>
     </View>
   );

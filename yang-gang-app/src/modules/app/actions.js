@@ -22,12 +22,7 @@ export function updateReddit() {
 export function updateTweets() {
   return dispatch => {
     return BackendUtils.getTwitter().then(response => {
-      const tweets = response.data.filter(
-        item =>
-          item.in_reply_to_status_id === null ||
-          item.in_reply_to_screen_name === "AndrewYang"
-      );
-
+      const tweets = response.data;
       dispatch({
         type: ActionTypes.UPDATE_TWEETS,
         tweets
@@ -38,8 +33,7 @@ export function updateTweets() {
 export function updateYoutube() {
   return dispatch => {
     return BackendUtils.getYoutube().then(response => {
-      console.log(response.data);
-      const youtube = response.data.items;
+      const youtube = response.data;
       dispatch({
         type: ActionTypes.UPDATE_YOUTUBE,
         youtube

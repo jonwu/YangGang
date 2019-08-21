@@ -13,8 +13,7 @@ That's it! If you make a code change, you need to rebuild the containers. For so
 "r = Redis(host='localhost', port=6379)" and comment out the other line where
 host='redis'. This is important because the redis hostname is different on AWS.
 
-1. We need to build the images and deploy to ECR so that docker-compose can access them. I've already created ECR repositories
-for my containers, so we just need to run the following commands.
+1. We need to build the images and deploy to ECR so that docker-compose can access them. If you haven't created the ECR repositories, you need to do that. I've already created ECR repositories for my containers, so we just need to run the following commands.
     
     - cd poller
     - docker build -t poller .

@@ -24,8 +24,7 @@ class TweetList(Resource):
         """
         returns a list of andrew yang tweets
         """
-        tweet_list = r.lrange('twitter', 0, -1)
-        print('loaded {} tweets from redis'.format(len(tweet_list)))
+        print('loaded {} tweets from redis'.format(r.llen('twitter')))
         return [json.loads(x.decode('utf-8')) for x in r.lrange('twitter', 0, 100)]
 
 

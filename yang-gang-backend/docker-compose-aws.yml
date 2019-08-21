@@ -7,7 +7,7 @@ services:
         logging: # for aws only
             driver: awslogs
             options:
-                awslogs-group: yang
+                awslogs-group: tutorial
                 awslogs-region: us-east-2
                 awslogs-stream-prefix: web
     redis:
@@ -17,6 +17,6 @@ services:
         logging: # for aws only
             driver: awslogs
             options:
-                awslogs-group: yang
+                awslogs-group: tutorial
                 awslogs-region: us-east-2
                 awslogs-stream-prefix: poller

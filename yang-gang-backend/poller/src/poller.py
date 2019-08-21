@@ -92,11 +92,10 @@ def fetch_hot_reddit():
     r.set('reddit', json.dumps(reddit_items))
 
 
-# since_id – Returns only statuses with an ID greater than (that is, more recent than) the specified ID.
-# max_id – Returns only statuses with an ID less than (that is, older than) or equal to the specified ID.
-
+# TODO: reset twitter list on server restart
 def fetch_twitter():
     global since_id
+    print('{} tweets in redis currently before fetch job'.format(r.llen('twitter')))
     s_timeline = api.user_timeline('AndrewYang', tweet_mode='extended', since_id=since_id)
     if len(s_timeline) == 0:
         print('no new entries to fetch at {}'.format(datetime.now()))
@@ -153,6 +152,7 @@ for tweet in initial:
         r.rpush('twitter', json.dumps(j))
         initial_count += 1
 end = time.time()
+
 print("initially filled redis with {} tweets in {} seconds".format(initial_count, end-start))
 
 scheduler = BackgroundScheduler()

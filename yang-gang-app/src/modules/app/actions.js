@@ -41,3 +41,25 @@ export function updateYoutube() {
     });
   };
 }
+export function updateYoutubeDay() {
+  return dispatch => {
+    return BackendUtils.getYoutubeDay().then(response => {
+      const youtube = response.data;
+      dispatch({
+        type: ActionTypes.UPDATE_YOUTUBE_DAY,
+        youtube
+      });
+    });
+  };
+}
+export function updateYoutubeAllTime() {
+  return dispatch => {
+    return BackendUtils.getYoutubeAllTime().then(response => {
+      const youtube = response.data;
+      dispatch({
+        type: ActionTypes.UPDATE_YOUTUBE_ALL_TIME,
+        youtube
+      });
+    });
+  };
+}

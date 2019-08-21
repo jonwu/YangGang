@@ -3,7 +3,11 @@ import { View, WebView, FlatList } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import YoutubeItem from "components/items/YoutubeItem";
-import { updateYoutube } from "modules/app/actions";
+import {
+  updateYoutube,
+  updateYoutubeDay,
+  updateYoutubeAllTime
+} from "modules/app/actions";
 import Separator from "components/items/TwitterSeparator";
 
 const styles = theme => {};
@@ -17,6 +21,8 @@ const Youtubecreen = ({ navigation }) => {
 
   React.useEffect(() => {
     dispatch(updateYoutube());
+    dispatch(updateYoutubeDay());
+    dispatch(updateYoutubeAllTime());
   }, []);
 
   if (!youtube) return null;

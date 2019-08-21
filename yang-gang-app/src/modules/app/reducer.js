@@ -25,4 +25,26 @@ function youtube(state = null, actions) {
       return state;
   }
 }
-export default combineReducers({ reddit, tweets, youtube });
+function youtube_day(state = null, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_YOUTUBE_DAY:
+      return actions.youtube;
+    default:
+      return state;
+  }
+}
+function youtube_all_time(state = null, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_YOUTUBE_ALL_TIME:
+      return actions.youtube;
+    default:
+      return state;
+  }
+}
+export default combineReducers({
+  reddit,
+  tweets,
+  youtube,
+  youtube_day,
+  youtube_all_time
+});

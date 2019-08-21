@@ -32,7 +32,13 @@ class BackendUtils {
     return instance.get(`/hotreddit`, { params });
   }
   getYoutube(params) {
+    return instance.get(`/youtube`, { params });
+  }
+  getYoutubeDay(params) {
     return instance.get(`/youtube_day`, { params });
+  }
+  getYoutubeAllTime(params) {
+    return instance.get(`/youtube_all_time`, { params });
   }
 }
 export default new BackendUtils();

@@ -37,8 +37,8 @@ const generateStyles = theme => ({
     // width: "auto"
   },
   logo: {
-    height: 30,
-    width: 60
+    height: 26,
+    width: 52
   },
   icon: {
     height: 24,
@@ -47,9 +47,9 @@ const generateStyles = theme => ({
 });
 
 const routes = [
+  { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
   { key: "twitter", icon: "logo-twitter", color: "#00aced" },
-  { key: "reddit", icon: "reddit", color: "#FF5700", iconType: "FontAwesome" },
-  { key: "youtube", icon: "logo-youtube", color: "#FF0000" }
+  { key: "reddit", icon: "reddit", color: "#FF5700", iconType: "FontAwesome" }
 ];
 
 const renderIcon = ({ route }) => {
@@ -123,7 +123,8 @@ const ThemeIcon = () => {
       style={{ padding: 8 }}
       onPress={() => dispatch(updateTheme(nextThemeId))}
     >
-      <Image source={pngYinYang} style={styles.icon} />
+      <MaterialCommunityIcons name="yin-yang" size={26} color={theme.light()} />
+      {/* <Image source={pngYinYang} style={styles.icon} /> */}
     </TouchableOpacity>
   );
 };

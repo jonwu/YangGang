@@ -3,6 +3,7 @@ import { View, Text, Image } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
+import { transformN } from "utils/Utils";
 const entities = new Entities();
 
 const generateStyles = theme => ({});
@@ -35,7 +36,7 @@ const YoutubeTinyItem = ({ item }) => {
           {entities.decode(title)}
         </Text>
         <Text numberOfLines={1} style={[gstyles.caption_50]}>
-          {channelTitle}
+          {transformN(statistics.viewCount, 10)} - {channelTitle}
         </Text>
       </View>
     </View>

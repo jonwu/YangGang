@@ -11,6 +11,7 @@ import {
   INTERRUPTION_MODE_IOS_DO_NOT_MIX,
   INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
 } from "expo-av/build/Audio";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 const { store, persistor } = configureStore();
 
@@ -47,13 +48,15 @@ export default function App() {
   return (
     <Provider store={store}>
       <ThemeContextProvider>
-        <PersistGate
-          loading={null}
-          persistor={persistor}
-          onBeforeLift={onBeforeLift}
-        >
-          {fontLoaded && <Root />}
-        </PersistGate>
+        <ActionSheetProvider>
+          <PersistGate
+            loading={null}
+            persistor={persistor}
+            onBeforeLift={onBeforeLift}
+          >
+            {fontLoaded && <Root />}
+          </PersistGate>
+        </ActionSheetProvider>
       </ThemeContextProvider>
     </Provider>
   );

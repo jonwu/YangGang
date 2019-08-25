@@ -12,6 +12,7 @@ import {
   INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
 } from "expo-av/build/Audio";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import silence from "assets/silence.mp3";
 
 const { store, persistor } = configureStore();
 
@@ -19,15 +20,29 @@ const onBeforeLift = () => {};
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = React.useState(false);
-  Audio.setAudioModeAsync({
-    playsInSilentModeIOS: true,
-    allowsRecordingIOS: true,
-    staysActiveInBackground: true,
-    interruptionModeIOS: INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-    shouldDuckAndroid: true,
-    interruptionModeAndroid: INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-    playThroughEarpieceAndroid: true
-  });
+  const fetchSound = async () => {
+    await Audio.setIsEnabledAsync(true);
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      allowsRecordingIOS: false,
+      staysActiveInBackground: false,
+      interruptionModeIOS: INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: true,
+      interruptionModeAndroid: INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
+    });
+
+    await Audio.Sound.createAsync(silence, {
+      shouldPlay: true,
+      pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
+      volume: 1,
+      isLooping: true
+    });
+  };
+  React.useEffect(() => {
+    fetchSound();
+  }, []);
+
   React.useEffect(() => {
     Font.loadAsync({
       "brandon-light": require("assets/fonts/whitney-light.ttf"),

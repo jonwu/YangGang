@@ -3,6 +3,7 @@ import { createAppContainer, createStackNavigator } from "react-navigation";
 import TabScreen from "components/screens/TabScreen";
 import WebviewScreen from "components/screens/WebviewScreen";
 import YoutubeWebviewScreen from "components/screens/YoutubeWebviewScreen";
+import PhotoScreen from "components/screens/PhotoScreen";
 import { useThemeKit } from "utils/ThemeUtils";
 
 const Root = () => {
@@ -10,7 +11,8 @@ const Root = () => {
     {
       Tabs: TabScreen,
       Webview: WebviewScreen,
-      YoutubeWebview: YoutubeWebviewScreen
+      YoutubeWebview: YoutubeWebviewScreen,
+      Photo: PhotoScreen
     },
     {
       headerMode: "none"

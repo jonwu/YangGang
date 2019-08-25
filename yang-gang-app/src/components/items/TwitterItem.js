@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableWithoutFeedback
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import ActionBarView from "./ActionBarView";
@@ -31,7 +37,7 @@ const generateStyles = theme => ({
   }
 });
 
-const TwitterItem = ({ item }) => {
+const TwitterItem = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   let {
     retweeted_status,
@@ -49,6 +55,11 @@ const TwitterItem = ({ item }) => {
   let photos = null;
   let video = null;
 
+  if (extended_entities && extended_entities.media) {
+    photos = extended_entities.media.filter(item => item.type === "photo");
+    video = extended_entities.media.find(item => item.type === "video");
+  }
+
   if (retweeted_status != null) {
     text = retweeted_status.full_text;
     name = retweeted_status.user.name;
@@ -56,10 +67,17 @@ const TwitterItem = ({ item }) => {
     avatar_url = retweeted_status.user.profile_image_url;
     retweet_count = retweeted_status.retweet_count;
     favorite_count = retweeted_status.favorite_count;
-  }
-  if (extended_entities && extended_entities.media) {
-    photos = extended_entities.media.filter(item => item.type === "photo");
-    video = extended_entities.media.find(item => item.type === "video");
+    if (
+      retweeted_status.extended_entities &&
+      retweeted_status.extended_entities.media
+    ) {
+      photos = retweeted_status.extended_entities.media.filter(
+        item => item.type === "photo"
+      );
+      video = retweeted_status.extended_entities.media.find(
+        item => item.type === "video"
+      );
+    }
   }
 
   return (
@@ -91,7 +109,7 @@ const TwitterItem = ({ item }) => {
             </Text>
           </View>
           <Text style={gstyles.p1}>{text}</Text>
-          <Photo medias={photos} />
+          <Photo medias={photos} navigation={navigation} />
           <TwitterVideo video={video} />
           <View
             style={[
@@ -126,7 +144,14 @@ const TwitterItem = ({ item }) => {
 
 const TwitterVideo = ({ video }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const videoRef = React.useRef(null);
+
   if (!video) return null;
+  const variant = video.video_info.variants.reduce((variant, n) => {
+    if (variant === null) return n;
+    if (n.bitrate > variant.bitrate) return n;
+    return variant;
+  }, null);
   const contentWidth = DEVICE_WIDTH - 48 - theme.spacing_3 * 3;
   return (
     <View
@@ -139,26 +164,32 @@ const TwitterVideo = ({ video }) => {
         gstyles.top_5
       ]}
     >
-      <Video
-        source={{ uri: video.video_info.variants[0].url }}
-        useNativeControls
-        style={{
-          width: contentWidth,
-          height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
-        }}
-      />
+      <TouchableWithoutFeedback
+        onPress={() => videoRef.current.presentFullscreenPlayer()}
+      >
+        <Video
+          ref={videoRef}
+          source={{ uri: variant.url }}
+          useNativeControls
+          style={{
+            width: contentWidth,
+            height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
+          }}
+        />
+      </TouchableWithoutFeedback>
     </View>
   );
 };
-const Photo = ({ medias }) => {
+const Photo = ({ medias, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   let content = null;
   if (medias === null || medias.length === 0) return null;
   switch (medias.length) {
     case 1:
       content = (
-        <Image
-          source={{ uri: medias[0].media_url }}
+        <TwitterImage
+          media={medias[0]}
+          navigation={navigation}
           style={[{ width: "100%", height: "100%" }]}
         />
       );
@@ -171,12 +202,14 @@ const Photo = ({ medias }) => {
             flex: 1
           }}
         >
-          <Image
-            source={{ uri: medias[0].media_url }}
+          <TwitterImage
+            media={medias[0]}
+            navigation={navigation}
             style={[{ flex: 1, height: "100%" }, gstyles.right_5]}
           />
-          <Image
-            source={{ uri: medias[1].media_url }}
+          <TwitterImage
+            media={medias[1]}
+            navigation={navigation}
             style={[{ flex: 1, height: "100%" }, gstyles.right_5]}
           />
         </View>
@@ -191,18 +224,21 @@ const Photo = ({ medias }) => {
           }}
         >
           <View style={[{ flex: 1 }, gstyles.right_5]}>
-            <Image
-              source={{ uri: medias[0].media_url }}
+            <TwitterImage
+              media={medias[0]}
+              navigation={navigation}
               style={[{ flex: 1, height: "100%" }]}
             />
           </View>
           <View style={{ flex: 1 }}>
-            <Image
-              source={{ uri: medias[1].media_url }}
+            <TwitterImage
+              media={medias[1]}
+              navigation={navigation}
               style={[{ flex: 1, width: "100%" }, gstyles.bottom_5]}
             />
-            <Image
-              source={{ uri: medias[2].media_url }}
+            <TwitterImage
+              media={medias[2]}
+              navigation={navigation}
               style={[{ flex: 1, width: "100%" }]}
             />
           </View>
@@ -218,22 +254,26 @@ const Photo = ({ medias }) => {
           }}
         >
           <View style={[{ flex: 1 }, gstyles.right_5]}>
-            <Image
-              source={{ uri: medias[0].media_url }}
+            <TwitterImage
+              media={medias[0]}
+              navigation={navigation}
               style={[{ flex: 1, width: "100%" }, gstyles.bottom_5]}
             />
-            <Image
-              source={{ uri: medias[1].media_url }}
+            <TwitterImage
+              media={medias[1]}
+              navigation={navigation}
               style={[{ flex: 1, width: "100%" }]}
             />
           </View>
           <View style={{ flex: 1 }}>
-            <Image
-              source={{ uri: medias[2].media_url }}
+            <TwitterImage
+              media={medias[2]}
+              navigation={navigation}
               style={[{ flex: 1, width: "100%" }, gstyles.bottom_5]}
             />
-            <Image
-              source={{ uri: medias[3].media_url }}
+            <TwitterImage
+              media={medias[3]}
+              navigation={navigation}
               style={[{ flex: 1, width: "100%" }]}
             />
           </View>
@@ -257,15 +297,31 @@ const Photo = ({ medias }) => {
   );
 };
 
-const TwitterItemContainer = React.memo(({ item }) => {
+const TwitterImage = ({ media, style, navigation }) => {
+  return (
+    <TouchableWithoutFeedback
+      onPress={() =>
+        navigation.navigate("Photo", {
+          uri: media.media_url,
+          height: media.sizes.medium.h,
+          width: media.sizes.medium.w
+        })
+      }
+    >
+      <Image source={{ uri: media.media_url }} style={style} />
+    </TouchableWithoutFeedback>
+  );
+};
+const TwitterItemContainer = React.memo(({ item, navigation }) => {
   return (
     <ActionBarView
       openLabel={"Open in Twitter"}
       openIcon={"twitter-square"}
       link={`https://twitter.com/AndrewYang/status/${item.id_str}`}
       message={`${item.full_text}`}
+      navigation={navigation}
     >
-      <TwitterItem item={item} />
+      <TwitterItem item={item} navigation={navigation} />
     </ActionBarView>
   );
 });

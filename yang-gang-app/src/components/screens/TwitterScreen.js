@@ -6,6 +6,7 @@ import TwitterItem from "components/items/TwitterItem";
 import ActionBarView from "components/items/ActionBarView";
 import { updateTweets } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
+import Loading from "components/utils/Loading";
 
 const styles = theme => {};
 const dummy = [1, 2, 3, 4, 5];
@@ -22,7 +23,7 @@ const TwitterScreen = ({ navigation }) => {
   React.useEffect(() => {
     dispatch(updateTweets());
   }, []);
-  if (!tweets) return null;
+  if (!tweets) return <Loading />;
 
   return (
     <FlatList

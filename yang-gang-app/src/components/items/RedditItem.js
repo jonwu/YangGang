@@ -5,7 +5,7 @@ import {
   Image,
   Dimensions,
   WebView,
-  TouchableHighlight,
+  TouchableWithoutFeedback,
   TouchableOpacity,
   Linking
 } from "react-native";
@@ -46,7 +46,7 @@ const RedditItem = React.memo(({ item, navigation }) => {
   } else if (isRedditVideo) {
     content = <RedditVideo item={item} />;
   } else if (isEnabled) {
-    content = <RedditImage item={item} />;
+    content = <RedditImage item={item} navigation={navigation} />;
   } else if (thumbnail !== "self") {
     content = <RedditThumbnail item={item} navigation={navigation} />;
   } else {
@@ -59,11 +59,13 @@ const RedditItem = React.memo(({ item, navigation }) => {
       openIcon={"reddit-square"}
       link={`https://reddit.com/r/YangForPresidentHQ/comments/${id}`}
       message={`${item.title}`}
+      navigation={navigation}
     >
-      <TouchableHighlight
+      <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate("Webview", {
-            uri: `https://reddit.com/r/YangForPresidentHQ/comments/${id}`
+            uri: `https://reddit.com/r/YangForPresidentHQ/comments/${id}`,
+            title
           })
         }
       >
@@ -73,7 +75,7 @@ const RedditItem = React.memo(({ item, navigation }) => {
           {content}
           <RedditFooter item={item} />
         </View>
-      </TouchableHighlight>
+      </TouchableWithoutFeedback>
     </ActionBarView>
   );
 });
@@ -126,7 +128,7 @@ const RedditHeader = ({ item }) => {
   );
 };
 
-const RedditImage = ({ item }) => {
+const RedditImage = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { title, selftext, preview } = item;
   const source = preview != null && preview.images[0].source;
@@ -145,47 +147,75 @@ const RedditImage = ({ item }) => {
             alignSelf: "center"
           }}
         >
-          <View style={{ maxHeight: 420, overflow: "hidden" }}>
-            <Image
-              style={[
-                styles.thumbnail,
-                {
-                  width: contentWidth,
-                  height: Math.min(
-                    (contentWidth * source.height) / source.width
-                  )
-                }
-              ]}
-              source={{ uri: source.url }}
-            />
-          </View>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate("Photo", {
+                uri: source.url,
+                height: source.height,
+                width: source.width,
+                title
+              })
+            }
+          >
+            <View style={{ maxHeight: 420, overflow: "hidden" }}>
+              <Image
+                style={[
+                  styles.thumbnail,
+                  {
+                    width: contentWidth,
+                    height: Math.min(
+                      (contentWidth * source.height) / source.width
+                    )
+                  }
+                ]}
+                source={{ uri: source.url }}
+              />
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       )}
     </View>
   );
 };
 
+function YouTubeGetID(url) {
+  var ID = "";
+  url = url
+    .replace(/(>|<)/gi, "")
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if (url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  } else {
+    ID = url;
+  }
+  return ID;
+}
+
 const RedditYoutube = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { title, selftext, secure_media_embed, url } = item;
-
+  const id = YouTubeGetID(url);
   return (
     <View>
       <View style={styles.body}>
         {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
         <Text style={[gstyles.h4_bold]}>{title}</Text>
       </View>
-      <WebView
-        style={{
-          width: DEVICE_WIDTH,
-          height:
-            (DEVICE_WIDTH * secure_media_embed.height) /
-            secure_media_embed.width
-        }}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        source={{ uri: "https://www.youtube.com/embed/-ZZPOXn6_9w" }}
-      />
+      <TouchableOpacity activeOpacity={1.0}>
+        <WebView
+          style={{
+            marginLeft: -theme.spacing_2,
+            width: DEVICE_WIDTH,
+            height:
+              (DEVICE_WIDTH * secure_media_embed.height) /
+              secure_media_embed.width
+          }}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          source={{ uri: `https://www.youtube.com/embed/${id}` }}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -200,14 +230,17 @@ const RedditVideo = ({ item }) => {
         {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
         <Text style={[gstyles.h4_bold]}>{title}</Text>
       </View>
-      <Video
-        source={{ uri: source.hls_url }}
-        useNativeControls
-        style={{
-          width: DEVICE_WIDTH,
-          height: (DEVICE_WIDTH * source.height) / source.width
-        }}
-      />
+      <TouchableOpacity activeOpacity={1.0}>
+        <Video
+          source={{ uri: source.hls_url }}
+          useNativeControls
+          style={{
+            marginLeft: -theme.spacing_2,
+            width: DEVICE_WIDTH,
+            height: (DEVICE_WIDTH * source.height) / source.width
+          }}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -232,8 +265,8 @@ const RedditThumbnail = ({ item, navigation }) => {
         <Text style={[gstyles.h4_bold, gstyles.right_2, gstyles.flex]}>
           {title}
         </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Webview", { uri: url })}
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate("Webview", { title, uri: url })}
         >
           <View
             style={{
@@ -266,7 +299,7 @@ const RedditThumbnail = ({ item, navigation }) => {
               </Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );

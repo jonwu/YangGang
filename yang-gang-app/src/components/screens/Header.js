@@ -1,5 +1,5 @@
 import React from "react";
-import { View, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, SafeAreaView, TouchableOpacity, Text } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -31,16 +31,33 @@ const Back = ({ navigation }) => {
   );
 };
 
-const Header = ({ renderLeft, renderTitle, renderRight, navigation }) => {
+const Header = ({
+  bgColor,
+  renderLeft,
+  renderTitle,
+  renderRight,
+  navigation,
+  title
+}) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
-    <SafeAreaView style={styles.headerSafeArea}>
-      <View style={styles.header}>
+    <SafeAreaView
+      style={[styles.headerSafeArea, bgColor && { backgroundColor: bgColor }]}
+    >
+      <View style={[styles.header, bgColor && { backgroundColor: bgColor }]}>
         <View style={gstyles.flex}>
           {renderLeft || <Back navigation={navigation} />}
         </View>
         <View style={[gstyles.flex, { alignItems: "center" }]}>
           {renderTitle}
+          {title && !renderTitle && (
+            <Text
+              numberOfLines={1}
+              style={[gstyles.p1_bold, { color: theme.light(), width: 200 }]}
+            >
+              {title}
+            </Text>
+          )}
         </View>
         <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
           {renderRight}

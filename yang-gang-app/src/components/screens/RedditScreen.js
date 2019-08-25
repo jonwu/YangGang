@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import RedditItem from "components/items/RedditItem";
 import { updateReddit } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
+import Loading from "components/utils/Loading";
 
 const styles = theme => {};
 
@@ -21,7 +22,7 @@ const RedditScreen = ({ navigation }) => {
     dispatch(updateReddit());
   }, []);
 
-  if (!reddit) return null;
+  if (!reddit) return <Loading />;
   return (
     <FlatList
       data={reddit}

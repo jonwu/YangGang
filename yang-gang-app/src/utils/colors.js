@@ -16,3 +16,4 @@ export const ROKA_SLATE = (opacity = 1.0) => `rgba(247, 247, 248, ${opacity})`;
 export const WHITE = (opacity = 1.0) => `rgba(255, 255, 255, ${opacity})`;
 export const BLACK = (opacity = 1.0) => `rgba(0, 0, 0, ${opacity})`;
 export const YANG = (opacity = 1.0) => `rgba(0, 45, 122, ${opacity})`;
+export const YANG_RED = (opacity = 1.0) => `rgba(218, 50, 72, ${opacity})`;

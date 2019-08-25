@@ -20,6 +20,7 @@ const generateStyles = theme => ({
     flex: 1
   },
   thumbnail: {
+    borderRadius: theme.borderRadius,
     height: 96,
     flex: 1,
     marginRight: theme.spacing_2,
@@ -35,13 +36,15 @@ const YoutubeItemContainer = React.memo(({ item, navigation }) => {
       openIcon={"youtube-square"}
       link={`https://youtube.com/watch?v=${id}`}
       message={`${item.snippet.title}`}
+      navigation={navigation}
     >
       <TouchableHighlight
         onPress={() =>
           navigation.navigate("Webview", {
-            // uri: `https://youtube.com/embed/${id}?autoplay=1`
+            // uri: `https://youtube.com/embed/${id}?autoplay=1`,
             // uri: `https://youtube.com/embed/${id.videoId}`
-            uri: `https://youtube.com/watch?v=${id}`
+            uri: `https://youtube.com/watch?v=${id}`,
+            title: item.snippet.title
           })
         }
       >

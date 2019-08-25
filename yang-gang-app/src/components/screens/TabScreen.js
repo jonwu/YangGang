@@ -47,9 +47,9 @@ const generateStyles = theme => ({
 });
 
 const routes = [
-  { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
   { key: "twitter", icon: "logo-twitter", color: "#00aced" },
-  { key: "reddit", icon: "reddit", color: "#FF5700", iconType: "FontAwesome" }
+  { key: "reddit", icon: "reddit", color: "#FF5700", iconType: "FontAwesome" },
+  { key: "youtube", icon: "logo-youtube", color: "#FF0000" }
 ];
 
 const renderIcon = ({ route }) => {

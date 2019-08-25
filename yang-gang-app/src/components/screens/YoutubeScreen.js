@@ -13,25 +13,34 @@ import Separator from "components/items/TwitterSeparator";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
+import Loading from "components/utils/Loading";
 
 const styles = theme => {};
 
+const DAYS_3 = "3 days";
+const DAYS_7 = "7 days";
+const DAYS_ALL = "All Times";
+const options = [DAYS_3, DAYS_7, DAYS_ALL, "Cancel"];
 const Header = connectActionSheet(
-  ({ navigation, showActionSheetWithOptions }) => {
+  ({ navigation, showActionSheetWithOptions, setFilter, filter }) => {
     const { theme, gstyles, styles } = useThemeKit(styles);
     const youtube_day = useSelector(state => state.app.youtube_day);
 
     const renderItemTiny = ({ item: youtube, showActionSheetWithOptions }) => {
       return <YoutubeTinyItem item={youtube} navigation={navigation} />;
     };
-    const options = ["3 days", "7 days", "All Times", "Cancel"];
+
+    let title = "";
+    if (filter === DAYS_3) title = "Last 3 days";
+    if (filter === DAYS_7) title = "This Week";
+    if (filter === DAYS_ALL) title = "All Times";
     const cancelButtonIndex = 3;
 
     return (
       <React.Fragment>
         {youtube_day && (
           <React.Fragment>
-            <Text style={[gstyles.h3, { margin: theme.spacing_2 }]}>
+            <Text style={[gstyles.h4, { margin: theme.spacing_2 }]}>
               Most Viewed Today
             </Text>
             <FlatList
@@ -50,7 +59,11 @@ const Header = connectActionSheet(
           onPress={() => {
             showActionSheetWithOptions(
               { options, cancelButtonIndex },
-              buttonIndex => {}
+              buttonIndex => {
+                if (buttonIndex !== cancelButtonIndex) {
+                  setFilter(options[buttonIndex]);
+                }
+              }
             );
           }}
         >
@@ -61,7 +74,7 @@ const Header = connectActionSheet(
               margin: theme.spacing_2
             }}
           >
-            <Text style={[gstyles.h3]}>This Week</Text>
+            <Text style={[gstyles.h4]}>{title}</Text>
             <Ionicons
               name="ios-arrow-down"
               size={20}
@@ -78,6 +91,20 @@ const Youtubecreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const youtube = useSelector(state => state.app.youtube);
+  const youtubeAllTime = useSelector(state => state.app.youtube_all_time);
+  const [filter, setFilter] = React.useState(DAYS_7);
+  let data = youtube;
+  switch (filter) {
+    case DAYS_3:
+      data = youtube;
+      break;
+    case DAYS_7:
+      data = youtube;
+      break;
+    case DAYS_ALL:
+      data = youtubeAllTime;
+      break;
+  }
 
   const renderItem = ({ item: youtube }) => {
     return <YoutubeItem item={youtube} navigation={navigation} />;
@@ -89,11 +116,13 @@ const Youtubecreen = ({ navigation }) => {
     dispatch(updateYoutubeAllTime());
   }, []);
 
-  if (!youtube) return null;
+  if (!youtube) return <Loading />;
   return (
     <FlatList
-      ListHeaderComponent={<Header navigation={navigation} />}
-      data={youtube}
+      ListHeaderComponent={
+        <Header navigation={navigation} setFilter={setFilter} filter={filter} />
+      }
+      data={data}
       renderItem={renderItem}
       ItemSeparatorComponent={Separator}
       keyExtractor={item => item.id}

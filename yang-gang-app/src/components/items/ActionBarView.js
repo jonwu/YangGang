@@ -17,7 +17,14 @@ const generateStyles = theme => ({
   }
 });
 
-const ActionBarView = ({ children, openLabel, openIcon, link, message }) => {
+const ActionBarView = ({
+  children,
+  openLabel,
+  openIcon,
+  link,
+  message,
+  navigation
+}) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const actionBar = (
     <View style={styles.container}>
@@ -33,7 +40,10 @@ const ActionBarView = ({ children, openLabel, openIcon, link, message }) => {
       <ActionBarItem
         label={openLabel}
         icon={openIcon}
-        onPress={() => Linking.openURL(link)}
+        onPress={() => {
+          navigation.navigate("Webview", { uri: link, title: link });
+          // Linking.openURL(link);
+        }}
       />
     </View>
   );

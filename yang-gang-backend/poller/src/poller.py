@@ -162,7 +162,7 @@ scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube'),
                   'interval', minutes=30, id='fetch_youtube')
 scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube_day'),
                   'interval', minutes=30, id='fetch_youtube_day')
-scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube_day'),
+scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube_all_time'),
                   'interval', minutes=60, id='fetch_youtube_all_time')
 fetch_hot_reddit()
 fetch_youtube(youtube_params, 'youtube')

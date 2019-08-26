@@ -11,11 +11,11 @@ import Loading from "components/utils/Loading";
 const styles = theme => {};
 const dummy = [1, 2, 3, 4, 5];
 
-const TwitterScreen = ({ navigation }) => {
+const TwitterScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const tweets = useSelector(state => state.app.tweets);
-
+  const loadingTweets = useSelector(state => state.loading.tweets);
   const renderItem = ({ item }) => {
     return <TwitterItem item={item} navigation={navigation} />;
   };
@@ -23,16 +23,22 @@ const TwitterScreen = ({ navigation }) => {
   React.useEffect(() => {
     dispatch(updateTweets());
   }, []);
-  if (!tweets) return <Loading />;
+
+  if (!loadingTweets.isReceived) return <Loading />;
 
   return (
     <FlatList
+      onRefresh={() => {
+        dispatch(updateTweets());
+      }}
+      refreshing={loadingTweets.isRequesting}
       data={tweets}
+      contentContainerStyle={{ paddingBottom: 16 }}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.id.toString()}
     />
   );
-};
+});
 
 export default TwitterScreen;

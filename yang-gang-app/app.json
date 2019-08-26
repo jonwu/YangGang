@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Yang Gang",
-    "slug": "YangGang",
+    "name": "YANG",
+    "slug": "yang",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/yang_blue.png",
+    "icon": "./src/assets/logo-4.png",
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "cover",
@@ -16,12 +16,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": ["./src/assets/*"],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.jonwu.yang",
       "infoPlist": {
         "UIBackgroundModes": ["audio"]
       }
+    },
+    "android": {
+      "package": "com.jonwu.yang"
     }
   }
 }

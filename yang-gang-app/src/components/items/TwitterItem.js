@@ -4,7 +4,8 @@ import {
   Text,
   Image,
   Dimensions,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  TouchableOpacity
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,6 +15,9 @@ const { width: DEVICE_WIDTH } = Dimensions.get("window");
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
+import { XmlEntities as Entities } from "html-entities";
+
+const xmlEntities = new Entities();
 
 const generateStyles = theme => ({
   container: {
@@ -37,49 +41,90 @@ const generateStyles = theme => ({
   }
 });
 
+function replaceIndices(str, indices, string) {
+  console.log(str, indices);
+  return str.substr(0, indices[0]) + string + str.substr(indices[1] + 1);
+}
+
 const TwitterItem = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  let { retweeted_status } = item;
+  const status = retweeted_status || item;
   let {
-    retweeted_status,
     full_text,
     user,
     extended_entities,
+    entities,
     retweet_count,
     favorite_count,
     created_at
-  } = item;
+  } = status;
   let text = full_text;
   let name = user.name;
   let screen_name = user.screen_name;
   let avatar_url = user.profile_image_url;
   let photos = null;
   let video = null;
+  let ents = [];
 
+  if (entities) {
+    ents = [...ents, ...entities.hashtags];
+    ents = [...ents, ...entities.user_mentions];
+    ents = [...ents, ...entities.urls];
+  }
   if (extended_entities && extended_entities.media) {
     photos = extended_entities.media.filter(item => item.type === "photo");
     video = extended_entities.media.find(item => item.type === "video");
+    ents = [...ents, ...photos];
+    if (video) ents = [...ents, video];
   }
 
-  if (retweeted_status != null) {
-    text = retweeted_status.full_text;
-    name = retweeted_status.user.name;
-    screen_name = retweeted_status.user.screen_name;
-    avatar_url = retweeted_status.user.profile_image_url;
-    retweet_count = retweeted_status.retweet_count;
-    favorite_count = retweeted_status.favorite_count;
-    if (
-      retweeted_status.extended_entities &&
-      retweeted_status.extended_entities.media
-    ) {
-      photos = retweeted_status.extended_entities.media.filter(
-        item => item.type === "photo"
+  ents.sort((a, b) => {
+    return a.indices[0] > b.indices[0];
+  });
+  full_text = xmlEntities.decode(full_text);
+  full_text = full_text.replace(
+    /([\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+    " "
+  );
+  const bodies = [];
+  const lastIndex = ents.reduce((index, ent, i) => {
+    const { indices } = ent;
+    const start = full_text.substr(index, indices[0] - index);
+    let replacement = null;
+    if (ent.text)
+      replacement = (
+        <Text key={index} style={{ color: theme.tweetLinkColor() }}>
+          #{ent.text}
+        </Text>
       );
-      video = retweeted_status.extended_entities.media.find(
-        item => item.type === "video"
-      );
-    }
-  }
 
+    if (ent.expanded_url && !ent.type)
+      replacement = (
+        <Text
+          onPress={() =>
+            navigation.navigate("Webview", {
+              uri: ent.expanded_url
+            })
+          }
+          key={index}
+          style={{ color: theme.tweetLinkColor() }}
+        >
+          {ent.expanded_url}
+        </Text>
+      );
+    if (ent.screen_name)
+      replacement = (
+        <Text key={index} style={{ color: theme.tweetLinkColor() }}>
+          @{ent.screen_name}
+        </Text>
+      );
+
+    bodies.push(start);
+    if (replacement) bodies.push(replacement);
+    return indices[1];
+  }, 0);
+  bodies.push(full_text.substr(lastIndex));
   return (
     <View style={{ backgroundColor: theme.bg2(), padding: theme.spacing_3 }}>
       {retweeted_status != null && (
@@ -108,7 +153,7 @@ const TwitterItem = ({ item, navigation }) => {
               {`@${screen_name}`} - {moment(created_at).fromNow(true)}
             </Text>
           </View>
-          <Text style={gstyles.p1}>{text}</Text>
+          <Text style={gstyles.p1}>{bodies}</Text>
           <Photo medias={photos} navigation={navigation} />
           <TwitterVideo video={video} />
           <View

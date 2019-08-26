@@ -10,10 +10,11 @@ import Loading from "components/utils/Loading";
 const styles = theme => {};
 
 const keyExtractor = item => item.id;
-const RedditScreen = ({ navigation }) => {
+const RedditScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const reddit = useSelector(state => state.app.reddit);
+  const loadingReddit = useSelector(state => state.loading.reddit);
   const renderItem = ({ item: reddit }) => {
     return <RedditItem item={reddit} navigation={navigation} />;
   };
@@ -22,15 +23,20 @@ const RedditScreen = ({ navigation }) => {
     dispatch(updateReddit());
   }, []);
 
-  if (!reddit) return <Loading />;
+  if (!loadingReddit.isReceived) return <Loading />;
   return (
     <FlatList
+      onRefresh={() => {
+        dispatch(updateReddit());
+      }}
+      refreshing={loadingReddit.isRequesting}
       data={reddit}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.id}
+      contentContainerStyle={{ paddingBottom: 16 }}
     />
   );
-};
+});
 
 export default RedditScreen;

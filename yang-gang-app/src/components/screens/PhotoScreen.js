@@ -27,9 +27,10 @@ const PhotoScreen = ({ navigation }) => {
       >
         <Image
           source={{ uri }}
+          resizeMode={"contain"}
           style={{
-            width: DEVICE_WIDTH,
-            height: (DEVICE_WIDTH * height) / width
+            width: "100%",
+            flex: 1
           }}
         />
       </View>

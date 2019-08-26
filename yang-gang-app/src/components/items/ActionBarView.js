@@ -41,8 +41,8 @@ const ActionBarView = ({
         label={openLabel}
         icon={openIcon}
         onPress={() => {
-          navigation.navigate("Webview", { uri: link, title: link });
-          // Linking.openURL(link);
+          // navigation.navigate("Webview", { uri: link, title: link });
+          Linking.openURL(link);
         }}
       />
     </View>

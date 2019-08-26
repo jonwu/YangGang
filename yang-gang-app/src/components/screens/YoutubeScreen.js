@@ -14,17 +14,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Loading from "components/utils/Loading";
+import { load } from "modules/loading/actions";
 
 const styles = theme => {};
 
 const DAYS_3 = "3 days";
 const DAYS_7 = "7 days";
-const DAYS_ALL = "All Times";
+const DAYS_ALL = "All Time";
 const options = [DAYS_3, DAYS_7, DAYS_ALL, "Cancel"];
 const Header = connectActionSheet(
   ({ navigation, showActionSheetWithOptions, setFilter, filter }) => {
     const { theme, gstyles, styles } = useThemeKit(styles);
-    const youtube_day = useSelector(state => state.app.youtube_day);
+    const youtube_day = useSelector(state => state.app.youtubeDay);
 
     const renderItemTiny = ({ item: youtube, showActionSheetWithOptions }) => {
       return <YoutubeTinyItem item={youtube} navigation={navigation} />;
@@ -33,7 +34,7 @@ const Header = connectActionSheet(
     let title = "";
     if (filter === DAYS_3) title = "Last 3 days";
     if (filter === DAYS_7) title = "This Week";
-    if (filter === DAYS_ALL) title = "All Times";
+    if (filter === DAYS_ALL) title = "All Time";
     const cancelButtonIndex = 3;
 
     return (
@@ -87,11 +88,14 @@ const Header = connectActionSheet(
     );
   }
 );
-const Youtubecreen = ({ navigation }) => {
+const YoutubeScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const youtube = useSelector(state => state.app.youtube);
-  const youtubeAllTime = useSelector(state => state.app.youtube_all_time);
+  const youtubeAllTime = useSelector(state => state.app.youtubeAllTime);
+
+  const loadingFetchYoutube = useSelector(state => state.loading.fetchYoutube);
+
   const [filter, setFilter] = React.useState(DAYS_7);
   let data = youtube;
   switch (filter) {
@@ -110,15 +114,26 @@ const Youtubecreen = ({ navigation }) => {
     return <YoutubeItem item={youtube} navigation={navigation} />;
   };
 
-  React.useEffect(() => {
-    dispatch(updateYoutube());
-    dispatch(updateYoutubeDay());
-    dispatch(updateYoutubeAllTime());
-  }, []);
+  const fetch = () => {
+    dispatch(
+      load(
+        "fetchYoutube",
+        Promise.all([
+          dispatch(updateYoutube()),
+          dispatch(updateYoutubeDay()),
+          dispatch(updateYoutubeAllTime())
+        ])
+      )
+    );
+  };
 
-  if (!youtube) return <Loading />;
+  React.useEffect(fetch, []);
+
+  if (!loadingFetchYoutube.isReceived) return <Loading />;
   return (
     <FlatList
+      onRefresh={fetch}
+      refreshing={loadingFetchYoutube.isRequesting}
       ListHeaderComponent={
         <Header navigation={navigation} setFilter={setFilter} filter={filter} />
       }
@@ -126,8 +141,9 @@ const Youtubecreen = ({ navigation }) => {
       renderItem={renderItem}
       ItemSeparatorComponent={Separator}
       keyExtractor={item => item.id}
+      contentContainerStyle={{ paddingBottom: 16 }}
     />
   );
-};
+});
 
-export default Youtubecreen;
+export default YoutubeScreen;

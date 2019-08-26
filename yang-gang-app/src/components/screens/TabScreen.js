@@ -64,6 +64,7 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case "twitter":

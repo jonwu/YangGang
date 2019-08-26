@@ -147,7 +147,8 @@ const RedditImage = ({ item, navigation }) => {
             alignSelf: "center"
           }}
         >
-          <TouchableWithoutFeedback
+          <TouchableOpacity
+            activeOpacity={1.0}
             onPress={() =>
               navigation.navigate("Photo", {
                 uri: source.url,
@@ -171,7 +172,7 @@ const RedditImage = ({ item, navigation }) => {
                 source={{ uri: source.url }}
               />
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
       )}
     </View>

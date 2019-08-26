@@ -24,8 +24,9 @@ class TweetList(Resource):
         """
         returns a list of andrew yang tweets
         """
-        print('loaded {} tweets from redis'.format(r.llen('twitter')))
-        return [json.loads(x.decode('utf-8')) for x in r.lrange('twitter', 0, 100)]
+        # print('loaded {} tweets from redis'.format(r.llen('twitter')))
+        # return [json.loads(x.decode('utf-8')) for x in r.lrange('twitter', 0, 30)]
+        return json.loads(r.get('twitter').decode('utf-8'))
 
 
 @api.route("/youtube/")

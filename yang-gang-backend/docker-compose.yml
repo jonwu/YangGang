@@ -4,7 +4,11 @@ services:
         build: ./app
         ports:
             - "80:80"
+#        volumes:
+#            - src
     redis:
         image: redis
     poller:
         build: ./poller
+#        volumes:
+#            - src

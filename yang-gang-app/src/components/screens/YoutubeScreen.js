@@ -15,6 +15,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Loading from "components/utils/Loading";
 import { load } from "modules/loading/actions";
+import lodash from "lodash";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_FETCH_YOUTUBE } from "utils/AnalyticsUtils";
 
 const styles = theme => {};
 
@@ -115,6 +118,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   };
 
   const fetch = () => {
+    Amplitude.logEvent(EVENT_FETCH_YOUTUBE);
     dispatch(
       load(
         "fetchYoutube",
@@ -127,12 +131,14 @@ const YoutubeScreen = React.memo(({ navigation }) => {
     );
   };
 
+  const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
+    .current;
   React.useEffect(fetch, []);
 
   if (!loadingFetchYoutube.isReceived) return <Loading />;
   return (
     <FlatList
-      onRefresh={fetch}
+      onRefresh={throttledFetch}
       refreshing={loadingFetchYoutube.isRequesting}
       ListHeaderComponent={
         <Header navigation={navigation} setFilter={setFilter} filter={filter} />

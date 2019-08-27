@@ -8,13 +8,15 @@ import { ThemeContextProvider } from "utils/ThemeUtils";
 import * as Font from "expo-font";
 import { Audio } from "expo-av";
 import {
-  INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+  INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
   INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
 } from "expo-av/build/Audio";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import silence from "assets/silence.mp3";
 import splash from "assets/splash.png";
 import { AppLoading } from "expo";
+import * as Amplitude from "expo-analytics-amplitude";
+import Constants from "expo-constants";
 
 const { store, persistor } = configureStore();
 
@@ -41,7 +43,7 @@ export default function App() {
       playsInSilentModeIOS: true,
       allowsRecordingIOS: false,
       staysActiveInBackground: false,
-      interruptionModeIOS: INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      interruptionModeIOS: INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
       shouldDuckAndroid: true,
       playThroughEarpieceAndroid: true,
       interruptionModeAndroid: INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
@@ -54,21 +56,20 @@ export default function App() {
       isLooping: true
     });
   };
+
   React.useEffect(() => {
     fetchSound();
   }, []);
 
-  // var CustomFade = {
-  //   duration: 5000,
-  //   update: {
-  //     type: LayoutAnimation.Types.easeOut,
-  //     property: LayoutAnimation.Properties.opacity
-  //   }
-  // };
-
-  // LayoutAnimation.configureNext(CustomFade);
-
   const load = async () => {
+    Amplitude.initialize(
+      __DEV__
+        ? "243dac9c72026a21c881e41673775405"
+        : "c48375b7100d056fa0396c962ec218b0"
+    );
+    Amplitude.setUserId(Constants.installationId);
+    console.log("Initialize ID", Constants.installationId);
+
     await Font.loadAsync({
       "brandon-light": require("assets/fonts/whitney-light.ttf"),
       "brandon-med": require("assets/fonts/whitney-medium.ttf"),

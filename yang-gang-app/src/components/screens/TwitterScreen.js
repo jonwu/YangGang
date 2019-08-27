@@ -7,6 +7,9 @@ import ActionBarView from "components/items/ActionBarView";
 import { updateTweets } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
 import Loading from "components/utils/Loading";
+import lodash from "lodash";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_FETCH_TWITTER } from "utils/AnalyticsUtils";
 
 const styles = theme => {};
 const dummy = [1, 2, 3, 4, 5];
@@ -20,17 +23,19 @@ const TwitterScreen = React.memo(({ navigation }) => {
     return <TwitterItem item={item} navigation={navigation} />;
   };
 
-  React.useEffect(() => {
+  const fetch = () => {
+    Amplitude.logEvent(EVENT_FETCH_TWITTER);
     dispatch(updateTweets());
-  }, []);
+  };
+  const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
+    .current;
+  React.useEffect(fetch, []);
 
   if (!loadingTweets.isReceived) return <Loading />;
 
   return (
     <FlatList
-      onRefresh={() => {
-        dispatch(updateTweets());
-      }}
+      onRefresh={throttledFetch}
       refreshing={loadingTweets.isRequesting}
       data={tweets}
       contentContainerStyle={{ paddingBottom: 16 }}

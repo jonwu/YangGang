@@ -20,7 +20,7 @@ const WebviewScreen = ({ navigation }) => {
     <React.Fragment>
       <Header
         navigation={navigation}
-        title={title}
+        title={title || uri}
         renderRight={
           <TouchableOpacity onPress={() => Linking.openURL(uri)}>
             <MaterialCommunityIcons
@@ -35,7 +35,7 @@ const WebviewScreen = ({ navigation }) => {
         style={{ flex: 1 }}
         javaScriptEnabled
         source={{ uri }}
-        useWebKit={true}
+        // useWebKit={true}
       />
     </React.Fragment>
   );

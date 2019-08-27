@@ -3,6 +3,15 @@ import { View, Text, TouchableOpacity, Linking, Share } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
+import * as Amplitude from "expo-analytics-amplitude";
+import {
+  EVENT_OPEN_YOUTUBE,
+  EVENT_OPEN_REDDIT,
+  EVENT_OPEN_TWITTER,
+  EVENT_SHARE_YOUTUBE,
+  EVENT_SHARE_REDDIT,
+  EVENT_SHARE_TWITTER
+} from "utils/AnalyticsUtils";
 
 const generateStyles = theme => ({
   item: {
@@ -32,6 +41,19 @@ const ActionBarView = ({
         label={"Share"}
         icon={"share-square"}
         onPress={() => {
+          switch (openLabel) {
+            case "Open in Youtube":
+              Amplitude.logEvent(EVENT_SHARE_YOUTUBE);
+              break;
+            case "Open in Reddit":
+              Amplitude.logEvent(EVENT_SHARE_REDDIT);
+              break;
+            case "Open in Twitter":
+              Amplitude.logEvent(EVENT_SHARE_TWITTER);
+              break;
+            default:
+              break;
+          }
           Share.share({
             message: `${message}${"\n\n"}${link}`
           });
@@ -41,7 +63,21 @@ const ActionBarView = ({
         label={openLabel}
         icon={openIcon}
         onPress={() => {
+          switch (openLabel) {
+            case "Open in Youtube":
+              Amplitude.logEvent(EVENT_OPEN_YOUTUBE);
+              break;
+            case "Open in Reddit":
+              Amplitude.logEvent(EVENT_OPEN_REDDIT);
+              break;
+            case "Open in Twitter":
+              Amplitude.logEvent(EVENT_OPEN_TWITTER);
+              break;
+            default:
+              break;
+          }
           // navigation.navigate("Webview", { uri: link, title: link });
+
           Linking.openURL(link);
         }}
       />

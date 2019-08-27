@@ -6,6 +6,9 @@ import RedditItem from "components/items/RedditItem";
 import { updateReddit } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
 import Loading from "components/utils/Loading";
+import lodash from "lodash";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_FETCH_REDDIT } from "utils/AnalyticsUtils";
 
 const styles = theme => {};
 
@@ -19,16 +22,18 @@ const RedditScreen = React.memo(({ navigation }) => {
     return <RedditItem item={reddit} navigation={navigation} />;
   };
 
-  React.useEffect(() => {
+  const fetch = () => {
+    Amplitude.logEvent(EVENT_FETCH_REDDIT);
     dispatch(updateReddit());
-  }, []);
+  };
+  const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
+    .current;
+  React.useEffect(fetch, []);
 
   if (!loadingReddit.isReceived) return <Loading />;
   return (
     <FlatList
-      onRefresh={() => {
-        dispatch(updateReddit());
-      }}
+      onRefresh={throttledFetch}
       refreshing={loadingReddit.isRequesting}
       data={reddit}
       renderItem={renderItem}

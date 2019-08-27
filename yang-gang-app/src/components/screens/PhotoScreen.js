@@ -4,6 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
 const { width: DEVICE_WIDTH } = Dimensions.get("window");
+import ImageViewer from "react-native-image-zoom-viewer";
 
 const generateStyles = theme => ({});
 
@@ -13,10 +14,16 @@ const PhotoScreen = ({ navigation }) => {
   height = navigation.getParam("height");
   width = navigation.getParam("width");
   title = navigation.getParam("title");
+  const images = [{ url: uri }];
 
   return (
     <View style={{ flex: 1 }}>
-      <Header bgColor={"black"} navigation={navigation} title={title || uri} />
+      <Header
+        close
+        bgColor={"black"}
+        navigation={navigation}
+        title={title || uri}
+      />
       <View
         style={{
           flex: 1,

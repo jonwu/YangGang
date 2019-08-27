@@ -30,6 +30,24 @@ const Back = ({ navigation }) => {
     </TouchableOpacity>
   );
 };
+const Close = ({ navigation }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  if (navigation.isFirstRouteInParent()) return null;
+
+  return (
+    <TouchableOpacity
+      style={{ padding: 8 }}
+      onPress={() => navigation.goBack()}
+    >
+      <Ionicons
+        name={"ios-close"}
+        color={theme.light()}
+        size={36}
+        style={{ marginTop: -6 }}
+      />
+    </TouchableOpacity>
+  );
+};
 
 const Header = ({
   bgColor,
@@ -37,7 +55,8 @@ const Header = ({
   renderTitle,
   renderRight,
   navigation,
-  title
+  title,
+  close
 }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
@@ -46,7 +65,7 @@ const Header = ({
     >
       <View style={[styles.header, bgColor && { backgroundColor: bgColor }]}>
         <View style={gstyles.flex}>
-          {renderLeft || <Back navigation={navigation} />}
+          {renderLeft || (!close && <Back navigation={navigation} />)}
         </View>
         <View style={[gstyles.flex, { alignItems: "center" }]}>
           {renderTitle}
@@ -61,6 +80,7 @@ const Header = ({
         </View>
         <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
           {renderRight}
+          {close && <Close navigation={navigation} />}
         </View>
       </View>
     </SafeAreaView>

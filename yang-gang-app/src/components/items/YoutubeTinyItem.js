@@ -4,6 +4,9 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
 import { transformN } from "utils/Utils";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
+
 const entities = new Entities();
 
 const generateStyles = theme => ({});
@@ -22,12 +25,13 @@ const YoutubeTinyItem = ({ item, navigation }) => {
   } = snippet;
   return (
     <TouchableWithoutFeedback
-      onPress={() =>
+      onPress={() => {
+        Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
         navigation.navigate("Webview", {
           uri: `https://youtube.com/watch?v=${id}`,
           title: item.snippet.title
-        })
-      }
+        });
+      }}
     >
       <View style={{ width: 96 * (16 / 9) }}>
         <Image

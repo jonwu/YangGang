@@ -6,19 +6,34 @@ import YoutubeWebviewScreen from "components/screens/YoutubeWebviewScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
 import { useThemeKit } from "utils/ThemeUtils";
 
-const Root = () => {
-  const StackNavigator = createStackNavigator(
-    {
-      Tabs: TabScreen,
-      Webview: WebviewScreen,
-      YoutubeWebview: YoutubeWebviewScreen,
-      Photo: PhotoScreen
+const MainStack = createStackNavigator(
+  {
+    Tabs: TabScreen,
+    Webview: WebviewScreen,
+    YoutubeWebview: YoutubeWebviewScreen
+    // Photo: PhotoScreen
+  },
+  {
+    headerMode: "none"
+  }
+);
+
+const RootStack = createStackNavigator(
+  {
+    Main: {
+      screen: MainStack
     },
-    {
-      headerMode: "none"
+    Photo: {
+      screen: PhotoScreen
     }
-  );
-  const App = createAppContainer(StackNavigator);
+  },
+  {
+    mode: "modal",
+    headerMode: "none"
+  }
+);
+const Root = () => {
+  const App = createAppContainer(RootStack);
 
   return <App />;
 };

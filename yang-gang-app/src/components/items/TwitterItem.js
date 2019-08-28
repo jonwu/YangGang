@@ -42,7 +42,6 @@ const generateStyles = theme => ({
 });
 
 function replaceIndices(str, indices, string) {
-  console.log(str, indices);
   return str.substr(0, indices[0]) + string + str.substr(indices[1] + 1);
 }
 
@@ -83,14 +82,32 @@ const TwitterItem = ({ item, navigation }) => {
     return a.indices[0] > b.indices[0];
   });
   full_text = xmlEntities.decode(full_text);
-  full_text = full_text.replace(
-    /([\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-    " "
-  );
+  const regex = /([\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
+  const unicodeIndices = [];
+  while ((match = regex.exec(full_text)) != null) {
+    unicodeIndices.push(match.index);
+  }
+  const matches = full_text.match(regex);
+  full_text = full_text.replace(regex, " ");
+
   const bodies = [];
   const lastIndex = ents.reduce((index, ent, i) => {
     const { indices } = ent;
-    const start = full_text.substr(index, indices[0] - index);
+
+    let start = "";
+    console.log(matches);
+    const curr = unicodeIndices.reduce((curr, position, i) => {
+      console.log(curr, position, curr <= position && position < indices[0]);
+      if (curr <= position && position < indices[0]) {
+        start += full_text.substring(curr, position) + matches[i];
+        return position + 1;
+      } else {
+        return curr;
+      }
+    }, index);
+    start += full_text.substr(curr, indices[0] - curr);
+    console.log(start);
+
     let replacement = null;
     if (ent.text)
       replacement = (
@@ -125,6 +142,7 @@ const TwitterItem = ({ item, navigation }) => {
     return indices[1];
   }, 0);
   bodies.push(full_text.substr(lastIndex));
+
   return (
     <View style={{ backgroundColor: theme.bg2(), padding: theme.spacing_3 }}>
       {retweeted_status != null && (

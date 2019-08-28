@@ -2,7 +2,7 @@ import axios from "axios";
 // const URL = "http://localhost:80";
 // const URL = "http://18.223.101.191:80";
 // const URL = "http://10.130.33.218:5000";
-const URL = "http://192.168.2.7:80";
+const URL = "http://54.185.34.163:80";
 // const URL = "http://192.168.17.202:80";
 const instance = axios.create({ timeout: 10000, baseURL: URL });
 

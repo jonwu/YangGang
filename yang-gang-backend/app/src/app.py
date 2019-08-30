@@ -47,8 +47,17 @@ class YoutubeListDay(Resource):
         return json.loads(r.get('youtube_day').decode('utf-8'))
 
 
+@api.route("/youtube_3day/")
+class YoutubeList3Day(Resource):
+    def get(self):
+        """
+        returns a list of recent andrew yang youtube videos today
+        """
+        return json.loads(r.get('youtube_3day').decode('utf-8'))
+
+
 @api.route("/youtube_all_time/")
-class YoutubeListDay(Resource):
+class YoutubeListAllTime(Resource):
     def get(self):
         """
         returns a list of recent andrew yang youtube videos all time

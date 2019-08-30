@@ -19,6 +19,8 @@ r.flushdb()
 
 # constants
 top_num = 30
+top_num_tweets = 50
+
 reddit = praw.Reddit(client_id='xuKSovdtrPCrOg',
                      client_secret='bwMxzy_4Ytpdj8P0VzMhuNeXTGE',
                      user_agent='yanggangtest',
@@ -34,11 +36,13 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-youtube_api_key = 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
+youtube_api_key = 'AIzaSyAzK4LuxH38FMKZ7XwyYkCjyAzDNjwNg9Q'
 youtube_url = 'https://www.googleapis.com/youtube/v3/search'
 youtube_vid_url = 'https://www.googleapis.com/youtube/v3/videos'
 seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
 one_day_ago = datetime.now(timezone.utc) - timedelta(days=1)
+three_days_ago = datetime.now(timezone.utc) - timedelta(days=3)
+
 youtube_params = {
     'part': 'snippet',
     'order': 'viewCount',
@@ -53,6 +57,16 @@ youtube_params_day = {
     'part': 'snippet',
     'order': 'viewCount',
     'publishedAfter': one_day_ago.isoformat(),
+    'q': 'andrew yang',
+    'type': 'video',
+    'maxResults': str(top_num),
+    'key': youtube_api_key
+}
+
+youtube_params_3day = {
+    'part': 'snippet',
+    'order': 'viewCount',
+    'publishedAfter': three_days_ago.isoformat(),
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
@@ -100,7 +114,7 @@ def fetch_twitter():
         j = tweet._json
         if j['in_reply_to_screen_name'] is None or j['in_reply_to_screen_name'] == 'AndrewYang':
             tweet_list.append(j)
-            if len(tweet_list) == top_num:
+            if len(tweet_list) == top_num_tweets:
                 break
     r.set('twitter', json.dumps(tweet_list))
     end = time.time()
@@ -140,7 +154,8 @@ def fetch_twitter():
 
 def fetch_youtube(params, redis_key):
     try:
-        response = requests.get(url=youtube_url, params=params).json()['items']
+        initial_response = requests.get(url=youtube_url, params=params).json()
+        response = initial_response['items']
         vid_ids = [x['id']['videoId'] for x in response]
         print('fetched new youtube items at {} using {} params'.format(datetime.now(), redis_key))
         view_counts = requests.get(url=youtube_vid_url,
@@ -151,6 +166,7 @@ def fetch_youtube(params, redis_key):
         print('set: {} with: {}'.format(redis_key, response[0]['statistics']))
     except:
         print('exception in getting video responses')
+        print('error code: {}'.format(initial_response))
         traceback.print_exc()
 
 
@@ -178,13 +194,16 @@ scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube'),
                   'interval', minutes=30, id='fetch_youtube')
 scheduler.add_job(lambda: fetch_youtube(youtube_params_day, 'youtube_day'),
                   'interval', minutes=30, id='fetch_youtube_day')
+scheduler.add_job(lambda: fetch_youtube(youtube_params_3day, 'youtube_3day'),
+                  'interval', minutes=1, id='fetch_youtube_3day')
 scheduler.add_job(lambda: fetch_youtube(youtube_params_all_time, 'youtube_all_time'),
-                  'interval', minutes=60, id='fetch_youtube_all_time')
+                  'interval', minutes=1, id='fetch_youtube_all_time')
 
 fetch_hot_reddit()
 fetch_twitter()
 fetch_youtube(youtube_params, 'youtube')
 fetch_youtube(youtube_params_day, 'youtube_day')
+fetch_youtube(youtube_params_3day, 'youtube_3day')
 fetch_youtube(youtube_params_all_time, 'youtube_all_time')
 
 scheduler.start()

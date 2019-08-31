@@ -33,6 +33,14 @@ function youtubeDay(state = null, actions) {
       return state;
   }
 }
+function youtube3Days(state = null, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_YOUTUBE_3_DAYS:
+      return actions.youtube;
+    default:
+      return state;
+  }
+}
 function youtubeAllTime(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_ALL_TIME:
@@ -47,5 +55,6 @@ export default combineReducers({
   tweets,
   youtube,
   youtubeDay,
+  youtube3Days,
   youtubeAllTime
 });

@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   updateYoutube,
   updateYoutubeDay,
+  updateYoutube3Days,
   updateYoutubeAllTime
 } from "modules/app/actions";
 import Separator from "components/items/TwitterSeparator";
@@ -96,6 +97,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   const dispatch = useDispatch();
   const youtube = useSelector(state => state.app.youtube);
   const youtubeAllTime = useSelector(state => state.app.youtubeAllTime);
+  const youtube3Days = useSelector(state => state.app.youtube3Days);
 
   const loadingFetchYoutube = useSelector(state => state.loading.fetchYoutube);
 
@@ -103,7 +105,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   let data = youtube;
   switch (filter) {
     case DAYS_3:
-      data = youtube;
+      data = youtube3Days;
       break;
     case DAYS_7:
       data = youtube;
@@ -125,6 +127,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
         Promise.all([
           dispatch(updateYoutube()),
           dispatch(updateYoutubeDay()),
+          dispatch(updateYoutube3Days()),
           dispatch(updateYoutubeAllTime())
         ])
       )

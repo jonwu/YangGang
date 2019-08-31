@@ -36,6 +36,9 @@ class BackendUtils {
   getYoutubeDay(params) {
     return instance.get(`/youtube_day`, { params });
   }
+  getYoutube3Days(params) {
+    return instance.get(`/youtube_3day`, { params });
+  }
   getYoutubeAllTime(params) {
     return instance.get(`/youtube_all_time`, { params });
   }

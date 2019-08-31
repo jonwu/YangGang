@@ -77,6 +77,23 @@ export function updateYoutubeDay() {
     );
   };
 }
+export function updateYoutube3Days() {
+  return dispatch => {
+    return dispatch(
+      load(
+        "youtube3Days",
+        BackendUtils.getYoutube3Days().then(response => {
+          const youtube = response.data;
+          dispatch({
+            type: ActionTypes.UPDATE_YOUTUBE_3_DAYS,
+            youtube
+          });
+          return youtube;
+        })
+      )
+    );
+  };
+}
 export function updateYoutubeAllTime() {
   return dispatch => {
     return dispatch(

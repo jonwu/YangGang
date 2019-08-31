@@ -38,6 +38,8 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 youtube_api_key = 'AIzaSyAzK4LuxH38FMKZ7XwyYkCjyAzDNjwNg9Q'
 youtube_api_key2 = 'AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k'
+youtube_api_key3 = 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
+
 youtube_url = 'https://www.googleapis.com/youtube/v3/search'
 youtube_vid_url = 'https://www.googleapis.com/youtube/v3/videos'
 seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
@@ -51,7 +53,7 @@ youtube_params = {
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
-    'key': youtube_api_key2
+    'key': youtube_api_key3
 }
 
 youtube_params_day = {
@@ -71,7 +73,7 @@ youtube_params_3day = {
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
-    'key': youtube_api_key2
+    'key': youtube_api_key3
 }
 
 youtube_params_all_time = {
@@ -84,11 +86,11 @@ youtube_params_all_time = {
 }
 
 
-def get_youtube_stat_params(vid_list):
+def get_youtube_stat_params(vid_list, api_key):
     return {
         'part': 'contentDetails,statistics',
         'id': ','.join(vid_list),
-        'key': youtube_api_key2
+        'key': api_key
     }
 
 
@@ -158,9 +160,9 @@ def fetch_youtube(params, redis_key):
         initial_response = requests.get(url=youtube_url, params=params).json()
         response = initial_response['items']
         vid_ids = [x['id']['videoId'] for x in response]
-        print('fetched new youtube items at {} using {} params'.format(datetime.now(), redis_key))
+        print('fetched new youtube items at {} using {} params with api key: {}'.format(datetime.now(), redis_key, params['key']))
         view_counts = requests.get(url=youtube_vid_url,
-                                   params=get_youtube_stat_params(vid_ids)).json()['items']
+                                   params=get_youtube_stat_params(vid_ids, params['key'])).json()['items']
         for i in range(len(response)):
             response[i].update(view_counts[i])
         r.set(redis_key, json.dumps(response))

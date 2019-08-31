@@ -37,7 +37,7 @@ const TwitterScreen = React.memo(({ navigation }) => {
     <FlatList
       onRefresh={throttledFetch}
       refreshing={loadingTweets.isRequesting}
-      data={[tweets[4]]}
+      data={tweets}
       contentContainerStyle={{ paddingBottom: 16 }}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}

@@ -51,7 +51,7 @@ youtube_params = {
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
-    'key': youtube_api_key
+    'key': youtube_api_key2
 }
 
 youtube_params_day = {
@@ -71,7 +71,7 @@ youtube_params_3day = {
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
-    'key': youtube_api_key
+    'key': youtube_api_key2
 }
 
 youtube_params_all_time = {
@@ -88,7 +88,7 @@ def get_youtube_stat_params(vid_list):
     return {
         'part': 'contentDetails,statistics',
         'id': ','.join(vid_list),
-        'key': youtube_api_key
+        'key': youtube_api_key2
     }
 
 

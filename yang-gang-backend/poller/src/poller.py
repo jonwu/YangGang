@@ -37,6 +37,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 youtube_api_key = 'AIzaSyAzK4LuxH38FMKZ7XwyYkCjyAzDNjwNg9Q'
+youtube_api_key2 = 'AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k'
 youtube_url = 'https://www.googleapis.com/youtube/v3/search'
 youtube_vid_url = 'https://www.googleapis.com/youtube/v3/videos'
 seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
@@ -60,7 +61,7 @@ youtube_params_day = {
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
-    'key': youtube_api_key
+    'key': youtube_api_key2
 }
 
 youtube_params_3day = {
@@ -79,7 +80,7 @@ youtube_params_all_time = {
     'q': 'andrew yang',
     'type': 'video',
     'maxResults': str(top_num),
-    'key': youtube_api_key
+    'key': youtube_api_key2
 }
 
 
@@ -191,13 +192,13 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=5, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=5, id='fetch_twitter')
 scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube'),
-                  'interval', minutes=30, id='fetch_youtube')
+                  'interval', minutes=35, id='fetch_youtube')
 scheduler.add_job(lambda: fetch_youtube(youtube_params_day, 'youtube_day'),
                   'interval', minutes=30, id='fetch_youtube_day')
 scheduler.add_job(lambda: fetch_youtube(youtube_params_3day, 'youtube_3day'),
-                  'interval', minutes=1, id='fetch_youtube_3day')
+                  'interval', minutes=35, id='fetch_youtube_3day')
 scheduler.add_job(lambda: fetch_youtube(youtube_params_all_time, 'youtube_all_time'),
-                  'interval', minutes=1, id='fetch_youtube_all_time')
+                  'interval', minutes=60, id='fetch_youtube_all_time')
 
 fetch_hot_reddit()
 fetch_twitter()

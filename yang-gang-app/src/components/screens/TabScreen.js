@@ -37,8 +37,8 @@ const generateStyles = theme => ({
     // width: "auto"
   },
   logo: {
-    height: 30,
-    width: 60
+    height: 26,
+    width: 52
   },
   icon: {
     height: 24,
@@ -64,6 +64,7 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case "twitter":
@@ -123,7 +124,8 @@ const ThemeIcon = () => {
       style={{ padding: 8 }}
       onPress={() => dispatch(updateTheme(nextThemeId))}
     >
-      <Image source={pngYinYang} style={styles.icon} />
+      <MaterialCommunityIcons name="yin-yang" size={26} color={theme.light()} />
+      {/* <Image source={pngYinYang} style={styles.icon} /> */}
     </TouchableOpacity>
   );
 };

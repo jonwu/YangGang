@@ -7,23 +7,13 @@ If running locally, it's just three steps:
 
 That's it! If you make a code change, you need to rebuild the containers. For some reason, the volume mount isn't working. Also, if you don't have docker you should download it from online and start it up.
 
-
-To deploy on AWS, follow the tutorial at:
-https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-cli-tutorial-fargate.html
-
-I've pretty much done all the steps, so we shouldn't have to repeat this again.
-
-Another useful link is:
-https://www.bogotobogo.com/DevOps/Docker/Docker-ECS-Service-Dicsovery-Redis-Flask.php
-
 ### Instructions for Deploying on AWS:
 
 0. In app.py and poller.py, uncomment the line 
 "r = Redis(host='localhost', port=6379)" and comment out the other line where
 host='redis'. This is important because the redis hostname is different on AWS.
 
-1. We need to build the images and deploy to ECR so that docker-compose can access them. I've already created ECR repositories
-for my containers, so we just need to run the following commands.
+1. We need to build the images and deploy to ECR so that docker-compose can access them. If you haven't created the ECR repositories, you need to do that. I've already created ECR repositories for my containers, so we just need to run the following commands.
     
     - cd poller
     - docker build -t poller .

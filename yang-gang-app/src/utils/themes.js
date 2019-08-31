@@ -40,6 +40,8 @@ const collections = {
     bgHeader: colors.YANG,
     borderColor: colors.DARK(0.1),
     shadow: colors.DARK(0.1),
+    loadingColor: colors.DARK(0.5),
+    tweetLinkColor: colors.YANG,
     ...shared
   },
   1: {
@@ -52,6 +54,8 @@ const collections = {
     bgHeader: colors.BLACK,
     borderColor: colors.LIGHT(0.05),
     shadow: colors.LIGHT(0.1),
+    loadingColor: colors.LIGHT(0.5),
+    tweetLinkColor: colors.BLUE,
     ...shared
   }
 };

@@ -11,11 +11,11 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
-const { width: DEVICE_WIDTH } = Dimensions.get("window");
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { XmlEntities as Entities } from "html-entities";
+import { useDimensionStore } from "utils/DimensionUtils";
 
 const xmlEntities = new Entities();
 
@@ -164,7 +164,7 @@ const TwitterItem = ({ item, navigation }) => {
           <View style={styles.header}>
             <Text style={[gstyles.p1_bold, gstyles.right_5]}>{name}</Text>
             <Text style={gstyles.p1_50}>
-              {`@${screen_name}`} - {moment(created_at).fromNow(true)}
+              {`@${screen_name}`} - {moment(new Date(created_at)).fromNow(true)}
             </Text>
           </View>
           <Text style={gstyles.p1}>{bodies}</Text>
@@ -204,6 +204,7 @@ const TwitterItem = ({ item, navigation }) => {
 const TwitterVideo = ({ video }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const videoRef = React.useRef(null);
+  const { deviceWidth } = useDimensionStore();
 
   if (!video) return null;
   const variant = video.video_info.variants.reduce((variant, n) => {
@@ -211,7 +212,7 @@ const TwitterVideo = ({ video }) => {
     if (n.bitrate > variant.bitrate) return n;
     return variant;
   }, null);
-  const contentWidth = DEVICE_WIDTH - 48 - theme.spacing_3 * 3;
+  const contentWidth = deviceWidth - 48 - theme.spacing_3 * 3;
   return (
     <View
       style={[
@@ -240,6 +241,7 @@ const TwitterVideo = ({ video }) => {
   );
 };
 const Photo = ({ medias, navigation }) => {
+  const { deviceWidth } = useDimensionStore();
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   let content = null;
   if (medias === null || medias.length === 0) return null;
@@ -344,7 +346,7 @@ const Photo = ({ medias, navigation }) => {
       style={[
         {
           width: "100%",
-          height: 180,
+          height: deviceWidth / 2.5,
           borderRadius: 8,
           overflow: "hidden"
         },
@@ -357,6 +359,7 @@ const Photo = ({ medias, navigation }) => {
 };
 
 const TwitterImage = ({ media, style, navigation }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
     <TouchableWithoutFeedback
       onPress={() =>
@@ -367,7 +370,10 @@ const TwitterImage = ({ media, style, navigation }) => {
         })
       }
     >
-      <Image source={{ uri: media.media_url }} style={style} />
+      <Image
+        source={{ uri: media.media_url }}
+        style={[style, { backgroundColor: theme.text(0.1) }]}
+      />
     </TouchableWithoutFeedback>
   );
 };

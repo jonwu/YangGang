@@ -19,6 +19,7 @@ import { load } from "modules/loading/actions";
 import lodash from "lodash";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_FETCH_YOUTUBE } from "utils/AnalyticsUtils";
+import { useDimensionStore } from "utils/DimensionUtils";
 
 const styles = theme => {};
 
@@ -98,7 +99,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   const youtube = useSelector(state => state.app.youtube);
   const youtubeAllTime = useSelector(state => state.app.youtubeAllTime);
   const youtube3Days = useSelector(state => state.app.youtube3Days);
-
+  const { deviceWidth } = useDimensionStore();
   const loadingFetchYoutube = useSelector(state => state.loading.fetchYoutube);
 
   const [filter, setFilter] = React.useState(DAYS_7);
@@ -117,6 +118,20 @@ const YoutubeScreen = React.memo(({ navigation }) => {
 
   const renderItem = ({ item: youtube }) => {
     return <YoutubeItem item={youtube} navigation={navigation} />;
+  };
+  const renderDuoItem = ({ item }) => {
+    const itemOne = item[0];
+    const itemTwo = item[1];
+    return (
+      <View style={{ flexDirection: "row" }}>
+        <View style={{ flex: 1 }}>
+          {itemOne && <YoutubeItem item={itemOne} navigation={navigation} />}
+        </View>
+        <View style={{ flex: 1 }}>
+          {itemTwo && <YoutubeItem item={itemTwo} navigation={navigation} />}
+        </View>
+      </View>
+    );
   };
 
   const fetch = () => {
@@ -139,6 +154,28 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   React.useEffect(fetch, []);
 
   if (!loadingFetchYoutube.isReceived) return <Loading />;
+
+  if (deviceWidth > 800) {
+    return (
+      <FlatList
+        ListHeaderComponent={
+          <Header
+            navigation={navigation}
+            setFilter={setFilter}
+            filter={filter}
+          />
+        }
+        onRefresh={throttledFetch}
+        refreshing={loadingFetchYoutube.isRequesting}
+        data={lodash.chunk(data, 2)}
+        contentContainerStyle={{ paddingBottom: 16 }}
+        renderItem={renderDuoItem}
+        ItemSeparatorComponent={Separator}
+        keyExtractor={(item, i) => i.toString()}
+      />
+    );
+  }
+
   return (
     <FlatList
       onRefresh={throttledFetch}

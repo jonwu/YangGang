@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, LayoutAnimation } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  LayoutAnimation,
+  Dimensions
+} from "react-native";
 import Root from "components/Root";
 import configureStore from "store/configureStore";
 import { Provider } from "react-redux";
@@ -17,7 +24,7 @@ import splash from "assets/splash.png";
 import { AppLoading } from "expo";
 import * as Amplitude from "expo-analytics-amplitude";
 import Constants from "expo-constants";
-
+import { useDimensionStore } from "utils/DimensionUtils";
 const { store, persistor } = configureStore();
 
 const onBeforeLift = () => {};
@@ -52,8 +59,7 @@ export default function App() {
     await Audio.Sound.createAsync(silence, {
       shouldPlay: true,
       pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
-      volume: 1,
-      isLooping: true
+      volume: 1
     });
   };
 
@@ -92,6 +98,7 @@ export default function App() {
         onError={console.warn}
       />
     );
+  console.log("Render App");
   return (
     <Provider store={store}>
       <ThemeContextProvider>
@@ -101,10 +108,26 @@ export default function App() {
             persistor={persistor}
             onBeforeLift={onBeforeLift}
           >
-            <Root />
+            <DimensionView>
+              <Root />
+            </DimensionView>
           </PersistGate>
         </ActionSheetProvider>
       </ThemeContextProvider>
     </Provider>
   );
 }
+
+const DimensionView = ({ children }) => {
+  const { setDimensions } = useDimensionStore();
+  return (
+    <View
+      onLayout={() => {
+        setDimensions();
+      }}
+      style={{ flex: 1 }}
+    >
+      {children}
+    </View>
+  );
+};

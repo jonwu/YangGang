@@ -9,6 +9,7 @@ import { transformN } from "utils/Utils";
 import moment from "moment";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
+import { useDimensionStore } from "utils/DimensionUtils";
 
 const entities = new Entities();
 
@@ -59,6 +60,11 @@ const YoutubeItemContainer = React.memo(({ item, navigation }) => {
 const YoutubeItem = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { snippet, statistics } = item;
+  const { deviceWidth } = useDimensionStore();
+  let height = 96;
+  if (deviceWidth > 800) {
+    height = deviceWidth / 9;
+  }
   const {
     title,
     description,
@@ -70,7 +76,10 @@ const YoutubeItem = ({ item }) => {
   } = snippet;
   return (
     <View style={styles.container}>
-      <Image style={styles.thumbnail} source={{ uri: thumbnails.medium.url }} />
+      <Image
+        style={[styles.thumbnail, { height, backgroundColor: theme.text(0.1) }]}
+        source={{ uri: thumbnails.medium.url }}
+      />
       <View style={styles.body}>
         <Text numberOfLines={3} style={[gstyles.p1_bold, gstyles.bottom_5]}>
           {entities.decode(title)}

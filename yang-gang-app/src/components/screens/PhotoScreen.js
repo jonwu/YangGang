@@ -3,7 +3,6 @@ import { View, Text, Dimensions, Image } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
-const { width: DEVICE_WIDTH } = Dimensions.get("window");
 import ImageViewer from "react-native-image-zoom-viewer";
 
 const generateStyles = theme => ({});

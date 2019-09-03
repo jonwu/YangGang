@@ -40,7 +40,8 @@ const YoutubeTinyItem = ({ item, navigation }) => {
             width: 96 * (16 / 9),
             marginRight: theme.spacing_2,
             backgroundColor: theme.bg2(),
-            borderRadius: theme.borderRadius
+            borderRadius: theme.borderRadius,
+            backgroundColor: theme.text(0.1)
           }}
           source={{ uri: thumbnails.medium.url }}
         />

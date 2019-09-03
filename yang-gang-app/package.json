@@ -29,7 +29,8 @@
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
     "redux-persist": "^5.10.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "zustand": "^1.0.7"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1"

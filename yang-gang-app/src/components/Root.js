@@ -32,10 +32,9 @@ const RootStack = createStackNavigator(
     headerMode: "none"
   }
 );
-const Root = () => {
+const Root = React.memo(() => {
   const App = createAppContainer(RootStack);
-
   return <App />;
-};
+});
 
 export default Root;

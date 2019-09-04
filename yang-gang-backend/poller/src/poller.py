@@ -42,48 +42,27 @@ youtube_api_key3 = 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
 
 youtube_url = 'https://www.googleapis.com/youtube/v3/search'
 youtube_vid_url = 'https://www.googleapis.com/youtube/v3/videos'
-seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-one_day_ago = datetime.now(timezone.utc) - timedelta(days=1)
-three_days_ago = datetime.now(timezone.utc) - timedelta(days=3)
 
-youtube_params = {
-    'part': 'snippet',
-    'order': 'viewCount',
-    'publishedAfter': seven_days_ago.isoformat(),
-    'q': 'andrew yang',
-    'type': 'video',
-    'maxResults': str(top_num),
-    'key': youtube_api_key3
-}
 
-youtube_params_day = {
-    'part': 'snippet',
-    'order': 'viewCount',
-    'publishedAfter': one_day_ago.isoformat(),
-    'q': 'andrew yang',
-    'type': 'video',
-    'maxResults': str(top_num),
-    'key': youtube_api_key2
-}
-
-youtube_params_3day = {
-    'part': 'snippet',
-    'order': 'viewCount',
-    'publishedAfter': three_days_ago.isoformat(),
-    'q': 'andrew yang',
-    'type': 'video',
-    'maxResults': str(top_num),
-    'key': youtube_api_key3
-}
-
-youtube_params_all_time = {
-    'part': 'snippet',
-    'order': 'viewCount',
-    'q': 'andrew yang',
-    'type': 'video',
-    'maxResults': str(top_num),
-    'key': youtube_api_key2
-}
+def get_youtube_params(published_after, api_key):
+    if published_after is None:
+        return {
+            'part': 'snippet',
+            'order': 'viewCount',
+            'q': 'andrew yang',
+            'type': 'video',
+            'maxResults': str(top_num),
+            'key': api_key
+        }
+    return {
+        'part': 'snippet',
+        'order': 'viewCount',
+        'publishedAfter': published_after,
+        'q': 'andrew yang',
+        'type': 'video',
+        'maxResults': str(top_num),
+        'key': api_key
+    }
 
 
 def get_youtube_stat_params(vid_list, api_key):
@@ -112,16 +91,19 @@ def fetch_hot_reddit():
 def fetch_twitter():
     start = time.time()
     tweet_list = []
-    s_timeline = api.user_timeline('AndrewYang', tweet_mode='extended')
+    s_timeline = tweepy.Cursor(api.user_timeline, screen_name='@AndrewYang', tweet_mode="extended").items()
+    count = 0
     for tweet in s_timeline:
         j = tweet._json
         if j['in_reply_to_screen_name'] is None or j['in_reply_to_screen_name'] == 'AndrewYang':
             tweet_list.append(j)
+            count += 1
             if len(tweet_list) == top_num_tweets:
                 break
+    print('num traversed: {}'.format(count))
     r.set('twitter', json.dumps(tweet_list))
     end = time.time()
-    print('fetched {} new twitter items at {} in {} seconds'.format(top_num, datetime.now(), end - start))
+    print('fetched {} new twitter items at {} in {} seconds'.format(len(tweet_list), datetime.now(), end - start))
 
 
 # # TODO: reset twitter list on server restart
@@ -155,8 +137,14 @@ def fetch_twitter():
 #                 print('backfilled {} filtered tweets into redis'.format(count))
 
 
-def fetch_youtube(params, redis_key):
+def fetch_youtube(days_lag, redis_key, api_key):
     try:
+        if days_lag is not None:
+            published_after = (datetime.now(timezone.utc) - timedelta(days=days_lag)).isoformat()
+        else:
+            published_after = None
+        params = get_youtube_params(published_after, api_key)
+
         initial_response = requests.get(url=youtube_url, params=params).json()
         response = initial_response['items']
         vid_ids = [x['id']['videoId'] for x in response]
@@ -193,21 +181,21 @@ def fetch_youtube(params, redis_key):
 scheduler = BackgroundScheduler()
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=5, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=5, id='fetch_twitter')
-scheduler.add_job(lambda: fetch_youtube(youtube_params, 'youtube'),
-                  'interval', minutes=35, id='fetch_youtube')
-scheduler.add_job(lambda: fetch_youtube(youtube_params_day, 'youtube_day'),
-                  'interval', minutes=30, id='fetch_youtube_day')
-scheduler.add_job(lambda: fetch_youtube(youtube_params_3day, 'youtube_3day'),
-                  'interval', minutes=35, id='fetch_youtube_3day')
-scheduler.add_job(lambda: fetch_youtube(youtube_params_all_time, 'youtube_all_time'),
+scheduler.add_job(lambda: fetch_youtube(7, 'youtube', youtube_api_key2),
+                  'interval', minutes=60, id='fetch_youtube')
+scheduler.add_job(lambda: fetch_youtube(1, 'youtube_day', youtube_api_key2),
+                  'interval', minutes=60, id='fetch_youtube_day')
+scheduler.add_job(lambda: fetch_youtube(3, 'youtube_3day', youtube_api_key3),
+                  'interval', minutes=60, id='fetch_youtube_3day')
+scheduler.add_job(lambda: fetch_youtube(None, 'youtube_all_time', youtube_api_key3),
                   'interval', minutes=60, id='fetch_youtube_all_time')
 
 fetch_hot_reddit()
 fetch_twitter()
-fetch_youtube(youtube_params, 'youtube')
-fetch_youtube(youtube_params_day, 'youtube_day')
-fetch_youtube(youtube_params_3day, 'youtube_3day')
-fetch_youtube(youtube_params_all_time, 'youtube_all_time')
+fetch_youtube(7, 'youtube', youtube_api_key2)
+fetch_youtube(1, 'youtube_day', youtube_api_key2)
+fetch_youtube(3, 'youtube_3day', youtube_api_key3)
+fetch_youtube(None, 'youtube_all_time', youtube_api_key3)
 
 scheduler.start()
 

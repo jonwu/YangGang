@@ -6,32 +6,44 @@ import TwitterItem from "components/items/TwitterItem";
 import ActionBarView from "components/items/ActionBarView";
 import { updateTweets } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
+import Loading from "components/utils/Loading";
+import lodash from "lodash";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_FETCH_TWITTER } from "utils/AnalyticsUtils";
 
 const styles = theme => {};
 const dummy = [1, 2, 3, 4, 5];
 
-const TwitterScreen = ({ navigation }) => {
+const TwitterScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const tweets = useSelector(state => state.app.tweets);
-
+  const loadingTweets = useSelector(state => state.loading.tweets);
   const renderItem = ({ item }) => {
     return <TwitterItem item={item} navigation={navigation} />;
   };
 
-  React.useEffect(() => {
+  const fetch = () => {
+    Amplitude.logEvent(EVENT_FETCH_TWITTER);
     dispatch(updateTweets());
-  }, []);
-  if (!tweets) return null;
+  };
+  const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
+    .current;
+  React.useEffect(fetch, []);
+
+  if (!loadingTweets.isReceived) return <Loading />;
 
   return (
     <FlatList
+      onRefresh={throttledFetch}
+      refreshing={loadingTweets.isRequesting}
       data={tweets}
+      contentContainerStyle={{ paddingBottom: 16 }}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
-      keyExtractor={item => item.id_str}
+      keyExtractor={item => item.id.toString()}
     />
   );
-};
+});
 
 export default TwitterScreen;

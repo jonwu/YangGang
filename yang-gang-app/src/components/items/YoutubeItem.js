@@ -5,6 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
 import ActionBarView from "./ActionBarView";
 import { FontAwesome } from "@expo/vector-icons";
+import { transformN } from "utils/Utils";
+import moment from "moment";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
+import { useDimensionStore } from "utils/DimensionUtils";
 
 const entities = new Entities();
 
@@ -18,6 +23,7 @@ const generateStyles = theme => ({
     flex: 1
   },
   thumbnail: {
+    borderRadius: theme.borderRadius,
     height: 96,
     flex: 1,
     marginRight: theme.spacing_2,
@@ -25,44 +31,64 @@ const generateStyles = theme => ({
   }
 });
 
-const YoutubeItemContainer = ({ item, navigation }) => {
+const YoutubeItemContainer = React.memo(({ item, navigation }) => {
   const { id } = item;
   return (
-    <ActionBarView openLabel="Open in Youtube" openIcon={"youtube-square"}>
+    <ActionBarView
+      openLabel="Open in Youtube"
+      openIcon={"youtube-square"}
+      link={`https://youtube.com/watch?v=${id}`}
+      message={`${item.snippet.title}`}
+      navigation={navigation}
+    >
       <TouchableHighlight
-        onPress={() =>
-          navigation.navigate("YoutubeWebview", {
-            uri: `https://youtube.com/embed/${id.videoId}?autoplay=1`
+        onPress={() => {
+          Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
+          navigation.navigate("Webview", {
+            // uri: `https://youtube.com/embed/${id}?autoplay=1`,
             // uri: `https://youtube.com/embed/${id.videoId}`
-            // uri: `https://youtube.com/watch?v=${id.videoId}`
-          })
-        }
+            uri: `https://youtube.com/watch?v=${id}`,
+            title: item.snippet.title
+          });
+        }}
       >
         <YoutubeItem item={item} />
       </TouchableHighlight>
     </ActionBarView>
   );
-};
+});
 const YoutubeItem = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { snippet } = item;
+  const { snippet, statistics } = item;
+  const { deviceWidth } = useDimensionStore();
+  let height = 96;
+  if (deviceWidth > 800) {
+    height = deviceWidth / 9;
+  }
   const {
     title,
     description,
     thumbnails,
     channelTitle,
     publishedId,
-    channelId
+    channelId,
+    publishedAt
   } = snippet;
   return (
     <View style={styles.container}>
-      <Image style={styles.thumbnail} source={{ uri: thumbnails.medium.url }} />
+      <Image
+        style={[styles.thumbnail, { height, backgroundColor: theme.text(0.1) }]}
+        source={{ uri: thumbnails.medium.url }}
+      />
       <View style={styles.body}>
         <Text numberOfLines={3} style={[gstyles.p1_bold, gstyles.bottom_5]}>
           {entities.decode(title)}
         </Text>
         <Text style={[gstyles.caption_50]}>{channelTitle}</Text>
-        <Text style={[gstyles.caption_50]}>145K views - 1 day ago</Text>
+        <Text style={[gstyles.caption_50]}>
+          {transformN(statistics.viewCount, 10)} -{" "}
+          {moment(publishedAt).fromNow()}
+        </Text>
       </View>
     </View>
   );

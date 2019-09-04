@@ -1,5 +1,5 @@
 import React from "react";
-import { View, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, SafeAreaView, TouchableOpacity, Text } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -30,20 +30,57 @@ const Back = ({ navigation }) => {
     </TouchableOpacity>
   );
 };
+const Close = ({ navigation }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  if (navigation.isFirstRouteInParent()) return null;
 
-const Header = ({ renderLeft, renderTitle, renderRight, navigation }) => {
+  return (
+    <TouchableOpacity
+      style={{ padding: 8 }}
+      onPress={() => navigation.goBack()}
+    >
+      <Ionicons
+        name={"ios-close"}
+        color={theme.light()}
+        size={36}
+        style={{ marginTop: -6 }}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const Header = ({
+  bgColor,
+  renderLeft,
+  renderTitle,
+  renderRight,
+  navigation,
+  title,
+  close
+}) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
-    <SafeAreaView style={styles.headerSafeArea}>
-      <View style={styles.header}>
+    <SafeAreaView
+      style={[styles.headerSafeArea, bgColor && { backgroundColor: bgColor }]}
+    >
+      <View style={[styles.header, bgColor && { backgroundColor: bgColor }]}>
         <View style={gstyles.flex}>
-          {renderLeft || <Back navigation={navigation} />}
+          {renderLeft || (!close && <Back navigation={navigation} />)}
         </View>
         <View style={[gstyles.flex, { alignItems: "center" }]}>
           {renderTitle}
+          {title && !renderTitle && (
+            <Text
+              numberOfLines={1}
+              style={[gstyles.p1_bold, { color: theme.light(), width: 200 }]}
+            >
+              {title}
+            </Text>
+          )}
         </View>
         <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
           {renderRight}
+          {close && <Close navigation={navigation} />}
         </View>
       </View>
     </SafeAreaView>

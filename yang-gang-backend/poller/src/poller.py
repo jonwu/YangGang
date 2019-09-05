@@ -169,10 +169,10 @@ def fetch_youtube(days_lag, redis_key, api_key):
 
 
 def fetch_news():
-    today_datestring = date.today().strftime("%Y-%m-%d")
+    today_datestring = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
     all_articles = newsapi.get_everything(q='Andrew Yang',
                                           language='en',
-                                          sort_by='relevancy',
+                                          sort_by='popularity',
                                           from_param=today_datestring)
     r.set('news', json.dumps(all_articles))
     print('fetched {} news items at {} with {} datestring'.format(all_articles['totalResults'], datetime.now(), today_datestring))

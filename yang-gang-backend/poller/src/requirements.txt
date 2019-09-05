@@ -1,4 +1,5 @@
 APScheduler
+newsapi-python
 praw
 redis
 tweepy

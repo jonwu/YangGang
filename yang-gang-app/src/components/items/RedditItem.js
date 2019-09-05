@@ -1,22 +1,14 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  WebView,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Linking
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
-import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { FontAwesome, Entypo, Ionicons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
+import { WebView } from "react-native-webview";
+import YoutubeIcon from "assets/youtube_icon.png";
 
 const generateStyles = theme => ({
   body: {
@@ -39,10 +31,11 @@ const RedditItem = React.memo(({ item, navigation }) => {
   const isEnabled = preview != null && preview.enabled;
   const isRedditVideo = media && media.reddit_video != null;
   const isYoutube = media && media.type === "youtube.com";
+
   let content = null;
 
   if (isYoutube) {
-    content = <RedditYoutube item={item} />;
+    content = <RedditYoutube item={item} navigation={navigation} />;
   } else if (isRedditVideo) {
     content = <RedditVideo item={item} />;
   } else if (isEnabled) {
@@ -50,7 +43,7 @@ const RedditItem = React.memo(({ item, navigation }) => {
   } else if (thumbnail !== "self") {
     content = <RedditThumbnail item={item} navigation={navigation} />;
   } else {
-    content = <RedditDescription item={item} />;
+    content = <RedditDescription item={item} navigation={navigation} />;
   }
 
   return (
@@ -58,22 +51,13 @@ const RedditItem = React.memo(({ item, navigation }) => {
       openLabel={"Open in Reddit"}
       openIcon={"reddit-square"}
       link={`https://reddit.com/r/YangForPresidentHQ/comments/${id}`}
-      message={`${item.title}`}
+      message={item.title}
       navigation={navigation}
     >
-      {/* <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate("Webview", {
-            uri: `https://reddit.com/r/YangForPresidentHQ/comments/${id}`,
-            title
-          })
-        }
-      > */}
       <View style={{ backgroundColor: theme.bg2(), padding: theme.spacing_2 }}>
         {content}
         <RedditFooter item={item} />
       </View>
-      {/* </TouchableWithoutFeedback> */}
     </ActionBarView>
   );
 });
@@ -193,30 +177,51 @@ function YouTubeGetID(url) {
   return ID;
 }
 
-const RedditYoutube = ({ item }) => {
+const RedditYoutube = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { title, selftext, secure_media_embed, url } = item;
+  const { title, selftext, secure_media_embed, url, preview } = item;
+  const source = preview != null && preview.images[0].source;
   const { deviceWidth } = useDimensionStore();
-  const id = YouTubeGetID(url);
+  const contentWidth = deviceWidth - theme.spacing_2 * 2;
+  const src =
+    preview.images[0].resolutions.find(r => r.width >= contentWidth) || source;
   return (
     <View>
-      <View style={styles.body}>
-        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-        <Text style={[gstyles.h4_bold]}>{title}</Text>
-      </View>
-      <TouchableOpacity activeOpacity={1.0}>
-        <WebView
-          style={{
-            marginLeft: -theme.spacing_2,
-            width: deviceWidth,
-            height:
-              (deviceWidth * secure_media_embed.height) /
-              secure_media_embed.width
-          }}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          source={{ uri: `https://www.youtube.com/embed/${id}` }}
-        />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Webview", { title, uri: url })}
+      >
+        <View style={[styles.body, gstyles.bottom_2]}>
+          {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
+          <Text style={[gstyles.h4_bold]}>{title}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        activeOpacity={1.0}
+        onPress={() => navigation.navigate("Webview", { title, uri: url })}
+      >
+        <View style={{ borderRadius: theme.borderRadius, overflow: "hidden" }}>
+          <Image
+            style={[
+              styles.thumbnail,
+              {
+                width: contentWidth,
+                height: (contentWidth * 9) / 16,
+                backgroundColor: theme.text(0.1)
+              }
+            ]}
+            source={{ uri: src.url }}
+          />
+          <View
+            style={{
+              ...StyleSheet.absoluteFill,
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <Image source={YoutubeIcon} style={{ width: 72, height: 50.6 }} />
+          </View>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -262,71 +267,83 @@ const RedditThumbnail = ({ item, navigation }) => {
   } = item;
 
   return (
-    <View style={styles.body}>
-      {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-      <View style={styles.thumbnailContainer}>
-        <Text style={[gstyles.h4_bold, gstyles.right_2, gstyles.flex]}>
-          {title}
-        </Text>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate("Webview", { title, uri: url })}
-        >
-          <View
-            style={{
-              borderRadius: 4,
-              borderWidth: 1,
-              borderColor: theme.borderColor,
-              overflow: "hidden",
-              height: 75,
-              width: 100
-            }}
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Webview", { title, uri: url })}
+    >
+      <View style={styles.body}>
+        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
+        <View style={styles.thumbnailContainer}>
+          <Text style={[gstyles.h4_bold, gstyles.right_2, gstyles.flex]}>
+            {title}
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Webview", { title, uri: url })}
           >
-            <Image
-              source={{ uri: thumbnail }}
-              style={{
-                height: 75,
-                width: 100,
-                backgroundColor: theme.text(0.1)
-              }}
-            />
             <View
               style={{
-                position: "absolute",
-                width: 100,
-                padding: 4,
-                bottom: 0,
-                backgroundColor: theme.dark(0.5)
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: theme.borderColor,
+                overflow: "hidden",
+                height: 75,
+                width: 100
               }}
             >
-              <Text
-                numberOfLines={1}
-                style={[gstyles.caption_bold, { color: theme.light() }]}
+              <Image
+                source={{ uri: thumbnail }}
+                style={{
+                  height: 75,
+                  width: 100,
+                  backgroundColor: theme.text(0.1)
+                }}
+              />
+              <View
+                style={{
+                  position: "absolute",
+                  width: 100,
+                  padding: 4,
+                  bottom: 0,
+                  backgroundColor: theme.dark(0.5)
+                }}
               >
-                {domain}
-              </Text>
+                <Text
+                  numberOfLines={1}
+                  style={[gstyles.caption_bold, { color: theme.light() }]}
+                >
+                  {domain}
+                </Text>
+              </View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-const RedditDescription = ({ item }) => {
+const RedditDescription = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { title, selftext, preview } = item;
-  const source = preview != null && preview.images[0].source;
 
   return (
-    <View style={styles.body}>
-      {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-      <Text style={[gstyles.h4_bold]}>{title}</Text>
-      {selftext != "" && (
-        <Text numberOfLines={4} style={[gstyles.caption, gstyles.bottom_5]}>
-          {selftext}
-        </Text>
-      )}
-    </View>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("Description", {
+          title,
+          description: selftext
+        })
+      }
+    >
+      <View style={styles.body}>
+        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
+        <Text style={[gstyles.h4_bold]}>{title}</Text>
+        {selftext != "" && (
+          <Text numberOfLines={4} style={[gstyles.caption, gstyles.bottom_5]}>
+            {selftext}
+          </Text>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 };
 

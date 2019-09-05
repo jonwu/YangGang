@@ -5,7 +5,7 @@
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.2",
+    "version": "1.0.5",
     "icon": "./src/assets/logo-4.png",
     "splash": {
       "image": "./src/assets/splash.png",
@@ -18,10 +18,7 @@
     "assetBundlePatterns": ["./src/assets/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jonwu.yang",
-      "infoPlist": {
-        "UIBackgroundModes": ["audio"]
-      }
+      "bundleIdentifier": "com.jonwu.yang"
     },
     "android": {
       "package": "com.jonwu.yang"

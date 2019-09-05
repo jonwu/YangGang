@@ -2,16 +2,13 @@ import * as React from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 import TabScreen from "components/screens/TabScreen";
 import WebviewScreen from "components/screens/WebviewScreen";
-import YoutubeWebviewScreen from "components/screens/YoutubeWebviewScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
-import { useThemeKit } from "utils/ThemeUtils";
+import DescriptionScreen from "components/screens/DescriptionScreen";
 
 const MainStack = createStackNavigator(
   {
     Tabs: TabScreen,
-    Webview: WebviewScreen,
-    YoutubeWebview: YoutubeWebviewScreen
-    // Photo: PhotoScreen
+    Webview: WebviewScreen
   },
   {
     headerMode: "none"
@@ -25,6 +22,9 @@ const RootStack = createStackNavigator(
     },
     Photo: {
       screen: PhotoScreen
+    },
+    Description: {
+      screen: DescriptionScreen
     }
   },
   {

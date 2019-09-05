@@ -98,7 +98,6 @@ export default function App() {
         onError={console.warn}
       />
     );
-  console.log("Render App");
   return (
     <Provider store={store}>
       <ThemeContextProvider>
@@ -122,8 +121,8 @@ const DimensionView = ({ children }) => {
   const { setDimensions } = useDimensionStore();
   return (
     <View
-      onLayout={() => {
-        setDimensions();
+      onLayout={e => {
+        setDimensions(e.nativeEvent.layout);
       }}
       style={{ flex: 1 }}
     >

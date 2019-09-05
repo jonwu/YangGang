@@ -1,15 +1,12 @@
 import React from "react";
-import {
-  View,
-  WebView,
-  FlatList,
-  TouchableOpacity,
-  Linking
-} from "react-native";
+import { TouchableOpacity, Linking } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { XmlEntities as Entities } from "html-entities";
+import { WebView } from "react-native-webview";
+
+const entities = new Entities();
 
 const WebviewScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
@@ -20,7 +17,7 @@ const WebviewScreen = ({ navigation }) => {
     <React.Fragment>
       <Header
         navigation={navigation}
-        title={title || uri}
+        title={entities.decode(title || uri)}
         renderRight={
           <TouchableOpacity onPress={() => Linking.openURL(uri)}>
             <MaterialCommunityIcons
@@ -32,10 +29,11 @@ const WebviewScreen = ({ navigation }) => {
         }
       />
       <WebView
+        mediaPlaybackRequiresUserAction
+        allowsFullscreenVideo
         style={{ flex: 1 }}
         javaScriptEnabled
         source={{ uri }}
-        // useWebKit={true}
       />
     </React.Fragment>
   );

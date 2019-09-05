@@ -155,7 +155,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
 
   if (!loadingFetchYoutube.isReceived) return <Loading />;
 
-  if (deviceWidth > 800) {
+  if (deviceWidth > 720) {
     return (
       <FlatList
         ListHeaderComponent={

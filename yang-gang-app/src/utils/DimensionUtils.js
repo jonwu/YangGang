@@ -6,12 +6,11 @@ const { width: deviceWidth, height: deviceHeight } = Dimensions.get("window");
 const [useStore] = create(set => ({
   deviceWidth,
   deviceHeight,
-  setDimensions: () =>
+  setDimensions: layout =>
     set(state => {
-      const { width, height } = Dimensions.get("window");
       return {
-        deviceWidth: width,
-        deviceHeight: height
+        deviceWidth: layout.width,
+        deviceHeight: layout.height
       };
     })
 }));

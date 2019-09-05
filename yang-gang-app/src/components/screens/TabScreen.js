@@ -5,7 +5,8 @@ import {
   View,
   Text,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  Dimensions
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
@@ -18,10 +19,10 @@ import {
   MaterialCommunityIcons
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
-import pngYinYang from "assets/yin.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
+import { useDimensionStore } from "utils/DimensionUtils";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -64,6 +65,7 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
+  const { deviceWidth, deviceHeight } = useDimensionStore();
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -97,6 +99,17 @@ const TabScreen = ({ navigation }) => {
         renderRight={<ThemeIcon />}
         navigation={navigation}
       />
+      {/* <Image source={header} style={{ width: "100%", height: 180 }} />
+      <View
+        style={{
+          backgroundColor: theme.yang(0.5),
+          position: "absolute",
+          left: 0,
+          top: 0,
+          right: 0,
+          height: 180
+        }}
+      /> */}
       <TabView
         lazy
         style={{ backgroundColor: theme.bg2() }}
@@ -104,6 +117,7 @@ const TabScreen = ({ navigation }) => {
         renderScene={renderScene}
         renderTabBar={renderTabBar}
         onIndexChange={index => setIndex(index)}
+        initialLayout={{ width: deviceWidth }}
       />
     </React.Fragment>
   );

@@ -1,9 +1,9 @@
 import React from "react";
-import { View, WebView, FlatList, Dimensions } from "react-native";
+import { View } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import Header from "./Header";
 import { useDimensionStore } from "utils/DimensionUtils";
+import { WebView } from "react-native-webview";
 
 const YoutubeWebviewScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);

@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 from redis import Redis
 import praw
 import json
@@ -7,6 +7,7 @@ import requests
 import tweepy
 import time
 import traceback
+from newsapi import NewsApiClient
 
 
 # initialize redis
@@ -21,6 +22,7 @@ r.flushdb()
 top_num = 30
 top_num_tweets = 50
 
+# reddit api
 reddit = praw.Reddit(client_id='xuKSovdtrPCrOg',
                      client_secret='bwMxzy_4Ytpdj8P0VzMhuNeXTGE',
                      user_agent='yanggangtest',
@@ -28,6 +30,7 @@ reddit = praw.Reddit(client_id='xuKSovdtrPCrOg',
                      password='pdZ4dF4V8Fbxd3L')
 subreddit = reddit.subreddit('YangForPresidentHQ')
 
+# twitter api
 consumer_key = "UgNuDDnG4aD0vuakNHHGzRqHI"
 consumer_secret = "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
 access_token = "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
@@ -36,12 +39,16 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
+# youtube api
 youtube_api_key = 'AIzaSyAzK4LuxH38FMKZ7XwyYkCjyAzDNjwNg9Q'
 youtube_api_key2 = 'AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k'
 youtube_api_key3 = 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
 
 youtube_url = 'https://www.googleapis.com/youtube/v3/search'
 youtube_vid_url = 'https://www.googleapis.com/youtube/v3/videos'
+
+# news api
+newsapi = NewsApiClient(api_key='d09d502864124079b98a360312bfb211')
 
 
 def get_youtube_params(published_after, api_key):
@@ -161,6 +168,16 @@ def fetch_youtube(days_lag, redis_key, api_key):
         traceback.print_exc()
 
 
+def fetch_news():
+    today_datestring = date.today().strftime("%Y-%m-%d")
+    all_articles = newsapi.get_everything(q='Andrew Yang',
+                                          language='en',
+                                          sort_by='relevancy',
+                                          from_param=today_datestring)
+    r.set('news', json.dumps(all_articles))
+    print('fetched {} news items at {} with {} datestring'.format(all_articles['totalResults'], datetime.now(), today_datestring))
+
+
 # initial push
 # start = time.time()
 # timeline = api.user_timeline('AndrewYang', tweet_mode='extended')
@@ -181,6 +198,7 @@ def fetch_youtube(days_lag, redis_key, api_key):
 scheduler = BackgroundScheduler()
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=5, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=5, id='fetch_twitter')
+scheduler.add_job(fetch_news, 'interval', minutes=30, id='fetch_news')
 scheduler.add_job(lambda: fetch_youtube(7, 'youtube', youtube_api_key2),
                   'interval', minutes=60, id='fetch_youtube')
 scheduler.add_job(lambda: fetch_youtube(1, 'youtube_day', youtube_api_key2),
@@ -192,6 +210,7 @@ scheduler.add_job(lambda: fetch_youtube(None, 'youtube_all_time', youtube_api_ke
 
 fetch_hot_reddit()
 fetch_twitter()
+fetch_news()
 fetch_youtube(7, 'youtube', youtube_api_key2)
 fetch_youtube(1, 'youtube_day', youtube_api_key2)
 fetch_youtube(3, 'youtube_3day', youtube_api_key3)

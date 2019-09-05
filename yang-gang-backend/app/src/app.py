@@ -18,6 +18,15 @@ class HotRedditList(Resource):
         return json.loads(r.get('reddit').decode('utf-8'))
 
 
+@api.route("/news/")
+class NewsList(Resource):
+    def get(self):
+        """
+        returns a list of news posts
+        """
+        return json.loads(r.get('news').decode('utf-8'))
+
+
 @api.route("/tweets/")
 class TweetList(Resource):
     def get(self):

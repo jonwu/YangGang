@@ -23,6 +23,7 @@ const shared = {
   blue: colors.BLUE,
   yellow: colors.YELLOW,
   green: colors.GREEN,
+  darkGreen: colors.DARK_GREEN,
   orange: colors.ORANGE,
   light: colors.LIGHT,
   dark: colors.DARK,

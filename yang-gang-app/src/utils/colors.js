@@ -4,6 +4,7 @@ export const RED = (opacity = 1.0) => `rgba(243, 83, 83, ${opacity})`;
 export const BLUE = (opacity = 1.0) => `rgba(51, 163, 243, ${opacity})`;
 export const YELLOW = (opacity = 1.0) => `rgba(255, 155, 60, ${opacity})`;
 export const GREEN = (opacity = 1.0) => `rgba(38, 194, 129, ${opacity})`;
+export const DARK_GREEN = (opacity = 1.0) => `rgba(68, 146, 106, ${opacity})`;
 export const ORANGE = (opacity = 1.0) => `rgba(255, 155, 60, ${opacity})`;
 export const REDDIT_DARK_SLATE = (opacity = 1.0) =>
   `rgba(26, 26, 27, ${opacity})`;

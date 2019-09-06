@@ -6,7 +6,8 @@ const FEATURES = [
   "youtube",
   "youtubeDay",
   "youtubeAllTime",
-  "fetchYoutube"
+  "fetchYoutube",
+  "news"
 ];
 const defaultState = FEATURES.reduce(
   (previous, current) =>

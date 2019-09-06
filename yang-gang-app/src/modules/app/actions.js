@@ -1,6 +1,7 @@
 import * as ActionTypes from "./actionTypes";
 import BackendUtils from "utils/BackendUtils";
 import { load } from "modules/loading/actions";
+import lodash from "lodash";
 
 export function updateTheme(theme) {
   return {
@@ -106,6 +107,23 @@ export function updateYoutubeAllTime() {
             youtube
           });
           return youtube;
+        })
+      )
+    );
+  };
+}
+export function updateNews() {
+  return dispatch => {
+    return dispatch(
+      load(
+        "news",
+        BackendUtils.getNews().then(response => {
+          const news = lodash.uniqBy(response.data.articles, "title");
+          dispatch({
+            type: ActionTypes.UPDATE_NEWS,
+            news
+          });
+          return news;
         })
       )
     );

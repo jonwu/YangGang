@@ -42,5 +42,8 @@ class BackendUtils {
   getYoutubeAllTime(params) {
     return instance.get(`/youtube_all_time`, { params });
   }
+  getNews(params) {
+    return instance.get(`/news`, { params });
+  }
 }
 export default new BackendUtils();

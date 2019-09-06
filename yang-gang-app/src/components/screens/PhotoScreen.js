@@ -36,7 +36,6 @@ const PhotoScreen = ({ navigation }) => {
       // gestureState.d{x,y} will be set to zero now
     },
     onPanResponderMove: (evt, gestureState) => {
-      console.log(evt);
       translateY.setValue(gestureState.dy);
       translateX.setValue(gestureState.dx);
       // The most recent move distance is gestureState.move{X,Y}

@@ -50,11 +50,20 @@ function youtubeAllTime(state = null, actions) {
   }
 }
 
+function news(state = null, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_NEWS:
+      return actions.news;
+    default:
+      return state;
+  }
+}
 export default combineReducers({
   reddit,
   tweets,
   youtube,
   youtubeDay,
   youtube3Days,
-  youtubeAllTime
+  youtubeAllTime,
+  news
 });

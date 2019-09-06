@@ -12,11 +12,12 @@ import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
 import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
-import GoogleNewsScreen from "./GoogleNewsScreen";
+import NewsScreen from "./NewsScreen";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import {
   Ionicons,
   FontAwesome,
+  Entypo,
   MaterialCommunityIcons
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
@@ -48,15 +49,10 @@ const generateStyles = theme => ({
   }
 });
 
-const routes = [
-  { key: "twitter", icon: "logo-twitter", color: "#00aced" },
-  { key: "reddit", icon: "reddit", color: "#FF5700", iconType: "FontAwesome" },
-  { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
-  { key: "google-news", icon: "logo-youtube", color: "#FF0000" }
-];
-
 const renderIcon = ({ route }) => {
   switch (route.iconType) {
+    case "Entypo":
+      return <Entypo name={route.icon} size={24} color={route.color} />;
     case "FontAwesome":
       return <FontAwesome name={route.icon} size={24} color={route.color} />;
     default:
@@ -69,6 +65,23 @@ const TabScreen = ({ navigation }) => {
   const [index, setIndex] = React.useState(0);
   const { deviceWidth, deviceHeight } = useDimensionStore();
 
+  const routes = [
+    {
+      key: "news",
+      icon: "newspaper-o",
+      iconType: "FontAwesome",
+      color: theme.darkGreen()
+    },
+    { key: "twitter", icon: "logo-twitter", color: "#00aced" },
+    {
+      key: "reddit",
+      icon: "reddit",
+      color: "#FF5700",
+      iconType: "FontAwesome"
+    },
+    { key: "youtube", icon: "logo-youtube", color: "#FF0000" }
+  ];
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case "twitter":
@@ -77,8 +90,8 @@ const TabScreen = ({ navigation }) => {
         return <RedditScreen navigation={navigation} />;
       case "youtube":
         return <YoutubeScreen navigation={navigation} />;
-      case "google-news":
-        return <GoogleNewsScreen navigation={navigation} />;
+      case "news":
+        return <NewsScreen navigation={navigation} />;
       default:
         return null;
     }

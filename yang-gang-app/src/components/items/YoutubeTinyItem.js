@@ -6,6 +6,7 @@ import { XmlEntities as Entities } from "html-entities";
 import { transformN } from "utils/Utils";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
+import moment from "moment";
 
 const entities = new Entities();
 
@@ -50,7 +51,11 @@ const YoutubeTinyItem = ({ item, navigation }) => {
             {entities.decode(title)}
           </Text>
           <Text numberOfLines={1} style={[gstyles.caption_50]}>
-            {transformN(statistics.viewCount, 10)} - {channelTitle}
+            {channelTitle}
+          </Text>
+          <Text style={[gstyles.caption_50]}>
+            {transformN(statistics.viewCount, 10)} -{" "}
+            {moment(publishedAt).fromNow()}
           </Text>
         </View>
       </View>

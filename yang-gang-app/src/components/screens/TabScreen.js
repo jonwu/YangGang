@@ -12,6 +12,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
 import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
+import GoogleNewsScreen from "./GoogleNewsScreen";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import {
   Ionicons,
@@ -50,7 +51,8 @@ const generateStyles = theme => ({
 const routes = [
   { key: "twitter", icon: "logo-twitter", color: "#00aced" },
   { key: "reddit", icon: "reddit", color: "#FF5700", iconType: "FontAwesome" },
-  { key: "youtube", icon: "logo-youtube", color: "#FF0000" }
+  { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
+  { key: "google-news", icon: "logo-youtube", color: "#FF0000" }
 ];
 
 const renderIcon = ({ route }) => {
@@ -75,6 +77,8 @@ const TabScreen = ({ navigation }) => {
         return <RedditScreen navigation={navigation} />;
       case "youtube":
         return <YoutubeScreen navigation={navigation} />;
+      case "google-news":
+        return <GoogleNewsScreen navigation={navigation} />;
       default:
         return null;
     }

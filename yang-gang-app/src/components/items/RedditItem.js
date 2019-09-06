@@ -7,7 +7,6 @@ import { FontAwesome, Entypo, Ionicons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
-import { WebView } from "react-native-webview";
 import YoutubeIcon from "assets/youtube_icon.png";
 
 const generateStyles = theme => ({

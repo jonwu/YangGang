@@ -35,7 +35,9 @@ const NewsScreen = React.memo(({ navigation }) => {
       data={news}
       contentContainerStyle={{ paddingBottom: 16 }}
       renderItem={renderItem}
-      ItemSeparatorComponent={TwitterSeparator}
+      ItemSeparatorComponent={() => (
+        <View style={{ height: theme.spacing_1 }} />
+      )}
       keyExtractor={item => item.url}
     />
   );

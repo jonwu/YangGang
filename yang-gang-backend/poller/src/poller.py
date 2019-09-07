@@ -169,7 +169,7 @@ def fetch_youtube(days_lag, redis_key, api_key):
 
 
 def fetch_news():
-    today_datestring = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+    today_datestring = (date.today() - timedelta(days=3)).strftime("%Y-%m-%d")
     params = {
         'qInTitle': 'andrew yang',
         'language': 'en',

@@ -16,7 +16,7 @@ export function updateReddit() {
       load(
         "reddit",
         BackendUtils.getReddit().then(response => {
-          const reddit = response.data.filter(item => !item.stickied);
+          const reddit = response.data;
           dispatch({
             type: ActionTypes.UPDATE_REDDIT,
             reddit

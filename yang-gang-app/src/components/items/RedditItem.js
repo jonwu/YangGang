@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
-import { FontAwesome, Entypo, Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
@@ -63,16 +63,24 @@ const RedditItem = React.memo(({ item, navigation }) => {
 
 const RedditFooter = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const { stickied } = item;
   return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between",
         paddingTop: theme.spacing_5
       }}
     >
-      <Text style={gstyles.caption_50}>
+      {stickied && (
+        <Entypo
+          name="pin"
+          color={theme.green()}
+          size={20}
+          style={{ marginRight: theme.spacing_4 }}
+        />
+      )}
+      <Text style={[gstyles.caption_50, { flex: 1 }]}>
         {moment(item.created_utc * 1000).fromNow()}
       </Text>
       <View
@@ -109,6 +117,14 @@ const RedditHeader = ({ item }) => {
   );
 };
 
+const RedditTitle = ({ title }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  return (
+    <View style={gstyles.bottom_2}>
+      <Text style={[gstyles.h4_bold]}>{title}</Text>
+    </View>
+  );
+};
 const RedditImage = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { deviceWidth } = useDimensionStore();
@@ -119,10 +135,7 @@ const RedditImage = ({ item, navigation }) => {
     preview.images[0].resolutions.find(r => r.width >= contentWidth) || source;
   return (
     <View style={{ backgroundColor: theme.bg2() }}>
-      <View style={gstyles.bottom_2}>
-        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-        <Text style={[gstyles.h4_bold]}>{title}</Text>
-      </View>
+      <RedditTitle title={title} />
       {src && (
         <View
           style={{
@@ -189,10 +202,7 @@ const RedditYoutube = ({ item, navigation }) => {
       <TouchableOpacity
         onPress={() => navigation.navigate("Webview", { title, uri: url })}
       >
-        <View style={[styles.body, gstyles.bottom_2]}>
-          {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-          <Text style={[gstyles.h4_bold]}>{title}</Text>
-        </View>
+        <RedditTitle title={title} />
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -229,16 +239,18 @@ const RedditVideo = ({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { title, selftext, secure_media } = item;
   const source = secure_media.reddit_video;
+  const videoRef = React.useRef(null);
   const { deviceWidth } = useDimensionStore();
 
   return (
     <View>
-      <View style={styles.body}>
-        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-        <Text style={[gstyles.h4_bold]}>{title}</Text>
-      </View>
-      <TouchableOpacity activeOpacity={1.0}>
+      <RedditTitle title={title} />
+      <TouchableOpacity
+        activeOpacity={1.0}
+        onPress={() => videoRef.current.presentFullscreenPlayer()}
+      >
         <Video
+          ref={videoRef}
           source={{ uri: source.hls_url }}
           useNativeControls
           style={{
@@ -269,8 +281,7 @@ const RedditThumbnail = ({ item, navigation }) => {
     <TouchableOpacity
       onPress={() => navigation.navigate("Webview", { title, uri: url })}
     >
-      <View style={styles.body}>
-        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
+      <View>
         <View style={styles.thumbnailContainer}>
           <Text style={[gstyles.h4_bold, gstyles.right_2, gstyles.flex]}>
             {title}
@@ -333,15 +344,12 @@ const RedditDescription = ({ item, navigation }) => {
         })
       }
     >
-      <View style={styles.body}>
-        {/* <Text style={[gstyles.p1_50, gstyles.bottom_5]}>u/jonwuster - 23h</Text> */}
-        <Text style={[gstyles.h4_bold]}>{title}</Text>
-        {selftext != "" && (
-          <Text numberOfLines={4} style={[gstyles.caption, gstyles.bottom_5]}>
-            {selftext}
-          </Text>
-        )}
-      </View>
+      <RedditTitle title={title} />
+      {selftext != "" && (
+        <Text numberOfLines={4} style={[gstyles.caption, gstyles.bottom_5]}>
+          {selftext}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

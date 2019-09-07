@@ -1,25 +1,20 @@
 import React from "react";
 import {
   View,
-  Text,
   Dimensions,
-  Image,
   PanResponder,
-  Animated
+  Animated,
+  StatusBar
 } from "react-native";
-import { useThemeKit } from "utils/ThemeUtils";
 import Header from "./Header";
-import { duration } from "moment";
 
 const generateStyles = theme => ({});
 
 const PhotoScreen = ({ navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
   uri = navigation.getParam("uri");
   height = navigation.getParam("height");
   width = navigation.getParam("width");
   title = navigation.getParam("title");
-  const images = [{ url: uri }];
   const translateY = React.useRef(new Animated.Value(0)).current;
   const translateX = React.useRef(new Animated.Value(0)).current;
 
@@ -76,6 +71,7 @@ const PhotoScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar barStyle="light-content" />
       <Header
         close
         bgColor={"black"}

@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
-import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
@@ -200,6 +200,7 @@ const RedditYoutube = ({ item, navigation }) => {
   return (
     <View>
       <TouchableOpacity
+        activeOpacity={theme.activeOpacity}
         onPress={() => navigation.navigate("Webview", { title, uri: url })}
       >
         <RedditTitle title={title} />
@@ -279,6 +280,7 @@ const RedditThumbnail = ({ item, navigation }) => {
 
   return (
     <TouchableOpacity
+      activeOpacity={theme.activeOpacity}
       onPress={() => navigation.navigate("Webview", { title, uri: url })}
     >
       <View>
@@ -287,6 +289,7 @@ const RedditThumbnail = ({ item, navigation }) => {
             {title}
           </Text>
           <TouchableOpacity
+            activeOpacity={theme.activeOpacity}
             onPress={() => navigation.navigate("Webview", { title, uri: url })}
           >
             <View
@@ -337,6 +340,7 @@ const RedditDescription = ({ item, navigation }) => {
 
   return (
     <TouchableOpacity
+      activeOpacity={theme.activeOpacity}
       onPress={() =>
         navigation.navigate("Description", {
           title,

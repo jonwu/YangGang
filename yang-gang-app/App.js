@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  LayoutAnimation,
-  Dimensions
-} from "react-native";
+import { View, Image } from "react-native";
 import Root from "components/Root";
 import configureStore from "store/configureStore";
 import { Provider } from "react-redux";
@@ -81,12 +74,7 @@ export default function App() {
       "brandon-med": require("assets/fonts/whitney-medium.ttf"),
       "brandon-semibold": require("assets/fonts/whitney-semibold.ttf"),
       "brandon-bold": require("assets/fonts/whitney-bold.ttf"),
-      "brandon-book": require("assets/fonts/whitney-book.ttf"),
-      "montserrat-thin": require("assets/fonts/montserrat/Montserrat-Thin.otf"),
-      "montserrat-extra-light": require("assets/fonts/montserrat/Montserrat-ExtraLight.otf"),
-      "montserrat-light": require("assets/fonts/montserrat/Montserrat-Light.otf"),
-      "montserrat-medium": require("assets/fonts/montserrat/Montserrat-Medium.otf"),
-      "montserrat-bold": require("assets/fonts/montserrat/Montserrat-Bold.otf")
+      "brandon-book": require("assets/fonts/whitney-book.ttf")
     });
   };
 

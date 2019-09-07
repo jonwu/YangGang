@@ -27,7 +27,8 @@ const shared = {
   orange: colors.ORANGE,
   light: colors.LIGHT,
   dark: colors.DARK,
-  yang: colors.YANG
+  yang: colors.YANG,
+  activeOpacity: 1
 };
 
 const collections = {
@@ -40,9 +41,12 @@ const collections = {
     bgTabs: colors.ROKA_SLATE,
     bgHeader: colors.YANG,
     borderColor: colors.DARK(0.1),
+    cardShadow: colors.DARK(0.5),
     shadow: colors.DARK(0.1),
     loadingColor: colors.DARK(0.5),
+    newsColor: colors.DARK_GREEN(),
     tweetLinkColor: colors.YANG,
+    indicatorColor: colors.YANG(),
     ...shared
   },
   1: {
@@ -54,9 +58,12 @@ const collections = {
     bgTabs: colors.BLACK,
     bgHeader: colors.BLACK,
     borderColor: colors.LIGHT(0.05),
+    cardShadow: colors.LIGHT(0),
     shadow: colors.LIGHT(0.1),
     loadingColor: colors.LIGHT(0.5),
+    newsColor: colors.GREEN(),
     tweetLinkColor: colors.BLUE,
+    indicatorColor: colors.YANG_RED(),
     ...shared
   }
 };

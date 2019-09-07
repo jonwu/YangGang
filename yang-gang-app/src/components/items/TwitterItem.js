@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  TouchableWithoutFeedback,
-  TouchableOpacity
-} from "react-native";
+import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import {  MaterialCommunityIcons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { XmlEntities as Entities } from "html-entities";

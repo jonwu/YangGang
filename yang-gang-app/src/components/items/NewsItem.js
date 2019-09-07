@@ -1,52 +1,85 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
-import { useDimensionStore } from "utils/DimensionUtils";
 import moment from "moment";
+import ActionBarView from "./ActionBarView";
 
 const generateStyles = theme => ({});
 
-const NewsItem = ({ item }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+const NewsItemContainer = React.memo(({ item, navigation }) => {
+  return (
+    <ActionBarView
+      openLabel="Open in Safari"
+      openIcon={"safari"}
+      link={item.url}
+      message={`${item.title}`}
+      navigation={navigation}
+    >
+      <NewsItem item={item} navigation={navigation} />
+    </ActionBarView>
+  );
+});
+
+const NewsItem = ({ item, navigation }) => {
+  const { theme, gstyles } = useThemeKit(generateStyles);
   const { title, source, author, url, urlToImage, publishedAt } = item;
   return (
-    <View style={{ padding: theme.spacing_2 }}>
-      <View style={[{ borderRadius: 8, overflow: "hidden" }, gstyles.bottom_2]}>
-        <Image
-          style={{
-            height: 200,
-            width: "100%",
-            backgroundColor: theme.text(0.1)
-          }}
-          source={{ uri: urlToImage }}
-          resizeMode={"cover"}
-        />
+    <TouchableOpacity
+      activeOpacity={theme.activeOpacity}
+      onPress={() => navigation.navigate("Webview", { uri: url, title })}
+    >
+      <View style={{ padding: theme.spacing_2 }}>
         <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            right: 0,
-            padding: theme.spacing_4,
-            backgroundColor: theme.dark(0.8),
-            borderTopLeftRadius: 8
-          }}
+          style={[
+            {
+              // shadowColor: theme.cardShadow,
+              // shadowOffset: { width: 2, height: 2 },
+              // shadowOpacity: 1,
+              // shadowRadius: 2
+            },
+            gstyles.bottom_2
+          ]}
         >
-          <Text style={[gstyles.p1, { color: theme.light() }]}>
-            {source.name || author}
-          </Text>
+          <Image
+            style={{
+              borderRadius: 8,
+              height: 200,
+              width: "100%",
+              backgroundColor: theme.text(0.1)
+            }}
+            source={{ uri: urlToImage }}
+            resizeMode={"cover"}
+          />
+          {/* <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              padding: theme.spacing_4,
+              backgroundColor: theme.dark(0.9),
+              borderTopLeftRadius: 8,
+              borderBottomRightRadius: 8
+            }}
+          >
+            <Text style={[gstyles.caption, { color: theme.light() }]}>
+              {author ? `${author} / ` : ""}
+              {source.name}
+            </Text>
+          </View> */}
         </View>
-      </View>
 
-      <Text
-        style={[gstyles.h4, gstyles.bottom_4, { fontFamily: "brandon-med" }]}
-        // style={[gstyles.h4_bold, gstyles.bottom_4]}
-      >
-        {title}
-      </Text>
-      <Text style={[gstyles.caption_50]}>{moment(publishedAt).fromNow()}</Text>
-    </View>
+        <Text
+          style={[gstyles.h4, gstyles.bottom_4, { fontFamily: "brandon-med" }]}
+          // style={[gstyles.h4_bold, gstyles.bottom_4]}
+        >
+          {title}
+        </Text>
+        <Text style={[gstyles.caption_50]}>
+          {source.name} - {moment(publishedAt).fromNow()}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
-export default NewsItem;
+export default NewsItemContainer;

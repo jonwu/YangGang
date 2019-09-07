@@ -1,16 +1,17 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Linking, Share } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import * as Amplitude from "expo-analytics-amplitude";
 import {
   EVENT_OPEN_YOUTUBE,
   EVENT_OPEN_REDDIT,
   EVENT_OPEN_TWITTER,
+  EVENT_OPEN_NEWS_SAFARI,
   EVENT_SHARE_YOUTUBE,
   EVENT_SHARE_REDDIT,
-  EVENT_SHARE_TWITTER
+  EVENT_SHARE_TWITTER,
+  EVENT_SHARE_NEWS
 } from "utils/AnalyticsUtils";
 
 const generateStyles = theme => ({
@@ -51,6 +52,9 @@ const ActionBarView = ({
             case "Open in Twitter":
               Amplitude.logEvent(EVENT_SHARE_TWITTER);
               break;
+            case "Open in Safari":
+              Amplitude.logEvent(EVENT_SHARE_NEWS);
+              break;
             default:
               break;
           }
@@ -73,11 +77,12 @@ const ActionBarView = ({
             case "Open in Twitter":
               Amplitude.logEvent(EVENT_OPEN_TWITTER);
               break;
+            case "Open in Safari":
+              Amplitude.logEvent(EVENT_OPEN_NEWS_SAFARI);
+              break;
             default:
               break;
           }
-          // navigation.navigate("Webview", { uri: link, title: link });
-
           Linking.openURL(link);
         }}
       />
@@ -85,14 +90,7 @@ const ActionBarView = ({
   );
 
   return (
-    <View
-    // style={{
-    //   marginHorizontal: theme.spacing_2,
-    //   marginVertical: theme.spacing_4,
-    //   borderRadius: 8,
-    //   overflow: "hidden"
-    // }}
-    >
+    <View>
       {children}
       {actionBar}
     </View>

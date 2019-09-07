@@ -1,10 +1,8 @@
 import React from "react";
-import { View, Text, Image, TouchableHighlight } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
 import ActionBarView from "./ActionBarView";
-import { FontAwesome } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import * as Amplitude from "expo-analytics-amplitude";
@@ -32,6 +30,7 @@ const generateStyles = theme => ({
 });
 
 const YoutubeItemContainer = React.memo(({ item, navigation }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const { id } = item;
   return (
     <ActionBarView
@@ -41,7 +40,8 @@ const YoutubeItemContainer = React.memo(({ item, navigation }) => {
       message={`${item.snippet.title}`}
       navigation={navigation}
     >
-      <TouchableHighlight
+      <TouchableOpacity
+        activeOpacity={theme.activeOpacity}
         onPress={() => {
           Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
           navigation.navigate("Webview", {
@@ -53,7 +53,7 @@ const YoutubeItemContainer = React.memo(({ item, navigation }) => {
         }}
       >
         <YoutubeItem item={item} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     </ActionBarView>
   );
 });

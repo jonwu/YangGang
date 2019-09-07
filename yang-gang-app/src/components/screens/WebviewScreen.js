@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, Linking } from "react-native";
+import { TouchableOpacity, Linking, StatusBar } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import Header from "./Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -15,6 +15,7 @@ const WebviewScreen = ({ navigation }) => {
 
   return (
     <React.Fragment>
+      <StatusBar barStyle="light-content" />
       <Header
         navigation={navigation}
         title={entities.decode(title || uri)}

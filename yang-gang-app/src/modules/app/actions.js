@@ -2,6 +2,7 @@ import * as ActionTypes from "./actionTypes";
 import BackendUtils from "utils/BackendUtils";
 import { load } from "modules/loading/actions";
 import lodash from "lodash";
+import moment from "moment";
 
 export function updateTheme(theme) {
   return {
@@ -119,6 +120,12 @@ export function updateNews() {
         "news",
         BackendUtils.getNews().then(response => {
           const news = lodash.uniqBy(response.data.articles, "title");
+          news.sort((a, b) => {
+            return (
+              moment(a.publishedAt).format("Y-M-D") <
+              moment(b.publishedAt).format("Y-M-D")
+            );
+          });
           dispatch({
             type: ActionTypes.UPDATE_NEWS,
             news

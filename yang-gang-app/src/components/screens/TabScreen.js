@@ -1,19 +1,12 @@
 import * as React from "react";
-import {
-  Image,
-  TouchableOpacity,
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  Dimensions
-} from "react-native";
+import { Image, TouchableOpacity, StatusBar, SafeAreaView } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
 import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
 import NewsScreen from "./NewsScreen";
-import { TabView, TabBar, SceneMap } from "react-native-tab-view";
+import SettingsScreen from "./SettingsScreen";
+import { TabView, TabBar } from "react-native-tab-view";
 import {
   Ionicons,
   FontAwesome,
@@ -23,7 +16,6 @@ import {
 import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
-import Header from "./Header";
 import { useDimensionStore } from "utils/DimensionUtils";
 
 const generateStyles = theme => ({
@@ -31,7 +23,7 @@ const generateStyles = theme => ({
     backgroundColor: theme.bgTabs()
   },
   indicator: {
-    backgroundColor: theme.yang()
+    backgroundColor: theme.indicatorColor
   },
   label: {
     color: theme.text()
@@ -66,12 +58,6 @@ const TabScreen = ({ navigation }) => {
   const { deviceWidth, deviceHeight } = useDimensionStore();
 
   const routes = [
-    {
-      key: "news",
-      icon: "newspaper-o",
-      iconType: "FontAwesome",
-      color: theme.darkGreen()
-    },
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
     {
       key: "reddit",
@@ -79,7 +65,19 @@ const TabScreen = ({ navigation }) => {
       color: "#FF5700",
       iconType: "FontAwesome"
     },
-    { key: "youtube", icon: "logo-youtube", color: "#FF0000" }
+    { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
+    {
+      key: "news",
+      icon: "newspaper-o",
+      iconType: "FontAwesome",
+      color: theme.darkGreen()
+    },
+    {
+      key: "settings",
+      icon: "md-settings",
+      // iconType: "FontAwesome",
+      color: theme.text()
+    }
   ];
 
   const renderScene = ({ route }) => {
@@ -92,6 +90,8 @@ const TabScreen = ({ navigation }) => {
         return <YoutubeScreen navigation={navigation} />;
       case "news":
         return <NewsScreen navigation={navigation} />;
+      case "settings":
+        return <SettingsScreen />;
       default:
         return null;
     }
@@ -99,23 +99,29 @@ const TabScreen = ({ navigation }) => {
 
   const renderTabBar = props => {
     return (
-      <TabBar
-        {...props}
-        indicatorStyle={styles.indicator}
-        renderIcon={renderIcon}
-        style={styles.tabbar}
-      />
+      <SafeAreaView style={{ backgroundColor: theme.bgTabs() }}>
+        <TabBar
+          {...props}
+          indicatorStyle={styles.indicator}
+          renderIcon={renderIcon}
+          style={styles.tabbar}
+        />
+      </SafeAreaView>
     );
   };
 
   return (
     <React.Fragment>
-      <StatusBar barStyle="light-content" />
-      <Header
+      {theme.id === 0 ? (
+        <StatusBar barStyle="dark-content" />
+      ) : (
+        <StatusBar barStyle="light-content" />
+      )}
+      {/* <Header
         renderTitle={<YangLogo />}
-        renderRight={<ThemeIcon />}
+        // renderRight={<ThemeIcon />}
         navigation={navigation}
-      />
+      /> */}
       {/* <Image source={header} style={{ width: "100%", height: 180 }} />
       <View
         style={{
@@ -129,6 +135,7 @@ const TabScreen = ({ navigation }) => {
       /> */}
       <TabView
         lazy
+        tabBarPosition={"top"}
         style={{ backgroundColor: theme.bg2() }}
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -156,7 +163,6 @@ const ThemeIcon = () => {
       onPress={() => dispatch(updateTheme(nextThemeId))}
     >
       <MaterialCommunityIcons name="yin-yang" size={26} color={theme.light()} />
-      {/* <Image source={pngYinYang} style={styles.icon} /> */}
     </TouchableOpacity>
   );
 };

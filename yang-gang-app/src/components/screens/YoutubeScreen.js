@@ -1,5 +1,5 @@
 import React from "react";
-import { View, WebView, FlatList, Text } from "react-native";
+import { View, WebView, FlatList, Text, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import YoutubeItem from "components/items/YoutubeItem";
 import YoutubeTinyItem from "components/items/YoutubeTinyItem";
@@ -12,7 +12,6 @@ import {
 } from "modules/app/actions";
 import Separator from "components/items/TwitterSeparator";
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Loading from "components/utils/Loading";
 import { load } from "modules/loading/actions";

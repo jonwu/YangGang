@@ -1,7 +1,6 @@
 import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import { DotsLoader } from "react-native-indicator";
 
 const generateStyles = theme => ({});

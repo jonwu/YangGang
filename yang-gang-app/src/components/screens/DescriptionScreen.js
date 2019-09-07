@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Image,
-  Text,
-  ScrollView,
-  WebView,
-  StyleSheet
-} from "react-native";
+import { View, Text, ScrollView, StatusBar } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import Header from "./Header";
 import Markdown from "react-native-markdown-renderer";
@@ -31,6 +24,7 @@ const DescriptionScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar barStyle="light-content" />
       <Header
         close
         bgColor={theme.bgHeader()}

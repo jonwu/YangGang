@@ -1,7 +1,6 @@
 import React from "react";
-import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
-import { useSelector, useDispatch } from "react-redux";
 import { XmlEntities as Entities } from "html-entities";
 import { transformN } from "utils/Utils";
 import * as Amplitude from "expo-analytics-amplitude";
@@ -25,7 +24,8 @@ const YoutubeTinyItem = ({ item, navigation }) => {
     publishedAt
   } = snippet;
   return (
-    <TouchableWithoutFeedback
+    <TouchableOpacity
+      activeOpacity={theme.activeOpacity}
       onPress={() => {
         Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
         navigation.navigate("Webview", {
@@ -59,7 +59,7 @@ const YoutubeTinyItem = ({ item, navigation }) => {
           </Text>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, WebView, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import RedditItem from "components/items/RedditItem";

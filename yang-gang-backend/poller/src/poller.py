@@ -174,8 +174,8 @@ def fetch_news():
         'qInTitle': 'andrew yang',
         'language': 'en',
         'sortBy': 'popularity',
+        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org',
         'from': today_datestring,
-        'pageSize': 30,
         'apiKey': '84dbae84af624aeaa6e1a3fc92c97d6d',
     }
     news_url = 'https://newsapi.org/v2/everything'

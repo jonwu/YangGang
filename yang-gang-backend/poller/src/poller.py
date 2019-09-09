@@ -174,7 +174,7 @@ def fetch_news():
         'qInTitle': 'andrew yang',
         'language': 'en',
         'sortBy': 'popularity',
-        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org',
+        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org, slickdeals.net',
         'from': today_datestring,
         'apiKey': '84dbae84af624aeaa6e1a3fc92c97d6d',
     }

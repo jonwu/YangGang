@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
-import {  MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { XmlEntities as Entities } from "html-entities";
@@ -221,9 +221,13 @@ const TwitterVideo = ({ video }) => {
       >
         <Video
           ref={videoRef}
-          source={{ uri: variant.url }}
+          resizeMode="contain"
+          source={{
+            uri: variant.url.split("?")[0]
+          }}
           useNativeControls
           style={{
+            backgroundColor: theme.text(0.1),
             width: contentWidth,
             height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
           }}

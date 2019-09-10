@@ -5,7 +5,8 @@
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.6",
+    "orientation": "portrait",
+    "version": "1.0.7",
     "icon": "./src/assets/logo-4.png",
     "splash": {
       "image": "./src/assets/splash.png",
@@ -22,6 +23,10 @@
     },
     "android": {
       "package": "com.jonwu.yang"
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#000000"
     }
   }
 }

@@ -72,7 +72,10 @@ const Header = ({
           {title && !renderTitle && (
             <Text
               numberOfLines={1}
-              style={[gstyles.p1_bold, { color: theme.light(), width: 200 }]}
+              style={[
+                gstyles.p1_bold,
+                { color: theme.light(), width: 200, textAlign: "center" }
+              ]}
             >
               {title}
             </Text>

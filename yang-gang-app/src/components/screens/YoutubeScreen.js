@@ -101,7 +101,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   const { deviceWidth } = useDimensionStore();
   const loadingFetchYoutube = useSelector(state => state.loading.fetchYoutube);
 
-  const [filter, setFilter] = React.useState(DAYS_7);
+  const [filter, setFilter] = React.useState(DAYS_3);
   let data = youtube;
   switch (filter) {
     case DAYS_3:

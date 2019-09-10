@@ -93,14 +93,14 @@ const RedditFooter = ({ item }) => {
           name={"arrow-up"}
           size={20}
           style={{ marginRight: theme.spacing_5 }}
-          color={theme.text()}
+          color={theme.text(0.5)}
         />
         <Text style={[gstyles.caption]}>{transformN(item.score, 1)}</Text>
         <Entypo
           name={"arrow-down"}
           size={20}
           style={{ marginTop: 2, marginLeft: theme.spacing_5 }}
-          color={theme.text()}
+          color={theme.text(0.5)}
         />
       </View>
     </View>
@@ -254,7 +254,9 @@ const RedditVideo = ({ item }) => {
           ref={videoRef}
           source={{ uri: source.hls_url }}
           useNativeControls
+          resizeMode="cover"
           style={{
+            backgroundColor: theme.text(0.1),
             marginLeft: -theme.spacing_2,
             width: deviceWidth,
             height: (deviceWidth * source.height) / source.width

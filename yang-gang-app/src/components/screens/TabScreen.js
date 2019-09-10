@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Image, TouchableOpacity, StatusBar, SafeAreaView } from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  StatusBar,
+  SafeAreaView,
+  Dimensions,
+  Platform
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
 import TwitterScreen from "./TwitterScreen";
@@ -16,7 +23,6 @@ import {
 import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { useDimensionStore } from "utils/DimensionUtils";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -55,7 +61,6 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
-  const { deviceWidth, deviceHeight } = useDimensionStore();
 
   const routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
@@ -110,13 +115,14 @@ const TabScreen = ({ navigation }) => {
     );
   };
 
+  let statusBar = <StatusBar barStyle="light-content" />;
+  if (Platform.OS === "ios" && theme.id === 0) {
+    statusBar = <StatusBar barStyle="dark-content" />;
+  }
+
   return (
     <React.Fragment>
-      {theme.id === 0 ? (
-        <StatusBar barStyle="dark-content" />
-      ) : (
-        <StatusBar barStyle="light-content" />
-      )}
+      {statusBar}
       {/* <Header
         renderTitle={<YangLogo />}
         // renderRight={<ThemeIcon />}
@@ -141,7 +147,7 @@ const TabScreen = ({ navigation }) => {
         renderScene={renderScene}
         renderTabBar={renderTabBar}
         onIndexChange={index => setIndex(index)}
-        initialLayout={{ width: deviceWidth }}
+        initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
     </React.Fragment>
   );

@@ -240,7 +240,7 @@ const TwitterVideo = ({ video }) => {
               height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
             }}
           />
-          {Platform.OS === "android" && (
+          {/* {Platform.OS === "android" && (
             <View
               style={[
                 StyleSheet.absoluteFill,
@@ -253,7 +253,7 @@ const TwitterVideo = ({ video }) => {
                 color={theme.text(0.5)}
               />
             </View>
-          )}
+          )} */}
         </React.Fragment>
       </TouchableWithoutFeedback>
     </View>

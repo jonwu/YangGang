@@ -1,11 +1,17 @@
 import { combineReducers } from "redux";
 import * as ActionTypes from "./actionTypes";
-import { newsPayload } from "utils/PayloadUtils";
+import {
+  newsPayload,
+  youtubeAllTimePayload,
+  youtubeDayPayload,
+  redditPayload,
+  tweetPayload
+} from "utils/PayloadUtils";
 
 function reddit(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_REDDIT:
-      return actions.reddit;
+      return redditPayload || actions.reddit;
     default:
       return state;
   }
@@ -13,7 +19,7 @@ function reddit(state = null, actions) {
 function tweets(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_TWEETS:
-      return actions.tweets;
+      return tweetPayload || actions.tweets;
     default:
       return state;
   }
@@ -29,7 +35,7 @@ function youtube(state = null, actions) {
 function youtubeDay(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_DAY:
-      return actions.youtube;
+      return youtubeDayPayload || actions.youtube;
     default:
       return state;
   }
@@ -45,7 +51,7 @@ function youtube3Days(state = null, actions) {
 function youtubeAllTime(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_ALL_TIME:
-      return actions.youtube;
+      return youtubeAllTimePayload || actions.youtube;
     default:
       return state;
   }

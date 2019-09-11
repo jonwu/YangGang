@@ -271,7 +271,7 @@ const RedditVideo = ({ item }) => {
               height: (deviceWidth * source.height) / source.width
             }}
           />
-          {Platform.OS === "android" && (
+          {/* {Platform.OS === "android" && (
             <View
               style={[
                 StyleSheet.absoluteFill,
@@ -284,7 +284,7 @@ const RedditVideo = ({ item }) => {
                 color={theme.text(0.5)}
               />
             </View>
-          )}
+          )} */}
         </React.Fragment>
       </TouchableOpacity>
     </View>

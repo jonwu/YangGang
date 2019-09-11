@@ -122,8 +122,8 @@ export function updateNews() {
           const news = lodash.uniqBy(response.data.articles, "title");
           news.sort((a, b) => {
             return (
-              moment(a.publishedAt).format("Y-M-D") <
-              moment(b.publishedAt).format("Y-M-D")
+              moment(a.publishedAt).format("Y-MM-DD") <
+              moment(b.publishedAt).format("Y-MM-DD")
             );
           });
           dispatch({

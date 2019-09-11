@@ -1,9 +1,17 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Platform
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
+
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { transformN } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
@@ -250,18 +258,34 @@ const RedditVideo = ({ item }) => {
         activeOpacity={1.0}
         onPress={() => videoRef.current.presentFullscreenPlayer()}
       >
-        <Video
-          ref={videoRef}
-          source={{ uri: source.hls_url }}
-          useNativeControls
-          resizeMode="cover"
-          style={{
-            backgroundColor: theme.text(0.1),
-            marginLeft: -theme.spacing_2,
-            width: deviceWidth,
-            height: (deviceWidth * source.height) / source.width
-          }}
-        />
+        <React.Fragment>
+          <Video
+            ref={videoRef}
+            source={{ uri: source.hls_url }}
+            useNativeControls
+            resizeMode="cover"
+            style={{
+              backgroundColor: theme.text(0.1),
+              marginLeft: -theme.spacing_2,
+              width: deviceWidth,
+              height: (deviceWidth * source.height) / source.width
+            }}
+          />
+          {Platform.OS === "android" && (
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                { alignItems: "center", justifyContent: "center" }
+              ]}
+            >
+              <MaterialCommunityIcons
+                name={"play-circle"}
+                size={24}
+                color={theme.text(0.5)}
+              />
+            </View>
+          )}
+        </React.Fragment>
       </TouchableOpacity>
     </View>
   );

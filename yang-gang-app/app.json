@@ -22,7 +22,8 @@
       "bundleIdentifier": "com.jonwu.yang"
     },
     "android": {
-      "package": "com.jonwu.yang"
+      "package": "com.jonwu.yang",
+      "permissions": []
     },
     "androidStatusBar": {
       "barStyle": "light-content",

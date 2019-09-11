@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableWithoutFeedback,
+  Platform,
+  StyleSheet
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
@@ -219,19 +226,35 @@ const TwitterVideo = ({ video }) => {
       <TouchableWithoutFeedback
         onPress={() => videoRef.current.presentFullscreenPlayer()}
       >
-        <Video
-          ref={videoRef}
-          resizeMode="contain"
-          source={{
-            uri: variant.url.split("?")[0]
-          }}
-          useNativeControls
-          style={{
-            backgroundColor: theme.text(0.1),
-            width: contentWidth,
-            height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
-          }}
-        />
+        <React.Fragment>
+          <Video
+            ref={videoRef}
+            resizeMode="contain"
+            source={{
+              uri: variant.url.split("?")[0]
+            }}
+            useNativeControls
+            style={{
+              backgroundColor: theme.text(0.1),
+              width: contentWidth,
+              height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
+            }}
+          />
+          {Platform.OS === "android" && (
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                { alignItems: "center", justifyContent: "center" }
+              ]}
+            >
+              <MaterialCommunityIcons
+                name={"play-circle"}
+                size={64}
+                color={theme.text(0.5)}
+              />
+            </View>
+          )}
+        </React.Fragment>
       </TouchableWithoutFeedback>
     </View>
   );

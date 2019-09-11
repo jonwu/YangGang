@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import * as ActionTypes from "./actionTypes";
+import { newsPayload } from "utils/PayloadUtils";
 
 function reddit(state = null, actions) {
   switch (actions.type) {
@@ -53,7 +54,7 @@ function youtubeAllTime(state = null, actions) {
 function news(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_NEWS:
-      return actions.news;
+      return newsPayload || actions.news;
     default:
       return state;
   }

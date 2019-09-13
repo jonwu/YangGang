@@ -1,0 +1,27 @@
+version: '3'
+services:
+    web:
+        build: ./app
+        links:
+            - db
+        ports:
+            - "80:80"
+    redis:
+        image: redis
+        restart: always
+    poller:
+        build: ./poller
+        environment:
+            BUILD_ENV: 'prod'
+        links:
+            - db
+    db:
+        image: mysql:5.7
+        restart: always
+        ports:
+          - "3306:3306"
+        environment:
+          MYSQL_ROOT_PASSWORD: 'root'
+          MYSQL_DATABASE: 'db'
+        volumes:
+          - ./db:/docker-entrypoint-initdb.d/:ro

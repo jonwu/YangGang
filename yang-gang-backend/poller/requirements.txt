@@ -1,5 +1,8 @@
 APScheduler
+confuse
 newsapi-python
 praw
+pymysql
+python-dateutil
 redis
 tweepy

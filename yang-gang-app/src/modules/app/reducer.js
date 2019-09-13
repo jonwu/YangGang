@@ -1,17 +1,74 @@
 import { combineReducers } from "redux";
 import * as ActionTypes from "./actionTypes";
-import {
-  newsPayload,
-  youtubeAllTimePayload,
-  youtubeDayPayload,
-  redditPayload,
-  tweetPayload
-} from "utils/PayloadUtils";
+// import {
+//   newsPayload,
+//   youtubeAllTimePayload,
+//   youtubeDayPayload,
+//   redditPayload,
+//   tweetPayload
+// } from "utils/PayloadUtils";
+
+// function reddit(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_REDDIT:
+//       return redditPayload;
+//     default:
+//       return state;
+//   }
+// }
+// function tweets(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_TWEETS:
+//       return tweetPayload;
+//     default:
+//       return state;
+//   }
+// }
+// function youtube(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_YOUTUBE:
+//       return actions.youtube;
+//     default:
+//       return state;
+//   }
+// }
+// function youtubeDay(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_YOUTUBE_DAY:
+//       return youtubeDayPayload;
+//     default:
+//       return state;
+//   }
+// }
+// function youtube3Days(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_YOUTUBE_3_DAYS:
+//       return actions.youtube;
+//     default:
+//       return state;
+//   }
+// }
+// function youtubeAllTime(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_YOUTUBE_ALL_TIME:
+//       return youtubeAllTimePayload;
+//     default:
+//       return state;
+//   }
+// }
+// function news(state = null, actions) {
+//   switch (actions.type) {
+//     case ActionTypes.UPDATE_NEWS:
+//       return newsPayload;
+//     default:
+//       return state;
+//   }
+// }
 
 function reddit(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_REDDIT:
-      return redditPayload || actions.reddit;
+      return actions.reddit;
     default:
       return state;
   }
@@ -19,7 +76,7 @@ function reddit(state = null, actions) {
 function tweets(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_TWEETS:
-      return tweetPayload || actions.tweets;
+      return actions.tweets;
     default:
       return state;
   }
@@ -35,7 +92,7 @@ function youtube(state = null, actions) {
 function youtubeDay(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_DAY:
-      return youtubeDayPayload || actions.youtube;
+      return actions.youtube;
     default:
       return state;
   }
@@ -51,7 +108,7 @@ function youtube3Days(state = null, actions) {
 function youtubeAllTime(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_ALL_TIME:
-      return youtubeAllTimePayload || actions.youtube;
+      return actions.youtube;
     default:
       return state;
   }
@@ -60,7 +117,7 @@ function youtubeAllTime(state = null, actions) {
 function news(state = null, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_NEWS:
-      return newsPayload || actions.news;
+      return actions.news;
     default:
       return state;
   }

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableWithoutFeedback,
-  Platform,
-  StyleSheet
-} from "react-native";
+import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
@@ -57,7 +50,6 @@ const TwitterItem = ({ item, navigation }) => {
     favorite_count,
     created_at
   } = status;
-  let text = full_text;
   let name = user.name;
   let screen_name = user.screen_name;
   let avatar_url = user.profile_image_url;
@@ -226,21 +218,20 @@ const TwitterVideo = ({ video }) => {
       <TouchableWithoutFeedback
         onPress={() => videoRef.current.presentFullscreenPlayer()}
       >
-        <React.Fragment>
-          <Video
-            ref={videoRef}
-            resizeMode="contain"
-            source={{
-              uri: variant.url.split("?")[0]
-            }}
-            useNativeControls
-            style={{
-              backgroundColor: theme.text(0.1),
-              width: contentWidth,
-              height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
-            }}
-          />
-          {/* {Platform.OS === "android" && (
+        <Video
+          ref={videoRef}
+          resizeMode="contain"
+          source={{
+            uri: variant.url.split("?")[0]
+          }}
+          useNativeControls
+          style={{
+            backgroundColor: theme.text(0.1),
+            width: contentWidth,
+            height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
+          }}
+        />
+        {/* {Platform.OS === "android" && (
             <View
               style={[
                 StyleSheet.absoluteFill,
@@ -254,7 +245,6 @@ const TwitterVideo = ({ video }) => {
               />
             </View>
           )} */}
-        </React.Fragment>
       </TouchableWithoutFeedback>
     </View>
   );

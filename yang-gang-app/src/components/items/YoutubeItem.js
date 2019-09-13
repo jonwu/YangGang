@@ -30,14 +30,14 @@ const generateStyles = theme => ({
 });
 
 const YoutubeItemContainer = React.memo(({ item, navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { id } = item;
+  const { theme } = useThemeKit(generateStyles);
+  const { id, snippet } = item;
   return (
     <ActionBarView
       openLabel="Open in Youtube"
       openIcon={"youtube-square"}
       link={`https://youtube.com/watch?v=${id}`}
-      message={`${item.snippet.title}`}
+      message={`${snippet.title}`}
       navigation={navigation}
     >
       <TouchableOpacity
@@ -48,7 +48,7 @@ const YoutubeItemContainer = React.memo(({ item, navigation }) => {
             // uri: `https://youtube.com/embed/${id}?autoplay=1`,
             // uri: `https://youtube.com/embed/${id.videoId}`
             uri: `https://youtube.com/watch?v=${id}`,
-            title: item.snippet.title
+            title: snippet.title
           });
         }}
       >
@@ -65,15 +65,7 @@ const YoutubeItem = ({ item }) => {
   if (deviceWidth > 800) {
     height = deviceWidth / 9;
   }
-  const {
-    title,
-    description,
-    thumbnails,
-    channelTitle,
-    publishedId,
-    channelId,
-    publishedAt
-  } = snippet;
+  const { title, thumbnails, channelTitle, publishedAt } = snippet;
   return (
     <View style={styles.container}>
       <Image

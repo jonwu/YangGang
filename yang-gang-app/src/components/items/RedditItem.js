@@ -33,8 +33,8 @@ const generateStyles = theme => ({
 });
 
 const RedditItem = React.memo(({ item, navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { title, selftext, preview, thumbnail, media, id, score } = item;
+  const { theme } = useThemeKit(generateStyles);
+  const { preview, thumbnail, media, id, title } = item;
   const isEnabled = preview != null && preview.enabled;
   const isRedditVideo = media && media.reddit_video != null;
   const isYoutube = media && media.type === "youtube.com";
@@ -58,7 +58,7 @@ const RedditItem = React.memo(({ item, navigation }) => {
       openLabel={"Open in Reddit"}
       openIcon={"reddit-square"}
       link={`https://reddit.com/r/YangForPresidentHQ/comments/${id}`}
-      message={item.title}
+      message={title}
       navigation={navigation}
     >
       <View style={{ backgroundColor: theme.bg2(), padding: theme.spacing_2 }}>
@@ -70,8 +70,8 @@ const RedditItem = React.memo(({ item, navigation }) => {
 });
 
 const RedditFooter = ({ item }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { stickied } = item;
+  const { theme, gstyles } = useThemeKit(generateStyles);
+  const { stickied, created_utc, score } = item;
   return (
     <View
       style={{
@@ -89,7 +89,7 @@ const RedditFooter = ({ item }) => {
         />
       )}
       <Text style={[gstyles.caption_50, { flex: 1 }]}>
-        {moment(item.created_utc * 1000).fromNow()}
+        {moment(created_utc * 1000).fromNow()}
       </Text>
       <View
         style={{
@@ -103,7 +103,7 @@ const RedditFooter = ({ item }) => {
           style={{ marginRight: theme.spacing_5 }}
           color={theme.text(0.5)}
         />
-        <Text style={[gstyles.caption]}>{transformN(item.score, 1)}</Text>
+        <Text style={[gstyles.caption]}>{transformN(score, 1)}</Text>
         <Entypo
           name={"arrow-down"}
           size={20}
@@ -114,19 +114,9 @@ const RedditFooter = ({ item }) => {
     </View>
   );
 };
-const RedditHeader = ({ item }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  return (
-    <View style={{ alignItems: "center", flexDirection: "row" }}>
-      <Text style={gstyles.caption_50}>
-        {moment(item.created_utc * 1000).fromNow()}
-      </Text>
-    </View>
-  );
-};
 
 const RedditTitle = ({ title }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const { gstyles } = useThemeKit(generateStyles);
   return (
     <View style={gstyles.bottom_2}>
       <Text style={[gstyles.h4_bold]}>{title}</Text>
@@ -134,9 +124,9 @@ const RedditTitle = ({ title }) => {
   );
 };
 const RedditImage = ({ item, navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const { theme, styles } = useThemeKit(generateStyles);
   const { deviceWidth } = useDimensionStore();
-  const { title, selftext, preview } = item;
+  const { title, preview } = item;
   const source = preview != null && preview.images[0].source;
   const contentWidth = deviceWidth - theme.spacing_2 * 2;
   const src =
@@ -198,8 +188,8 @@ function YouTubeGetID(url) {
 }
 
 const RedditYoutube = ({ item, navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { title, selftext, secure_media_embed, url, preview } = item;
+  const { theme, styles } = useThemeKit(generateStyles);
+  const { title, url, preview } = item;
   const source = preview != null && preview.images[0].source;
   const { deviceWidth } = useDimensionStore();
   const contentWidth = deviceWidth - theme.spacing_2 * 2;
@@ -245,8 +235,8 @@ const RedditYoutube = ({ item, navigation }) => {
   );
 };
 const RedditVideo = ({ item }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { title, selftext, secure_media } = item;
+  const { theme } = useThemeKit(generateStyles);
+  const { title, secure_media } = item;
   const source = secure_media.reddit_video;
   const videoRef = React.useRef(null);
   const { deviceWidth } = useDimensionStore();
@@ -293,16 +283,7 @@ const RedditVideo = ({ item }) => {
 
 const RedditThumbnail = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const {
-    title,
-    selftext,
-    preview,
-    thumbnail,
-    thumbnail_height,
-    thumbnail_width,
-    domain,
-    url
-  } = item;
+  const { title, thumbnail, domain, url } = item;
 
   return (
     <TouchableOpacity
@@ -361,8 +342,8 @@ const RedditThumbnail = ({ item, navigation }) => {
 };
 
 const RedditDescription = ({ item, navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const { title, selftext, preview } = item;
+  const { theme, gstyles } = useThemeKit(generateStyles);
+  const { title, selftext } = item;
 
   return (
     <TouchableOpacity

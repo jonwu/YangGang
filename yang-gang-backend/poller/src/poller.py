@@ -50,19 +50,17 @@ subreddit = reddit.subreddit('YangForPresidentHQ')
 
 def prefill_stats(table_name):
     try:
-        num_followers = subreddit.subscribers()
+        num_followers = subreddit.subscribers
         with connection.cursor() as cursor:
-            sql = "INSERT INTO `{}` (`id`, `num_followers`) VALUES ({}, {})".format(table_name,
-                                                                                    datetime.now().isoformat(),
-                                                                                    num_followers)
+            sql = "INSERT INTO `{}` (`num_followers`) VALUES ({})".format(table_name, num_followers)
             print(sql)
             cursor.execute(sql)
-            cursor.commit()
+            connection.commit()
     except:
         traceback.print_exc()
 
 
-prefill_stats('reddit_stats')
+# prefill_stats('reddit_stats')
 
 # twitter api
 auth = tweepy.OAuthHandler(env_configs['twitter']['consumer_key'], env_configs['twitter']['consumer_secret'])

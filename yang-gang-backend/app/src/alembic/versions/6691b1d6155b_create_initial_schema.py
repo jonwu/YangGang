@@ -19,7 +19,7 @@ depends_on = None
 def upgrade():
     op.create_table(
         'user',
-        sa.Column('id', sa.Text(), primary_key=True, autoincrement=False),
+        sa.Column('id', sa.String(40), primary_key=True, autoincrement=False),
         sa.Column('created_date', sa.DateTime, server_default=sa.func.current_timestamp()),
         sa.Column('status', sa.Text()),
         sa.Column('handle', sa.String(40))

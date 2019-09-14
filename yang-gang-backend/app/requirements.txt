@@ -1,7 +1,9 @@
 alembic
 flask
 flask-restplus
+Flask-SQLAlchemy
 gevent
 gunicorn
+marshmallow-sqlalchemy
 pymysql
 redis

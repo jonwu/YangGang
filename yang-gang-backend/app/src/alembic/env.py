@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+import pymysql
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -25,6 +26,22 @@ target_metadata = None
 # ... etc.
 
 
+def wait_until_db_alive():
+    while True:
+        try:
+            connection = pymysql.connect(host='db',
+                                         port=3306,
+                                         user='root',
+                                         password='root',
+                                         db='db',
+                                         charset='utf8mb4',
+                                         cursorclass=pymysql.cursors.DictCursor)
+            print('database connection successfully established. beginning migration.')
+            break
+        except:
+            pass
+
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -37,6 +54,7 @@ def run_migrations_offline():
     script output.
 
     """
+    wait_until_db_alive()
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -56,6 +74,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
+    wait_until_db_alive()
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",

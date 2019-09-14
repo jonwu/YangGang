@@ -21,13 +21,22 @@ r = Redis(host='redis', port=6379)
 # deletes all keys from redis (if we decide that persisting stuff isn't important)
 r.flushdb()
 
-connection = pymysql.connect(host='172.29.0.1',
-                             port=3306,
-                             user='root',
-                             password='root',
-                             db='db',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
+print('trying to establish database connection.')
+while True:
+    try:
+        connection = pymysql.connect(host='db',
+                                     port=3306,
+                                     user='root',
+                                     password='root',
+                                     db='db',
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        print('database connection successfully established. proceeding to run poller code.')
+        break
+    except:
+        pass
+
 
 config = confuse.Configuration('src', __name__)
 config.set_file('config.yaml')

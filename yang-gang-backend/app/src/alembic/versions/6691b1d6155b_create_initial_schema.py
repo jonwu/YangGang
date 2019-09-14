@@ -46,14 +46,23 @@ def upgrade():
     op.create_table(
         'twitter_stats',
         sa.Column('id', sa.DateTime(), primary_key=True, autoincrement=False, server_default=sa.func.current_timestamp()),
-        sa.Column('num_followers', sa.Integer),
+        sa.Column('num_followers_yang', sa.Integer),
+        sa.Column('num_followers_sanders', sa.Integer),
+        sa.Column('num_followers_warren', sa.Integer),
+        sa.Column('num_followers_buttigieg', sa.Integer),
+        sa.Column('num_followers_kamala', sa.Integer),
+        sa.Column('num_followers_biden', sa.Integer),
     )
 
     # https://subredditstats.com/r/YangForPresidentHQ
     reddit_table = op.create_table(
         'reddit_stats',
         sa.Column('id', sa.DateTime(), primary_key=True, autoincrement=False, server_default=sa.func.current_timestamp()),
-        sa.Column('num_followers', sa.Integer),
+        sa.Column('num_followers_yang', sa.Integer),
+        sa.Column('num_followers_sanders', sa.Integer),
+        sa.Column('num_followers_warren', sa.Integer),
+        sa.Column('num_followers_buttigieg', sa.Integer),
+        sa.Column('num_followers_kamala', sa.Integer),
     )
 
     # with open('reddit_followers.csv', newline='') as csvfile:

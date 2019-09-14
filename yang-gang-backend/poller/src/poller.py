@@ -57,18 +57,6 @@ reddit = praw.Reddit(client_id=env_configs['reddit']['client_id'],
 subreddit = reddit.subreddit('YangForPresidentHQ')
 
 
-def fill_stats_reddit():
-    try:
-        num_followers = reddit.subreddit('YangForPresidentHQ').subscribers
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO `reddit_stats` (`num_followers`) VALUES ({})".format(num_followers)
-            print(sql)
-            cursor.execute(sql)
-            connection.commit()
-    except:
-        traceback.print_exc()
-
-
 # twitter api
 auth = tweepy.OAuthHandler(env_configs['twitter']['consumer_key'], env_configs['twitter']['consumer_secret'])
 auth.set_access_token(env_configs['twitter']['access_token'], env_configs['twitter']['access_token_secret'])
@@ -188,11 +176,50 @@ def fetch_news():
     print('fetched {} news items at {} with {} datestring'.format(all_articles['totalResults'], datetime.now(), today_datestring))
 
 
+def fill_stats_reddit():
+    try:
+        num_followers_yang = reddit.subreddit('YangForPresidentHQ').subscribers
+        num_followers_sanders = reddit.subreddit('SandersForPresident').subscribers
+        num_followers_warren = reddit.subreddit('ElizabethWarren').subscribers
+        num_followers_buttigieg = reddit.subreddit('Pete_buttigieg').subscribers
+        num_followers_kamala = reddit.subreddit('Kamala').subscribers
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `reddit_stats` (`num_followers_yang`, " \
+                  "`num_followers_sanders`, " \
+                  "`num_followers_warren`, " \
+                  "`num_followers_buttigieg`, " \
+                  "`num_followers_kamala`) VALUES ({}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                               num_followers_sanders,
+                                                                               num_followers_warren,
+                                                                               num_followers_buttigieg,
+                                                                               num_followers_kamala)
+            print(sql)
+            cursor.execute(sql)
+            connection.commit()
+    except:
+        traceback.print_exc()
+
+
 def fill_stats_twitter():
     try:
-        num_followers = api.get_user('AndrewYang').followers_count
+        num_followers_yang = api.get_user('AndrewYang').followers_count
+        num_followers_sanders = api.get_user('BernieSanders').followers_count
+        num_followers_warren = api.get_user('ewarren').followers_count
+        num_followers_buttigieg = api.get_user('PeteButtigieg').followers_count
+        num_followers_kamala = api.get_user('KamalaHarris').followers_count
+        num_followers_biden = api.get_user('JoeBiden').followers_count
         with connection.cursor() as cursor:
-            sql = "INSERT INTO `twitter_stats` (`num_followers`) VALUES ({})".format(num_followers)
+            sql = "INSERT INTO `twitter_stats` (`num_followers_yang`, " \
+                  "`num_followers_sanders`, " \
+                  "`num_followers_warren`, " \
+                  "`num_followers_buttigieg`, " \
+                  "`num_followers_kamala`, " \
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                                  num_followers_sanders,
+                                                                                  num_followers_warren,
+                                                                                  num_followers_buttigieg,
+                                                                                  num_followers_kamala,
+                                                                                  num_followers_biden)
             print(sql)
             cursor.execute(sql)
             connection.commit()

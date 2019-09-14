@@ -6,20 +6,18 @@ services:
             - db
         ports:
             - "80:80"
-#        volumes:
-#            - './app/src:/src'
     redis:
         image: redis
+        restart: always
     poller:
         build: ./poller
         environment:
-            BUILD_ENV: 'dev'
+            BUILD_ENV: 'prod'
         links:
             - db
-#        volumes:
-#            - ./poller/src:/src
     db:
         image: mysql:5.7
+        restart: always
         ports:
           - "3306:3306"
         environment:

@@ -1,5 +1,7 @@
+alembic
 flask
 flask-restplus
 gevent
 gunicorn
+pymysql
 redis

@@ -57,19 +57,17 @@ reddit = praw.Reddit(client_id=env_configs['reddit']['client_id'],
 subreddit = reddit.subreddit('YangForPresidentHQ')
 
 
-def prefill_stats(table_name):
+def fill_stats_reddit():
     try:
-        num_followers = subreddit.subscribers
+        num_followers = reddit.subreddit('YangForPresidentHQ').subscribers
         with connection.cursor() as cursor:
-            sql = "INSERT INTO `{}` (`num_followers`) VALUES ({})".format(table_name, num_followers)
+            sql = "INSERT INTO `reddit_stats` (`num_followers`) VALUES ({})".format(num_followers)
             print(sql)
             cursor.execute(sql)
             connection.commit()
     except:
         traceback.print_exc()
 
-
-# prefill_stats('reddit_stats')
 
 # twitter api
 auth = tweepy.OAuthHandler(env_configs['twitter']['consumer_key'], env_configs['twitter']['consumer_secret'])
@@ -183,7 +181,21 @@ def fetch_news():
     print('fetched {} news items at {} with {} datestring'.format(all_articles['totalResults'], datetime.now(), today_datestring))
 
 
+def fill_stats_twitter():
+    try:
+        num_followers = api.get_user('AndrewYang').followers_count
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `twitter_stats` (`num_followers`) VALUES ({})".format(num_followers)
+            print(sql)
+            cursor.execute(sql)
+            connection.commit()
+    except:
+        traceback.print_exc()
+
+
 scheduler = BackgroundScheduler()
+scheduler.add_job(fill_stats_twitter, 'interval', minutes=60, id='fill_stats_twitter')
+scheduler.add_job(fill_stats_reddit, 'interval', minutes=60, id='fill_stats_reddit')
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=10, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=10, id='fetch_twitter')
 scheduler.add_job(fetch_news, 'interval', minutes=30, id='fetch_news')
@@ -203,6 +215,8 @@ fetch_youtube(7, 'youtube', youtube_api_key1)
 fetch_youtube(1, 'youtube_day', youtube_api_key1)
 fetch_youtube(3, 'youtube_3day', youtube_api_key2)
 fetch_youtube(None, 'youtube_all_time', youtube_api_key2)
+fill_stats_reddit()
+fill_stats_twitter()
 
 scheduler.start()
 

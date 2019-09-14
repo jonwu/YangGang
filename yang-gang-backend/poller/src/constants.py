@@ -1,7 +1,7 @@
 reddit_fields = ['preview', 'thumbnail', 'media', 'id', 'title', 'stickied',
                  'created_utc', 'score', 'url','secure_media', 'domain', 'selftext']
 
-twitter_fields = ['id', 'full_text', 'user', 'extended_entities', 'entities',
+twitter_fields = ['id', 'id_str', 'full_text', 'user', 'extended_entities', 'entities',
                   'retweet_count', 'favorite_count', 'created_at', 'retweeted_status']
 
 youtube_vid_fields = ['id', 'snippet']

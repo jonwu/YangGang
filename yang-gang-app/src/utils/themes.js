@@ -20,6 +20,7 @@ const shared = {
   borderWidth: 1,
   borderRadius: 4,
   red: colors.RED,
+  yangRed: colors.YANG_RED,
   blue: colors.BLUE,
   yellow: colors.YELLOW,
   green: colors.GREEN,
@@ -47,6 +48,7 @@ const collections = {
     newsColor: colors.DARK_GREEN(),
     tweetLinkColor: colors.YANG,
     indicatorColor: colors.YANG(),
+    fab: colors.RED(),
     ...shared
   },
   1: {
@@ -64,6 +66,7 @@ const collections = {
     newsColor: colors.GREEN(),
     tweetLinkColor: colors.BLUE,
     indicatorColor: colors.YANG_RED(),
+    fab: colors.RED(),
     ...shared
   }
 };

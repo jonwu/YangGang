@@ -5,7 +5,8 @@ import {
   StatusBar,
   SafeAreaView,
   Dimensions,
-  Platform
+  Platform,
+  View
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
@@ -149,6 +150,35 @@ const TabScreen = ({ navigation }) => {
         onIndexChange={index => setIndex(index)}
         initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          bottom: theme.spacing_2,
+          right: theme.spacing_2
+        }}
+      >
+        <View
+          style={{
+            height: 56,
+            width: 56,
+            borderRadius: 56,
+            backgroundColor: theme.fab,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 1,
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <MaterialCommunityIcons
+            name="chart-bar"
+            color={theme.light()}
+            size={24}
+          />
+        </View>
+      </TouchableOpacity>
     </React.Fragment>
   );
 };

@@ -40,16 +40,18 @@ const NewsItem = ({ item, navigation }) => {
             gstyles.bottom_2
           ]}
         >
-          <Image
-            style={{
-              borderRadius: 8,
-              height: 200,
-              width: "100%",
-              backgroundColor: theme.text(0.1)
-            }}
-            source={{ uri: urlToImage }}
-            resizeMode={"cover"}
-          />
+          {urlToImage && (
+            <Image
+              style={{
+                borderRadius: 8,
+                height: 200,
+                width: "100%",
+                backgroundColor: theme.text(0.1)
+              }}
+              source={{ uri: urlToImage }}
+              resizeMode={"cover"}
+            />
+          )}
           {/* <View
             style={{
               position: "absolute",

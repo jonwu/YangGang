@@ -2,6 +2,7 @@ version: '3'
 services:
     web:
         build: ./app
+        restart: always
         links:
             - db
         ports:
@@ -11,6 +12,7 @@ services:
         restart: always
     poller:
         build: ./poller
+        restart: always
         environment:
             BUILD_ENV: 'prod'
         links:

@@ -51,6 +51,7 @@ def upgrade():
         sa.Column('num_followers_warren', sa.Integer),
         sa.Column('num_followers_buttigieg', sa.Integer),
         sa.Column('num_followers_kamala', sa.Integer),
+        sa.Column('num_followers_biden', sa.Integer),
     )
 
     # https://subredditstats.com/r/YangForPresidentHQ

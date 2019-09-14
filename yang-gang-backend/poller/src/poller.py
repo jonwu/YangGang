@@ -200,16 +200,19 @@ def fill_stats_twitter():
         num_followers_warren = api.get_user('ewarren').followers_count
         num_followers_buttigieg = api.get_user('PeteButtigieg').followers_count
         num_followers_kamala = api.get_user('KamalaHarris').followers_count
+        num_followers_biden = api.get_user('JoeBiden').followers_count
         with connection.cursor() as cursor:
             sql = "INSERT INTO `twitter_stats` (`num_followers_yang`, " \
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
-                  "`num_followers_kamala`) VALUES ({}, {}, {}, {}, {})".format(num_followers_yang,
-                                                                               num_followers_sanders,
-                                                                               num_followers_warren,
-                                                                               num_followers_buttigieg,
-                                                                               num_followers_kamala)
+                  "`num_followers_kamala`, " \
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                                  num_followers_sanders,
+                                                                                  num_followers_warren,
+                                                                                  num_followers_buttigieg,
+                                                                                  num_followers_kamala,
+                                                                                  num_followers_biden)
             print(sql)
             cursor.execute(sql)
             connection.commit()

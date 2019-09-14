@@ -163,7 +163,7 @@ def fetch_youtube(days_lag, redis_key, api_key):
         view_counts = requests.get(url=youtube_vid_url,
                                    params=get_youtube_stat_params(vid_ids, params['key'])).json()['items']
         for i in range(len(response)):
-            response[i] = {k: k for k,v in response[i].items() if v in youtube_vid_fields}
+            response[i] = {k: v for k,v in response[i].items() if k in youtube_vid_fields}
             response[i].update(view_counts[i])
         r.set(redis_key, json.dumps(response))
         print('set: {} with: {}'.format(redis_key, response[0]['statistics']))

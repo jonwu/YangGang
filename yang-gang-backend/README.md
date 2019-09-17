@@ -14,3 +14,11 @@ That's it! If you make a code change, you need to rebuild the containers. For so
 4. run docker-compose -f docker-compose-prod.yml up
 
 TODO: I need to figure out volumes so that we don't completely wipe the database every time we do docker-compose down.
+
+### Instructions for accessing the Database:
+1. run 'docker container ls' and find the container id of the mysql database.
+2. run 'docker exec -it <container_id> /bin/bash' to ssh into the container.
+3. run 'mysql -u root -p'. It will prompt you for the password, which is also 'root'
+4. run 'use db;'
+
+Now you can run whatever commands you want!

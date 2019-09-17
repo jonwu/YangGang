@@ -220,9 +220,49 @@ def fill_stats_twitter():
         traceback.print_exc()
 
 
+def get_instagram_followers(user):
+    try:
+        url = 'https://www.instagram.com/' + user
+        r = requests.get(url).text
+        start = '"edge_followed_by":{"count":'
+        end = '},"followed_by_viewer"'
+
+        return int(r[r.find(start) + len(start):r.rfind(end)])
+    except:
+        traceback.print_exc()
+
+
+def fill_stats_instagram():
+    try:
+        num_followers_yang = get_instagram_followers('andrewyang2020')
+        num_followers_sanders = get_instagram_followers('berniesanders')
+        num_followers_warren = get_instagram_followers('elizabethwarren')
+        num_followers_buttigieg = get_instagram_followers('pete.buttigieg')
+        num_followers_kamala = get_instagram_followers('kamalaharris')
+        num_followers_biden = get_instagram_followers('joebiden')
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO `instagram_stats` (`num_followers_yang`, " \
+                  "`num_followers_sanders`, " \
+                  "`num_followers_warren`, " \
+                  "`num_followers_buttigieg`, " \
+                  "`num_followers_kamala`, " \
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                                  num_followers_sanders,
+                                                                                  num_followers_warren,
+                                                                                  num_followers_buttigieg,
+                                                                                  num_followers_kamala,
+                                                                                  num_followers_biden)
+            print(sql)
+            cursor.execute(sql)
+            connection.commit()
+    except:
+        traceback.print_exc()
+
+
 scheduler = BackgroundScheduler()
 scheduler.add_job(fill_stats_twitter, 'interval', minutes=60, id='fill_stats_twitter')
 scheduler.add_job(fill_stats_reddit, 'interval', minutes=60, id='fill_stats_reddit')
+scheduler.add_job(fill_stats_instagram, 'interval', minutes=60, id='fill_stats_instagram')
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=10, id='fetch_hot_reddit')
 scheduler.add_job(fetch_twitter, 'interval', seconds=10, id='fetch_twitter')
 scheduler.add_job(fetch_news, 'interval', minutes=30, id='fetch_news')
@@ -244,6 +284,7 @@ fetch_youtube(3, 'youtube_3day', youtube_api_key2)
 fetch_youtube(None, 'youtube_all_time', youtube_api_key2)
 fill_stats_reddit()
 fill_stats_twitter()
+fill_stats_instagram()
 
 scheduler.start()
 

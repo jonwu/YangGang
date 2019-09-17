@@ -89,6 +89,15 @@ class TwitterStatsApi(Resource):
         return [x.as_dict() for x in get_recent_data(2, TwitterStats)]
 
 
+@api.route("/instagram_stats/")
+class InstagramStatsApi(Resource):
+    def get(self):
+        """
+        returns a twitter stats from the past day for all candidates
+        """
+        return [x.as_dict() for x in get_recent_data(2, InstagramStats)]
+
+
 @api.route("/reddit_stats/")
 class RedditStatsApi(Resource):
     def get(self):
@@ -108,6 +117,23 @@ class TwitterStats(db.Model):
     num_followers_warren = db.Column(db.Integer)
     num_followers_buttigieg = db.Column(db.Integer)
     num_followers_biden = db.Column(db.Integer)
+    num_followers_kamala = db.Column(db.Integer)
+
+    def as_dict(self):
+        return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+
+
+class InstagramStats(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "instagram_stats"
+
+    id = db.Column(db.DateTime, primary_key=True, autoincrement=False)
+    num_followers_yang = db.Column(db.Integer)
+    num_followers_sanders = db.Column(db.Integer)
+    num_followers_warren = db.Column(db.Integer)
+    num_followers_buttigieg = db.Column(db.Integer)
+    num_followers_biden = db.Column(db.Integer)
+    num_followers_kamala = db.Column(db.Integer)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
@@ -122,6 +148,7 @@ class RedditStats(db.Model):
     num_followers_sanders = db.Column(db.Integer)
     num_followers_warren = db.Column(db.Integer)
     num_followers_buttigieg = db.Column(db.Integer)
+    num_followers_kamala = db.Column(db.Integer)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}

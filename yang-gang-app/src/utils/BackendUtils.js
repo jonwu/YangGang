@@ -45,5 +45,14 @@ class BackendUtils {
   getNews(params) {
     return instance.get(`/news`, { params });
   }
+  getRedditStats(params) {
+    return instance.get(`/reddit_stats/`, { params });
+  }
+  getTwitterStats(params) {
+    return instance.get(`/twitter_stats`, { params });
+  }
+  getInstagramStats(params) {
+    return instance.get(`/instagram_stats`, { params });
+  }
 }
 export default new BackendUtils();

@@ -66,6 +66,7 @@ const Header = ({
       <View style={[styles.header, bgColor && { backgroundColor: bgColor }]}>
         <View style={gstyles.flex}>
           {renderLeft || (!close && <Back navigation={navigation} />)}
+          {close && <Close navigation={navigation} />}
         </View>
         <View style={[gstyles.flex, { alignItems: "center" }]}>
           {renderTitle}
@@ -83,7 +84,6 @@ const Header = ({
         </View>
         <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
           {renderRight}
-          {close && <Close navigation={navigation} />}
         </View>
       </View>
     </SafeAreaView>

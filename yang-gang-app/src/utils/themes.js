@@ -47,7 +47,7 @@ const collections = {
     loadingColor: colors.DARK(0.5),
     newsColor: colors.DARK_GREEN(),
     tweetLinkColor: colors.YANG,
-    indicatorColor: colors.YANG(),
+    indicatorColor: colors.RED(),
     fab: colors.RED(),
     ...shared
   },

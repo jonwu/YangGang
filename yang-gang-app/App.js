@@ -17,6 +17,7 @@ import splash from "assets/splash.png";
 import { AppLoading } from "expo";
 import * as Amplitude from "expo-analytics-amplitude";
 import Constants from "expo-constants";
+import { Asset } from "expo-asset";
 import { useDimensionStore } from "utils/DimensionUtils";
 const { store, persistor } = configureStore();
 
@@ -35,6 +36,17 @@ const Splash = ({}) => {
     </View>
   );
 };
+
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === "string") {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
 export default function App() {
   const [resourcesReady, setReasourcesReady] = React.useState(false);
   const fetchSound = async () => {
@@ -45,7 +57,7 @@ export default function App() {
       staysActiveInBackground: false,
       interruptionModeIOS: INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
       shouldDuckAndroid: true,
-      playThroughEarpieceAndroid: true,
+      playThroughEarpieceAndroid: false,
       interruptionModeAndroid: INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
     });
 
@@ -69,13 +81,18 @@ export default function App() {
     Amplitude.setUserId(Constants.installationId);
     console.log("Initialize ID", Constants.installationId);
 
-    await Font.loadAsync({
+    const fontAssets = Font.loadAsync({
       "brandon-light": require("assets/fonts/whitney-light.ttf"),
       "brandon-med": require("assets/fonts/whitney-medium.ttf"),
       "brandon-semibold": require("assets/fonts/whitney-semibold.ttf"),
       "brandon-bold": require("assets/fonts/whitney-bold.ttf"),
       "brandon-book": require("assets/fonts/whitney-book.ttf")
     });
+    const imageAssets = cacheImages([
+      require("assets/yang.jpg"),
+      require("assets/sanders.jpg")
+    ]);
+    await Promise.all([fontAssets, imageAssets]);
   };
 
   if (!resourcesReady)

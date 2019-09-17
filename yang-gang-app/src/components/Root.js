@@ -4,6 +4,8 @@ import TabScreen from "components/screens/TabScreen";
 import WebviewScreen from "components/screens/WebviewScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
 import DescriptionScreen from "components/screens/DescriptionScreen";
+import ProgressScreen from "components/screens/ProgressScreen";
+import { useStatsStore } from "utils/StoreUtils";
 
 const MainStack = createStackNavigator(
   {
@@ -18,13 +20,16 @@ const MainStack = createStackNavigator(
 const RootStack = createStackNavigator(
   {
     Main: {
-      screen: MainStack
+      screen: ProgressScreen
     },
     Photo: {
       screen: PhotoScreen
     },
     Description: {
       screen: DescriptionScreen
+    },
+    Progress: {
+      screen: ProgressScreen
     }
   },
   {
@@ -33,6 +38,16 @@ const RootStack = createStackNavigator(
   }
 );
 const Root = React.memo(() => {
+  const updateTwitterStats = useStatsStore(state => state.updateTwitterStats);
+  const updateRedditStats = useStatsStore(state => state.updateRedditStats);
+  const getInstagramStats = useStatsStore(state => state.getInstagramStats);
+
+  React.useEffect(() => {
+    updateTwitterStats();
+    updateRedditStats();
+    getInstagramStats();
+  }, []);
+
   const App = createAppContainer(RootStack);
   return <App />;
 });

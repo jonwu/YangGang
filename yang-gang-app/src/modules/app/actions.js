@@ -17,7 +17,10 @@ export function updateReddit() {
       load(
         "reddit",
         BackendUtils.getReddit().then(response => {
-          const reddit = response.data;
+          const reddit = response.data.filter(item => {
+            return !item.stickied || item.score > 100;
+          });
+
           dispatch({
             type: ActionTypes.UPDATE_REDDIT,
             reddit

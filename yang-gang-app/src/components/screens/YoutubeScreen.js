@@ -167,7 +167,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
         onRefresh={throttledFetch}
         refreshing={loadingFetchYoutube.isRequesting}
         data={lodash.chunk(data, 2)}
-        contentContainerStyle={{ paddingBottom: 16 }}
+        contentContainerStyle={{ paddingBottom: 72 }}
         renderItem={renderDuoItem}
         ItemSeparatorComponent={Separator}
         keyExtractor={(item, i) => i.toString()}
@@ -186,7 +186,7 @@ const YoutubeScreen = React.memo(({ navigation }) => {
       renderItem={renderItem}
       ItemSeparatorComponent={Separator}
       keyExtractor={item => item.id}
-      contentContainerStyle={{ paddingBottom: 16 }}
+      contentContainerStyle={{ paddingBottom: 72 }}
     />
   );
 });

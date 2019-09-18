@@ -244,16 +244,16 @@ const RedditVideo = ({ item }) => {
   return (
     <View>
       <RedditTitle title={title} />
-      <TouchableOpacity
-        activeOpacity={1.0}
-        onPress={() => videoRef.current.presentFullscreenPlayer()}
-      >
-        <React.Fragment>
+      {Platform.OS === "ios" ? (
+        <TouchableOpacity
+          activeOpacity={1.0}
+          onPress={() => videoRef.current.presentFullscreenPlayer()}
+        >
           <Video
             ref={videoRef}
             source={{ uri: source.hls_url }}
             useNativeControls
-            resizeMode="cover"
+            resizeMode={Video.RESIZE_MODE_CONTAIN}
             style={{
               backgroundColor: theme.text(0.1),
               marginLeft: -theme.spacing_2,
@@ -261,22 +261,21 @@ const RedditVideo = ({ item }) => {
               height: (deviceWidth * source.height) / source.width
             }}
           />
-          {/* {Platform.OS === "android" && (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { alignItems: "center", justifyContent: "center" }
-              ]}
-            >
-              <MaterialCommunityIcons
-                name={"play-circle"}
-                size={24}
-                color={theme.text(0.5)}
-              />
-            </View>
-          )} */}
-        </React.Fragment>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      ) : (
+        <Video
+          ref={videoRef}
+          source={{ uri: source.hls_url }}
+          useNativeControls
+          resizeMode={Video.RESIZE_MODE_CONTAIN}
+          style={{
+            backgroundColor: theme.text(0.1),
+            marginLeft: -theme.spacing_2,
+            width: deviceWidth,
+            height: (deviceWidth * source.height) / source.width
+          }}
+        />
+      )}
     </View>
   );
 };

@@ -38,7 +38,7 @@ const TwitterScreen = React.memo(({ navigation }) => {
       onRefresh={throttledFetch}
       refreshing={loadingTweets.isRequesting}
       data={tweets}
-      contentContainerStyle={{ paddingBottom: 16 }}
+      contentContainerStyle={{ paddingBottom: 72 }}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.id.toString()}

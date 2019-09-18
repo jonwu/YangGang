@@ -68,20 +68,23 @@ const Header = ({
           {renderLeft || (!close && <Back navigation={navigation} />)}
           {close && <Close navigation={navigation} />}
         </View>
-        <View style={[gstyles.flex, { alignItems: "center" }]}>
-          {renderTitle}
-          {title && !renderTitle && (
-            <Text
-              numberOfLines={1}
-              style={[
-                gstyles.p1_bold,
-                { color: theme.light(), width: 200, textAlign: "center" }
-              ]}
-            >
-              {title}
-            </Text>
-          )}
-        </View>
+        {renderTitle ||
+          (title && (
+            <View style={[gstyles.flex, { alignItems: "center" }]}>
+              {renderTitle}
+              {title && !renderTitle && (
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    gstyles.p1_bold,
+                    { color: theme.light(), width: 200, textAlign: "center" }
+                  ]}
+                >
+                  {title}
+                </Text>
+              )}
+            </View>
+          ))}
         <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
           {renderRight}
         </View>

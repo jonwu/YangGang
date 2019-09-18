@@ -24,6 +24,7 @@ import {
 import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
+import * as Haptics from "expo-haptics";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -151,7 +152,10 @@ const TabScreen = ({ navigation }) => {
         initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate("Progress")}
+        onPress={() => {
+          Haptics.selectionAsync();
+          navigation.navigate("Progress");
+        }}
         style={{
           position: "absolute",
           bottom: theme.spacing_2,

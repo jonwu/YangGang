@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, ActivityIndicator, Platform } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { DotsLoader } from "react-native-indicator";
 
@@ -16,7 +16,11 @@ const Loading = () => {
         marginBottom: 80
       }}
     >
-      <DotsLoader color={theme.yang()} />
+      {Platform.OS === "ios" ? (
+        <DotsLoader color={theme.red()} />
+      ) : (
+        <ActivityIndicator size="large" color={theme.red()} />
+      )}
     </View>
   );
 };

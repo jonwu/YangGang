@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { View, Image, Platform } from "react-native";
 import Root from "components/Root";
 import configureStore from "store/configureStore";
 import { Provider } from "react-redux";
@@ -50,22 +50,23 @@ function cacheImages(images) {
 export default function App() {
   const [resourcesReady, setReasourcesReady] = React.useState(false);
   const fetchSound = async () => {
-    await Audio.setIsEnabledAsync(true);
-    await Audio.setAudioModeAsync({
-      playsInSilentModeIOS: true,
-      allowsRecordingIOS: false,
-      staysActiveInBackground: false,
-      interruptionModeIOS: INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
-      shouldDuckAndroid: true,
-      playThroughEarpieceAndroid: false,
-      interruptionModeAndroid: INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
-    });
-
-    await Audio.Sound.createAsync(silence, {
-      shouldPlay: true,
-      pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
-      volume: 1
-    });
+    if (Platform.OS === "ios") {
+      await Audio.setIsEnabledAsync(true);
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        allowsRecordingIOS: false,
+        staysActiveInBackground: false,
+        interruptionModeIOS: INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: false,
+        interruptionModeAndroid: INTERRUPTION_MODE_ANDROID_DO_NOT_MIX
+      });
+      await Audio.Sound.createAsync(silence, {
+        shouldPlay: true,
+        pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
+        volume: 1
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -90,7 +91,11 @@ export default function App() {
     });
     const imageAssets = cacheImages([
       require("assets/yang.jpg"),
-      require("assets/sanders.jpg")
+      require("assets/sanders.jpg"),
+      require("assets/warren.jpg"),
+      require("assets/buttigieg.jpg"),
+      require("assets/biden.jpg"),
+      require("assets/kamala.jpg")
     ]);
     await Promise.all([fontAssets, imageAssets]);
   };
@@ -123,7 +128,7 @@ export default function App() {
 }
 
 const DimensionView = ({ children }) => {
-  const { setDimensions } = useDimensionStore();
+  const setDimensions = useDimensionStore(state => state.setDimensions);
   return (
     <View
       onLayout={e => {

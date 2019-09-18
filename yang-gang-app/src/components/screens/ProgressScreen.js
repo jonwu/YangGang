@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import { useThemeKit } from "utils/ThemeUtils";
 import Header from "./Header";
 import { useSelector, useDispatch } from "react-redux";
-import { useStatsStore } from "utils/StoreUtils";
+import { useStatsStore, useRefreshStats } from "utils/StoreUtils";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import moment, { max } from "moment-timezone";
 import { transformN } from "utils/Utils";
@@ -24,6 +24,8 @@ import kamalaImg from "assets/kamala.jpg";
 import { LinearGradient } from "expo-linear-gradient";
 import instagramIcon from "assets/instagram.png";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
+import Loading from "components/utils/Loading";
+import { useDimensionStore } from "utils/DimensionUtils";
 
 const generateStyles = theme => ({});
 
@@ -41,7 +43,7 @@ const CompareText = ({ value1, value2, label }) => {
     <View style={[{ flexDirection: "row" }, gstyles.bottom_4]}>
       <View style={{ flex: 1, alignItems: "flex-end" }}>
         <Text style={[gstyles.caption, { color: theme.light() }]}>
-          {transformN(value1)}
+          {value1 ? transformN(value1) : "-"}
         </Text>
       </View>
       <Text
@@ -54,7 +56,7 @@ const CompareText = ({ value1, value2, label }) => {
       </Text>
       <View style={{ flex: 1 }}>
         <Text style={[gstyles.caption, { color: theme.light() }]}>
-          {transformN(value2)}
+          {value2 ? transformN(value2) : "-"}
         </Text>
       </View>
     </View>
@@ -91,7 +93,7 @@ const BarGraph = ({ value1, value2, Icon, label }) => {
           }}
         >
           <Text style={[gstyles.caption, { color: theme.light() }]}>
-            {value1}
+            {value1 ? value1 : "--"}
           </Text>
         </View>
         <View
@@ -138,7 +140,7 @@ const BarGraph = ({ value1, value2, Icon, label }) => {
           }}
         >
           <Text style={[gstyles.caption, { color: theme.light() }]}>
-            {value2}
+            {value2 ? value2 : "--"}
           </Text>
         </View>
       </View>
@@ -198,12 +200,12 @@ const ConnectedHeader = connectActionSheet(
     const options = [
       "Bernie Sanders",
       "Joe Biden",
-      "Pete Buttigieg",
       "Elizabeth Warren",
+      "Pete Buttigieg",
       "Kamala Harris",
       "Cancel"
     ];
-    const optionsKeys = ["sanders", "biden", "buttigieg", "warren", "kamala"];
+    const optionsKeys = ["sanders", "biden", "warren", "buttigieg", "kamala"];
     const cancelButtonIndex = 5;
     return (
       <Header
@@ -227,24 +229,48 @@ const ConnectedHeader = connectActionSheet(
               )
             }
           >
-            <Text style={[gstyles.p1_bold, { color: theme.light() }]}>
-              Choose Candidate
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={[gstyles.p1_bold, { color: theme.light() }]}>
+                Choose Candidate
+              </Text>
+              <Ionicons
+                name={"ios-arrow-round-down"}
+                size={16}
+                color={theme.light()}
+                style={[gstyles.left_4, { marginTop: 1 }]}
+              />
+            </View>
           </TouchableOpacity>
         }
       />
     );
   }
 );
+const Screen = ({ navigation }) => {
+  const loadingStats = useSelector(state => state.loading.stats);
+  const refreshStats = useRefreshStats();
+  React.useEffect(() => {
+    refreshStats();
+  }, []);
+
+  if (loadingStats.isRequesting && !loadingStats.isReceived) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "black" }}>
+        <Header close bgColor={"black"} navigation={navigation} />
+        <Loading />
+      </View>
+    );
+  } else {
+    return <ProgressScreen navigation={navigation} />;
+  }
+};
 const ProgressScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const twitterStats = useStatsStore(state => state.twitterStats);
   const redditStats = useStatsStore(state => state.redditStats);
   const instagramStats = useStatsStore(state => state.instagramStats);
   const [candidate, setCandidate] = React.useState("sanders");
-
-  if (!twitterStats || !redditStats || !instagramStats) return null;
-
+  const { deviceHeight } = useDimensionStore();
   const twitterDelta = generateDelta(twitterStats);
   const redditDelta = generateDelta(redditStats);
   const instagramDelta = generateDelta(instagramStats);
@@ -261,7 +287,7 @@ const ProgressScreen = ({ navigation }) => {
                 source={IMAGES.yang}
                 style={{
                   backgroundColor: theme.light(0.1),
-                  height: 200,
+                  height: deviceHeight * 0.35,
                   width: "100%"
                 }}
                 resizeMode={"cover"}
@@ -282,7 +308,7 @@ const ProgressScreen = ({ navigation }) => {
                 source={IMAGES[candidate]}
                 style={{
                   backgroundColor: theme.light(0.1),
-                  height: 200,
+                  height: deviceHeight * 0.35,
                   width: "100%"
                 }}
                 resizeMode={"cover"}
@@ -376,4 +402,4 @@ const ProgressScreen = ({ navigation }) => {
   );
 };
 
-export default ProgressScreen;
+export default Screen;

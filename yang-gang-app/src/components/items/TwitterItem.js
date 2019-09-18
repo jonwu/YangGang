@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableWithoutFeedback,
+  Platform
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
@@ -215,12 +221,28 @@ const TwitterVideo = ({ video }) => {
         gstyles.top_5
       ]}
     >
-      <TouchableWithoutFeedback
-        onPress={() => videoRef.current.presentFullscreenPlayer()}
-      >
+      {Platform.OS === "ios" ? (
+        <TouchableWithoutFeedback
+          onPress={() => videoRef.current.presentFullscreenPlayer()}
+        >
+          <Video
+            ref={videoRef}
+            resizeMode={Video.RESIZE_MODE_CONTAIN}
+            source={{
+              uri: variant.url.split("?")[0]
+            }}
+            useNativeControls
+            style={{
+              backgroundColor: theme.text(0.1),
+              width: contentWidth,
+              height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
+            }}
+          />
+        </TouchableWithoutFeedback>
+      ) : (
         <Video
           ref={videoRef}
-          resizeMode="contain"
+          resizeMode={Video.RESIZE_MODE_CONTAIN}
           source={{
             uri: variant.url.split("?")[0]
           }}
@@ -231,21 +253,7 @@ const TwitterVideo = ({ video }) => {
             height: (contentWidth * video.sizes.thumb.h) / video.sizes.thumb.w
           }}
         />
-        {/* {Platform.OS === "android" && (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { alignItems: "center", justifyContent: "center" }
-              ]}
-            >
-              <MaterialCommunityIcons
-                name={"play-circle"}
-                size={64}
-                color={theme.text(0.5)}
-              />
-            </View>
-          )} */}
-      </TouchableWithoutFeedback>
+      )}
     </View>
   );
 };

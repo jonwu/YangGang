@@ -1,4 +1,7 @@
 import { memo } from "react";
+const date11 = "09-19";
+const date10 = "09-18";
+const date09 = "09-18";
 
 export const newsPayload = [
   {
@@ -14,7 +17,7 @@ export const newsPayload = [
       "https://www.nbcnews.com/politics/2020-election/andrew-yang-ready-prime-time-n1051336",
     urlToImage:
       "https://static.euronews.com/articles/4146976/1000x563_nbc-190909-andrew-yang-gang-cs-1016a_a57c878671a0429870aa2b29065bf352.jpg",
-    publishedAt: "2019-09-11T08:30:13Z",
+    publishedAt: "2019-" + date11 + "T08:30:13Z",
     content: ""
   },
 
@@ -31,7 +34,7 @@ export const newsPayload = [
     url:
       "https://www.newsweek.com/andrew-yang-election-2020-yanggang-crowdsurfing-1458232",
     urlToImage: "https://d.newsweek.com/en/full/1525928/andrew-yang.jpg",
-    publishedAt: "2019-09-09T09:12:49Z",
+    publishedAt: "2019-" + date09 + "T09:12:49Z",
     content:
       "Democrat contender for 2020, Andrew Yang has brandished his credibility among the youth vote by sharing a video of him crowd-surfing in a room of supporters. The 44-year-old entrepreneur tweeted the video of him at the AAPI Democratic Presidential Forum in C… [+2552 chars]"
   },
@@ -48,7 +51,7 @@ export const newsPayload = [
       "https://www.cbsnews.com/video/2020-hopeful-andrew-yang-on-why-he-can-beat-president-trump/",
     urlToImage:
       "https://cbsnews2.cbsistatic.com/hub/i/r/2019/09/04/1bd3b08c-cf59-4a22-ab62-9438e8b1616a/thumbnail/1200x630/ca1b62c0e204f2078d5dec941141f0e9/cbsn-fusion-2020-hopeful-andrew-yang-on-why-he-can-beat-president-trump-thumbnail-1926822-640x360.jpg",
-    publishedAt: "2019-09-04T22:18:30Z",
+    publishedAt: "2019-" + date10 + "T22:18:30Z",
     content: null
   },
   {
@@ -65,7 +68,7 @@ export const newsPayload = [
       "https://www.macleans.ca/politics/dont-count-out-andrew-yang-the-populist-technocrat-who-wants-to-be-president/",
     urlToImage:
       "https://www.macleans.ca/wp-content/uploads/2019/09/ANDREW-YANG-FRAIMAN-SEPT05-810x445.jpg?6c139",
-    publishedAt: "2019-09-10T19:49:55Z",
+    publishedAt: "2019-" + date10 + "T19:49:55Z",
     content:
       "Last year, around 100 people showed up to the Belknap County Democrats annual summer picnic. Many had white hair and walkers and knew each other by first name. This year, on an unseasonably cool August afternoon in the economically debilitated New Hampshire t… [+14987 chars]"
   }
@@ -260,7 +263,7 @@ export const youtubeDayPayload = [
     kind: "youtube#video",
     id: "QlsaQZz6418",
     snippet: {
-      publishedAt: "2019-09-11T15:09:09.000Z",
+      publishedAt: "2019-" + date11 + "T15:09:09.000Z",
       channelId: "UCUyanZn0S-SqJkgUHPEFlww",
       title: "Andrew Yang Rising",
       description:
@@ -305,7 +308,7 @@ export const youtubeDayPayload = [
     kind: "youtube#video",
     id: "9izThKBNwR4",
     snippet: {
-      publishedAt: "2019-09-11T22:21:56.000Z",
+      publishedAt: "2019-" + date11 + "T22:21:56.000Z",
       channelId: "UC8p1vwvWtl6T73JiExfWs1g",
       title: "2020 hopeful Andrew Yang on why he can beat President Trump",
       description:
@@ -353,7 +356,7 @@ export const youtubeDayPayload = [
     kind: "youtube#video",
     id: "P6T4c7B22r0",
     snippet: {
-      publishedAt: "2019-09-11T12:40:45.000Z",
+      publishedAt: "2019-" + date11 + "T12:40:45.000Z",
       channelId: "UC-SJ6nODDmufqBzPBwCvYvQ",
       title:
         "Andrew Yang: &quot;The American Dream is dying by the numbers&quot;",
@@ -837,10 +840,9 @@ export const redditPayload = [
   }
 ];
 
-
 export const tweetPayload = [
   {
-    created_at: "Tue Sep 10 18:13:50 +0000 2019",
+    created_at: "Tue Sep 17 18:13:50 +0000 2019",
     id: 1171486956313706500,
     id_str: "1171486956313706496",
     full_text:
@@ -947,7 +949,7 @@ export const tweetPayload = [
     lang: "en"
   },
   {
-    created_at: "Tue Sep 10 15:11:09 +0000 2019",
+    created_at: "Tue Sep 17 15:11:09 +0000 2019",
     id: 1171440985168994300,
     id_str: "1171440985168994309",
     full_text:
@@ -1059,7 +1061,7 @@ export const tweetPayload = [
     lang: "en"
   },
   {
-    created_at: "Tue Sep 10 02:21:56 +0000 2019",
+    created_at: "Tue Sep 17 02:21:56 +0000 2019",
     id: 1171247403850195000,
     id_str: "1171247403850194946",
     full_text:
@@ -1166,7 +1168,7 @@ export const tweetPayload = [
     lang: "en"
   },
   {
-    created_at: "Tue Sep 10 02:10:08 +0000 2019",
+    created_at: "Tue Sep 17 02:10:08 +0000 2019",
     id: 1171244434735976400,
     id_str: "1171244434735976448",
     full_text:

@@ -160,12 +160,12 @@ def fetch_youtube(days_lag, redis_key, api_key):
 
 
 def fetch_news():
-    today_datestring = (date.today() - timedelta(days=2)).strftime("%Y-%m-%d")
+    today_datestring = (date.today() - timedelta(days=3)).strftime("%Y-%m-%d")
     params = {
         'qInTitle': 'andrew yang',
         'language': 'en',
         'sortBy': 'popularity',
-        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org, slickdeals.net, fark.com',
+        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org, slickdeals.net, fark.com, knowyourmeme.com',
         'from': today_datestring,
         'apiKey': '84dbae84af624aeaa6e1a3fc92c97d6d',
         'pageSize': '100',

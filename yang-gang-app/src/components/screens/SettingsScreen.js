@@ -4,7 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useDispatch } from "react-redux";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { updateTheme } from "modules/app/actions";
-import { StoreReview } from "expo";
+import * as StoreReview from "expo-store-review";
 
 const generateStyles = theme => ({});
 
@@ -57,7 +57,7 @@ const SettingsScreen = React.memo(() => {
         label={themeLabel}
       />
       <SettingsRow
-        onPress={StoreReview.requestReview}
+        onPress={() => StoreReview.requestReview()}
         Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
         label={"Write a review!"}
       />

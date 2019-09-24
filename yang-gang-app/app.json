@@ -19,10 +19,12 @@
     "assetBundlePatterns": ["./src/assets/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jonwu.yang"
+      "bundleIdentifier": "com.jonwu.yang",
+      "appStoreUrl": "https://itunes.apple.com/us/app/yang-humanity-first/id1477732890"
     },
     "android": {
       "versionCode": 2,
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.jonwu.yang",
       "package": "com.jonwu.yang",
       "permissions": []
     },

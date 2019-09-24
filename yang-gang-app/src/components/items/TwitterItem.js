@@ -45,9 +45,9 @@ function replaceIndices(str, indices, string) {
 
 const TwitterItem = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  let { retweeted_status } = item;
+  const { retweeted_status } = item;
   const status = retweeted_status || item;
-  let {
+  const {
     full_text,
     user,
     extended_entities,
@@ -78,12 +78,12 @@ const TwitterItem = ({ item, navigation }) => {
   ents.sort((a, b) => {
     return a.indices[0] > b.indices[0];
   });
-  full_text = xmlEntities.decode(full_text);
+  const decodedText = xmlEntities.decode(full_text);
   // const regex = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
   const regex = /([\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
   const offsets = [];
 
-  while ((match = regex.exec(full_text)) != null) {
+  while ((match = regex.exec(decodedText)) != null) {
     offsets.push([match.index, match[0].length, match[0]]);
   }
   // console.log(status.display_text_range);
@@ -91,21 +91,24 @@ const TwitterItem = ({ item, navigation }) => {
   // console.log(entities);
   // console.log(offsets);
   const bodies = [];
-  const lastIndex = ents.reduce((index, ent, i) => {
+
+  const lastIndex = ents.reduce((startIndex, ent, i) => {
     const { indices } = ent;
+    let firstIndex = indices[0];
+    let secondIndex = indices[1];
     offsets.forEach(offset => {
       const index = offset[0];
       const size = offset[1];
-      if (index < indices[0]) {
-        indices[0] = indices[0] - 1 + size;
-        indices[1] = indices[1] - 1 + size;
+      if (index < firstIndex) {
+        firstIndex = firstIndex - 1 + size;
+        secondIndex = secondIndex - 1 + size;
       }
     });
-    bodies.push(full_text.substr(index, indices[0] - index));
+    bodies.push(decodedText.substr(startIndex, firstIndex - startIndex));
     let replacement = null;
     if (ent.text)
       replacement = (
-        <Text key={index} style={{ color: theme.tweetLinkColor() }}>
+        <Text key={startIndex} style={{ color: theme.tweetLinkColor() }}>
           #{ent.text}
         </Text>
       );
@@ -118,7 +121,7 @@ const TwitterItem = ({ item, navigation }) => {
               uri: ent.expanded_url
             })
           }
-          key={index}
+          key={startIndex}
           style={{ color: theme.tweetLinkColor() }}
         >
           {ent.expanded_url}
@@ -126,15 +129,15 @@ const TwitterItem = ({ item, navigation }) => {
       );
     if (ent.screen_name)
       replacement = (
-        <Text key={index} style={{ color: theme.tweetLinkColor() }}>
+        <Text key={startIndex} style={{ color: theme.tweetLinkColor() }}>
           @{ent.screen_name}
         </Text>
       );
 
     if (replacement) bodies.push(replacement);
-    return indices[1];
+    return secondIndex;
   }, 0);
-  bodies.push(full_text.substr(lastIndex));
+  bodies.push(decodedText.substr(lastIndex));
 
   return (
     <View style={{ backgroundColor: theme.bg2(), padding: theme.spacing_3 }}>

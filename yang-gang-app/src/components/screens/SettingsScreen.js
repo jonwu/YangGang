@@ -1,10 +1,11 @@
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useDispatch } from "react-redux";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { updateTheme } from "modules/app/actions";
 import { StoreReview } from "expo";
+import * as MailComposer from "expo-mail-composer";
 
 const generateStyles = theme => ({});
 
@@ -56,10 +57,36 @@ const SettingsScreen = React.memo(() => {
         }
         label={themeLabel}
       />
+
+      <SettingsRow
+        onPress={() =>
+          MailComposer.composeAsync({
+            recipients: ["theyangapp@gmail.com"],
+            subject: "My thoughts on Yang: Humanity First app..."
+          }).catch(() => {
+            Alert.alert(
+              "Mail Error",
+              `The mail composer cannot be opened. You likely have not configured your email account on your device yet.${"\n\n"}Please don't hesitate to say hi to me at theyangapp@gmail.com!`,
+              [
+                {
+                  text: "OK",
+                  onPress: () => console.log("Ask me later pressed"),
+                  style: "cancel"
+                }
+              ],
+              { cancelable: false }
+            );
+          })
+        }
+        Icon={
+          <MaterialCommunityIcons name="email" size={24} color={theme.text()} />
+        }
+        label={"Send feedback"}
+      />
       <SettingsRow
         onPress={StoreReview.requestReview}
         Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
-        label={"Write a review!"}
+        label={"Rate the app!"}
       />
     </ScrollView>
   );

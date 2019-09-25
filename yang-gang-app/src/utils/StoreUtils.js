@@ -36,4 +36,17 @@ export const useRefreshStats = () => {
 
   return () => dispatch(load("stats", throttleFetch()));
 };
+
+export const useInstantRefreshStats = () => {
+  const dispatch = useDispatch();
+  const updateTwitterStats = useStatsStore(state => state.updateTwitterStats);
+  const updateRedditStats = useStatsStore(state => state.updateRedditStats);
+  const getInstagramStats = useStatsStore(state => state.getInstagramStats);
+  const getStats = Promise.all([
+    updateTwitterStats(),
+    updateRedditStats(),
+    getInstagramStats()
+  ]);
+  return () => dispatch(load("stats", getStats));
+};
 export { useStatsStore };

@@ -30,7 +30,14 @@ const RedditScreen = React.memo(({ navigation }) => {
     .current;
   React.useEffect(fetch, []);
 
-  if (!loadingReddit.isReceived) return <Loading />;
+  if (!loadingReddit.isReceived)
+    return (
+      <Loading
+        error={loadingReddit.error}
+        errorKey={"wall"}
+        errorRefresh={fetch}
+      />
+    );
   return (
     <FlatList
       onRefresh={throttledFetch}

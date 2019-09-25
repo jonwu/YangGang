@@ -95,7 +95,12 @@ export default function App() {
       require("assets/warren.jpg"),
       require("assets/buttigieg.jpg"),
       require("assets/biden.jpg"),
-      require("assets/kamala.jpg")
+      require("assets/kamala.jpg"),
+      require("assets/russia.png"),
+      require("assets/bureaucracy.png"),
+      require("assets/loan.png"),
+      require("assets/lobby.png"),
+      require("assets/wall.png")
     ]);
     await Promise.all([fontAssets, imageAssets]);
   };

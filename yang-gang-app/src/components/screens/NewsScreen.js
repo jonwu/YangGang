@@ -44,6 +44,15 @@ const NewsScreen = React.memo(({ navigation }) => {
     .current;
   React.useEffect(fetch, []);
 
+  if (!loadingNews.isReceived)
+    return (
+      <Loading
+        error={loadingNews.error}
+        errorKey={"lobby"}
+        errorRefresh={fetch}
+      />
+    );
+
   if (deviceWidth > 720) {
     return (
       <FlatList
@@ -56,8 +65,6 @@ const NewsScreen = React.memo(({ navigation }) => {
       />
     );
   }
-
-  if (!loadingNews.isReceived) return <Loading />;
   return (
     <FlatList
       onRefresh={throttledFetch}

@@ -11,7 +11,11 @@ import {
 import { useThemeKit } from "utils/ThemeUtils";
 import Header from "./Header";
 import { useSelector, useDispatch } from "react-redux";
-import { useStatsStore, useRefreshStats } from "utils/StoreUtils";
+import {
+  useStatsStore,
+  useRefreshStats,
+  useInstantRefreshStats
+} from "utils/StoreUtils";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import moment, { max } from "moment-timezone";
 import { transformN } from "utils/Utils";
@@ -88,7 +92,7 @@ const BarGraph = ({ value1, value2, Icon, label }) => {
       >
         <View
           style={{
-            width: 48,
+            width: 56,
             alignItems: "center"
           }}
         >
@@ -135,7 +139,7 @@ const BarGraph = ({ value1, value2, Icon, label }) => {
 
         <View
           style={{
-            width: 48,
+            width: 56,
             alignItems: "center"
           }}
         >
@@ -249,15 +253,20 @@ const ConnectedHeader = connectActionSheet(
 const Screen = ({ navigation }) => {
   const loadingStats = useSelector(state => state.loading.stats);
   const refreshStats = useRefreshStats();
+  const fetch = useInstantRefreshStats();
   React.useEffect(() => {
     refreshStats();
   }, []);
-
-  if (loadingStats.isRequesting && !loadingStats.isReceived) {
+  if (!loadingStats.isReceived) {
     return (
       <View style={{ flex: 1, backgroundColor: "black" }}>
         <Header close bgColor={"black"} navigation={navigation} />
-        <Loading />
+        <Loading
+          error={loadingStats.error}
+          errorKey={"loan"}
+          errorRefresh={fetch}
+          forceLight
+        />
       </View>
     );
   } else {

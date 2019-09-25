@@ -152,7 +152,14 @@ const YoutubeScreen = React.memo(({ navigation }) => {
     .current;
   React.useEffect(fetch, []);
 
-  if (!loadingFetchYoutube.isReceived) return <Loading />;
+  if (!loadingFetchYoutube.isReceived)
+    return (
+      <Loading
+        error={loadingFetchYoutube.error}
+        errorKey={"bureaucracy"}
+        errorRefresh={fetch}
+      />
+    );
 
   if (deviceWidth > 720) {
     return (

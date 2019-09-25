@@ -31,7 +31,14 @@ const TwitterScreen = React.memo(({ navigation }) => {
     .current;
   React.useEffect(fetch, []);
 
-  if (!loadingTweets.isReceived) return <Loading />;
+  if (!loadingTweets.isReceived)
+    return (
+      <Loading
+        error={loadingTweets.error}
+        errorKey={"russia"}
+        errorRefresh={fetch}
+      />
+    );
 
   return (
     <FlatList

@@ -4,7 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 
 const generateStyles = theme => ({
   separator: {
-    height: theme.spacing_2
+    height: theme.spacing_5
   }
 });
 

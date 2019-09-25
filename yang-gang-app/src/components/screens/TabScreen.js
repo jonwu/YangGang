@@ -14,6 +14,7 @@ import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
 import NewsScreen from "./NewsScreen";
 import SettingsScreen from "./SettingsScreen";
+import HomeScreen from "./HomeScreen";
 import { TabView, TabBar } from "react-native-tab-view";
 import {
   Ionicons,
@@ -22,6 +23,8 @@ import {
   MaterialCommunityIcons
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
+import logo from "assets/logo.png";
+import logoWhite from "assets/logo-white.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
@@ -55,8 +58,10 @@ const renderIcon = ({ route }) => {
       return <Entypo name={route.icon} size={24} color={route.color} />;
     case "FontAwesome":
       return <FontAwesome name={route.icon} size={24} color={route.color} />;
-    default:
+    case "Ionicons":
       return <Ionicons name={route.icon} size={24} color={route.color} />;
+    default:
+      return route.renderCustom();
   }
 };
 
@@ -65,30 +70,53 @@ const TabScreen = ({ navigation }) => {
   const [index, setIndex] = React.useState(0);
 
   const routes = [
-    { key: "twitter", icon: "logo-twitter", color: "#00aced" },
+    {
+      key: "home",
+      renderCustom: () => (
+        <Image
+          source={theme.id === 0 ? logo : logoWhite}
+          style={{ width: 24, height: 24 }}
+        />
+      ),
+      color: "#00aced"
+    },
+    {
+      key: "twitter",
+      iconType: "Ionicons",
+      icon: "logo-twitter",
+      color: "#00aced"
+    },
     {
       key: "reddit",
       icon: "reddit",
       color: "#FF5700",
       iconType: "FontAwesome"
     },
-    { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
+    {
+      key: "youtube",
+      iconType: "Ionicons",
+      icon: "logo-youtube",
+      color: "#FF0000"
+    },
     {
       key: "news",
       icon: "newspaper-o",
       iconType: "FontAwesome",
       color: theme.darkGreen()
-    },
-    {
-      key: "settings",
-      icon: "md-settings",
-      // iconType: "FontAwesome",
-      color: theme.text()
     }
+    // {
+    //   key: "settings",
+    //   icon: "md-settings",
+    //   iconType: "Ionicons",
+    //   // iconType: "FontAwesome",
+    //   color: theme.text()
+    // }
   ];
 
   const renderScene = ({ route }) => {
     switch (route.key) {
+      case "home":
+        return <HomeScreen navigation={navigation} />;
       case "twitter":
         return <TwitterScreen navigation={navigation} />;
       case "reddit":

@@ -87,7 +87,8 @@ export default function App() {
       "brandon-med": require("assets/fonts/whitney-medium.ttf"),
       "brandon-semibold": require("assets/fonts/whitney-semibold.ttf"),
       "brandon-bold": require("assets/fonts/whitney-bold.ttf"),
-      "brandon-book": require("assets/fonts/whitney-book.ttf")
+      "brandon-book": require("assets/fonts/whitney-book.ttf"),
+      "montserrat-extra-bold": require("assets/fonts/montserrat/Montserrat-ExtraBold.otf")
     });
     const imageAssets = cacheImages([
       require("assets/yang.jpg"),

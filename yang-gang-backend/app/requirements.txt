@@ -1,5 +1,6 @@
 alembic
 flask
+flask-marshmallow
 flask-restplus
 Flask-SQLAlchemy
 gevent

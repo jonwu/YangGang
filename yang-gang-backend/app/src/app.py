@@ -1,7 +1,8 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy, inspect
-from flask_restplus import Api, Resource
-from datetime import date, timedelta
+from flask import Flask, abort, request, make_response
+from flask_sqlalchemy import SQLAlchemy
+from flask_restplus import Api, Resource, reqparse, fields
+from flask_marshmallow import Marshmallow
+from datetime import date, timedelta, datetime
 from redis import Redis
 import json
 
@@ -13,6 +14,95 @@ r = Redis(host='redis', port=6379)
 # r = Redis(host='localhost', port=6379) # for aws only!!
 
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
+
+event_json = api.model('Resource', {
+    'title': fields.String,
+    'image': fields.String,
+    'location': fields.String,
+    'event_date': fields.DateTime,
+    'link': fields.String,
+})
+
+
+@api.route("/allevents/")
+class AllEventsApi(Resource):
+    def get(self):
+        events = Events.query.order_by(Events.event_date).all()
+        # Serialize the data for the response
+        events_schema = EventsSchema(many=True)
+        return events_schema.dump(events)
+
+    @api.expect(event_json)
+    def post(self):
+        try:
+            event = request.get_json()
+            print("this is my new event: {}, of type: {}".format(event, type(event)))
+
+            schema = EventsSchema()
+            new_event = schema.load(event, session=db.session)
+
+            db.session.add(new_event)
+            db.session.commit()
+
+            return schema.dump(new_event), 201
+        except Exception as e:
+            abort(404, 'internal server error: {}'.format(str(e)))
+
+
+@api.route('/event/<int:id_string>')
+class EventApi(Resource):
+    def get(self, id_string):
+        event = Events.query.filter(Events.id == id_string).one_or_none()
+
+        if event is not None:
+            # Serialize the data for the response
+            events_schema = EventsSchema()
+            return events_schema.dump(event)
+
+        else:
+            abort(404, 'Event not found for Id: {}'.format(id_string))
+
+    def delete(self, id_string):
+        event = Events.query.filter(Events.id == id_string).one_or_none()
+
+        # Did we find a person?
+        if event is not None:
+            db.session.delete(event)
+            db.session.commit()
+            return make_response(
+                "event {id_string} deleted".format(id_string=id_string), 200
+            )
+
+        # Otherwise, nope, didn't find that person
+        else:
+            abort(
+                404,
+                "event not found for Id: {id_string}".format(id_string=id_string),
+            )
+
+    @api.expect(event_json)
+    def put(self, id_string):
+        new_fields = request.get_json()
+        event = Events.query.filter(Events.id == id_string).one_or_none()
+
+        if event is None:
+            abort(
+                404,
+                "event not found for Id: {id_string}".format(id_string=id_string),
+            )
+
+        events_schema = EventsSchema()
+        update = events_schema.load(new_fields, instance=Events().query.get(id_string), partial=True)
+
+        # merge the new object into the old and commit it to the db
+        db.session.merge(update)
+        db.session.commit()
+
+        # return updated person in the response
+        data = events_schema.dump(update)
+
+        return data, 200
 
 
 @api.route("/hotreddit/")
@@ -84,7 +174,7 @@ class YoutubeListAllTime(Resource):
 class TwitterStatsApi(Resource):
     def get(self):
         """
-        returns a twitter stats from the past day for all candidates
+        returns a twitter stats from the past two days for all candidates
         """
         return [x.as_dict() for x in get_recent_data(2, TwitterStats)]
 
@@ -93,7 +183,7 @@ class TwitterStatsApi(Resource):
 class InstagramStatsApi(Resource):
     def get(self):
         """
-        returns a twitter stats from the past day for all candidates
+        returns a twitter stats from the past two days for all candidates
         """
         return [x.as_dict() for x in get_recent_data(2, InstagramStats)]
 
@@ -102,7 +192,7 @@ class InstagramStatsApi(Resource):
 class RedditStatsApi(Resource):
     def get(self):
         """
-        returns a twitter stats from the past day for all candidates
+        returns a twitter stats from the past two days for all candidates
         """
         return [x.as_dict() for x in get_recent_data(2, RedditStats)]
 
@@ -152,6 +242,24 @@ class RedditStats(db.Model):
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+
+
+class Events(db.Model):
+    __tablename__ = "events"
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    title = db.Column(db.Text())
+    location = db.Column(db.Text())
+    image = db.Column(db.Text())
+    event_date = db.Column(db.DateTime())
+    link = db.Column(db.Text())
+
+
+class EventsSchema(ma.ModelSchema):
+    class Meta:
+        model = Events
+        sqla_session = db.session
 
 
 def get_recent_data(num_days, table):

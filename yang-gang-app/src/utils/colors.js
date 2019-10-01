@@ -18,3 +18,8 @@ export const WHITE = (opacity = 1.0) => `rgba(255, 255, 255, ${opacity})`;
 export const BLACK = (opacity = 1.0) => `rgba(0, 0, 0, ${opacity})`;
 export const YANG = (opacity = 1.0) => `rgba(0, 45, 122, ${opacity})`;
 export const YANG_RED = (opacity = 1.0) => `rgba(218, 50, 72, ${opacity})`;
+export const YANG_BLUE = (opacity = 1.0) => `rgba(19, 52, 103, ${opacity})`;
+export const YANG_BLUE_LIGHT = (opacity = 1.0) =>
+  `rgba(108, 172, 228, ${opacity})`;
+export const YANG_BLUE_DARK = (opacity = 1.0) => `rgba(19, 41, 75, ${opacity})`;
+export const YANG_GOLD = (opacity = 1.0) => `rgba(242, 160, 15, ${opacity})`;

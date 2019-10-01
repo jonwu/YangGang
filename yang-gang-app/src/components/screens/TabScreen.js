@@ -14,6 +14,7 @@ import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
 import NewsScreen from "./NewsScreen";
 import SettingsScreen from "./SettingsScreen";
+import MerchScreen from "./MerchScreen";
 import { TabView, TabBar } from "react-native-tab-view";
 import {
   Ionicons,

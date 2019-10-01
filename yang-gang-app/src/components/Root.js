@@ -5,6 +5,7 @@ import WebviewScreen from "components/screens/WebviewScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
 import DescriptionScreen from "components/screens/DescriptionScreen";
 import ProgressScreen from "components/screens/ProgressScreen";
+import MerchScreen from "components/screens/MerchScreen";
 import { useRefreshStats } from "utils/StoreUtils";
 
 const MainStack = createStackNavigator(
@@ -30,6 +31,9 @@ const RootStack = createStackNavigator(
     },
     Progress: {
       screen: ProgressScreen
+    },
+    Merch: {
+      screen: MerchScreen
     }
   },
   {

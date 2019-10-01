@@ -57,12 +57,11 @@ const WebviewScreen = ({ navigation }) => {
         }
       />
       <WebView
-        // javaScriptEnabled
-        // allowsFullscreenVideo
         allowsInlineMediaPlayback
         mediaPlaybackRequiresUserAction={false}
         style={{ flex: 1 }}
         source={{ uri }}
+        showsVerticalScrollIndicator={false}
       />
     </React.Fragment>
   );

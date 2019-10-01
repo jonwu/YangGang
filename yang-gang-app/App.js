@@ -87,7 +87,12 @@ export default function App() {
       "brandon-med": require("assets/fonts/whitney-medium.ttf"),
       "brandon-semibold": require("assets/fonts/whitney-semibold.ttf"),
       "brandon-bold": require("assets/fonts/whitney-bold.ttf"),
-      "brandon-book": require("assets/fonts/whitney-book.ttf")
+      "brandon-book": require("assets/fonts/whitney-book.ttf"),
+      "montserrat-light": require("assets/fonts/montserrat/Montserrat-Light.otf"),
+      "montserrat-med": require("assets/fonts/montserrat/Montserrat-Medium.otf"),
+      "montserrat-semibold": require("assets/fonts/montserrat/Montserrat-SemiBold.otf"),
+      "montserrat-bold": require("assets/fonts/montserrat/Montserrat-Bold.otf"),
+      "montserrat-extra-bold": require("assets/fonts/montserrat/Montserrat-ExtraBold.otf")
     });
     const imageAssets = cacheImages([
       require("assets/yang.jpg"),
@@ -101,6 +106,11 @@ export default function App() {
       require("assets/loan.png"),
       require("assets/lobby.png"),
       require("assets/wall.png")
+    ]);
+
+    cacheImages([
+      require("assets/merch/hat.png"),
+      require("assets/yanggangday.jpg")
     ]);
     await Promise.all([fontAssets, imageAssets]);
   };

@@ -50,6 +50,7 @@ const Header = connectActionSheet(
             </Text>
             <FlatList
               horizontal
+              showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingLeft: theme.spacing_2 }}
               ItemSeparatorComponent={() => (
                 <View style={{ width: theme.spacing_4 }} />

@@ -23,8 +23,10 @@ def upgrade():
         sa.Column('created_date', sa.DateTime(),
                   server_default=sa.func.current_timestamp()),
         sa.Column('image', sa.Text()),
+        sa.Column('event_type', sa.Text()),
         sa.Column('title', sa.Text()),
-        sa.Column('location', sa.Text()),
+        sa.Column('line1', sa.Text()),
+        sa.Column('line2', sa.Text()),
         sa.Column('event_date', sa.DateTime()),
         sa.Column('link', sa.Text()),
     )

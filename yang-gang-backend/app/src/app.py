@@ -19,7 +19,9 @@ ma = Marshmallow(app)
 event_json = api.model('Resource', {
     'title': fields.String,
     'image': fields.String,
-    'location': fields.String,
+    'event_type': fields.String,
+    'line1': fields.String,
+    'line2': fields.String,
     'event_date': fields.DateTime,
     'link': fields.String,
 })
@@ -250,7 +252,9 @@ class Events(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
     title = db.Column(db.Text())
-    location = db.Column(db.Text())
+    event_type = db.Column(db.Text())
+    line1 = db.Column(db.Text())
+    line2 = db.Column(db.Text())
     image = db.Column(db.Text())
     event_date = db.Column(db.DateTime())
     link = db.Column(db.Text())

@@ -16,8 +16,8 @@ services:
             BUILD_ENV: 'dev'
         links:
             - db
-#        volumes:
-#            - ./poller/src:/src
+        volumes:
+            - ./poller/src:/src
     db:
         image: mysql:5.7
         ports:

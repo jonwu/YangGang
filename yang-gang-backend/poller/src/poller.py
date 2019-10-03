@@ -22,6 +22,7 @@ r = Redis(host='redis', port=6379)
 r.flushdb()
 
 
+print('trying to establish database connection.')
 while True:
     try:
         connection = pymysql.connect(host='db',

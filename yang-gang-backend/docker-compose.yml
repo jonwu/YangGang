@@ -6,8 +6,10 @@ services:
             - db
         ports:
             - "80:80"
-#        volumes:
-#            - './app/src:/src'
+        volumes:
+            - ./app/src:/src
+        environment:
+            FLASK_DEBUG: 1
     redis:
         image: redis
     poller:

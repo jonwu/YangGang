@@ -1,5 +1,9 @@
 FROM python:3.6-stretch
 
+# for debugging
+RUN apt-get update
+RUN apt-get -y install vim
+
 # for gunicorn logging to console
 ENV PYTHONUNBUFFERED=TRUE
 
@@ -9,7 +13,6 @@ RUN pip install -r requirements.txt
 COPY src src
 WORKDIR /src
 
-COPY boot.sh ./
 RUN chmod +x boot.sh
 
 # expose 80 port

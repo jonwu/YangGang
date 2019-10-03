@@ -1,8 +1,8 @@
 from flask import Flask, abort, request, make_response
 from flask_sqlalchemy import SQLAlchemy
-from flask_restplus import Api, Resource, reqparse, fields
+from flask_restplus import Api, Resource, fields
 from flask_marshmallow import Marshmallow
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta
 from redis import Redis
 import json
 

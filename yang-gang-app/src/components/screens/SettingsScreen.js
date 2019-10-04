@@ -6,6 +6,7 @@ import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { updateTheme } from "modules/app/actions";
 import { StoreReview } from "expo";
 import * as MailComposer from "expo-mail-composer";
+import Constants from "expo-constants";
 
 const generateStyles = theme => ({});
 
@@ -38,7 +39,7 @@ const SettingsRow = ({ Icon, label, onPress, removeSeparator }) => {
   );
 };
 
-const SettingsScreen = React.memo(() => {
+const SettingsScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const themeLabel = theme.id === 0 ? "Enable dark mode" : "Enable light mode";
   const nextThemeId = theme.id === 0 ? 1 : 0;
@@ -88,6 +89,14 @@ const SettingsScreen = React.memo(() => {
         Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
         label={"Rate the app!"}
       />
+      <SettingsRow
+        onPress={() => navigation.navigate("PostEvent")}
+        Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
+        label={"Events Dashboard"}
+      />
+      <View style={[gstyles.top_2, { alignItems: "center" }]}>
+        <Text style={gstyles.footnote_50}>{Constants.installationId}</Text>
+      </View>
     </ScrollView>
   );
 });

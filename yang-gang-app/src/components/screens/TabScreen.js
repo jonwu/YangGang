@@ -14,7 +14,7 @@ import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
 import NewsScreen from "./NewsScreen";
 import SettingsScreen from "./SettingsScreen";
-import MerchScreen from "./MerchScreen";
+
 import { TabView, TabBar } from "react-native-tab-view";
 import {
   Ionicons,
@@ -99,7 +99,7 @@ const TabScreen = ({ navigation }) => {
       case "news":
         return <NewsScreen navigation={navigation} />;
       case "settings":
-        return <SettingsScreen />;
+        return <SettingsScreen navigation={navigation} />;
       default:
         return null;
     }

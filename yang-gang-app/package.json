@@ -13,6 +13,7 @@
     "expo": "^34.0.1",
     "expo-analytics-amplitude": "~6.0.0",
     "expo-av": "^6.0.0",
+    "expo-facebook": "~6.0.0",
     "expo-haptics": "~6.0.0",
     "expo-linear-gradient": "~6.0.0",
     "expo-mail-composer": "~6.0.0",

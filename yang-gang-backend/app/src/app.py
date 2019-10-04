@@ -49,6 +49,8 @@ class AllEventsApi(Resource):
 
             return schema.dump(new_event), 201
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             abort(404, 'internal server error: {}'.format(str(e)))
 
 

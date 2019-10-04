@@ -27,26 +27,23 @@ export const useRefreshStats = () => {
   const updateTwitterStats = useStatsStore(state => state.updateTwitterStats);
   const updateRedditStats = useStatsStore(state => state.updateRedditStats);
   const getInstagramStats = useStatsStore(state => state.getInstagramStats);
-  const getStats = Promise.all([
-    updateTwitterStats(),
-    updateRedditStats(),
-    getInstagramStats()
-  ]);
-  const throttleFetch = lodash.throttle(() => getStats, 60 * 1000);
+  const getStats = () =>
+    Promise.all([
+      updateTwitterStats(),
+      updateRedditStats(),
+      getInstagramStats()
+    ]);
 
-  return () => dispatch(load("stats", throttleFetch()));
+  return () => dispatch(load("stats", getStats()));
 };
 
-export const useInstantRefreshStats = () => {
-  const dispatch = useDispatch();
-  const updateTwitterStats = useStatsStore(state => state.updateTwitterStats);
-  const updateRedditStats = useStatsStore(state => state.updateRedditStats);
-  const getInstagramStats = useStatsStore(state => state.getInstagramStats);
-  const getStats = Promise.all([
-    updateTwitterStats(),
-    updateRedditStats(),
-    getInstagramStats()
-  ]);
-  return () => dispatch(load("stats", getStats));
-};
-export { useStatsStore };
+const [useEventsStore] = create(set => ({
+  events: [],
+  fetchEvents: () => {
+    BackendUtils.getAllEvents().then(response => {
+      set({ events: response.data });
+    });
+  }
+}));
+
+export { useStatsStore, useEventsStore };

@@ -11,11 +11,7 @@ import {
 import { useThemeKit } from "utils/ThemeUtils";
 import Header from "./Header";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  useStatsStore,
-  useRefreshStats,
-  useInstantRefreshStats
-} from "utils/StoreUtils";
+import { useStatsStore, useRefreshStats } from "utils/StoreUtils";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import moment, { max } from "moment-timezone";
 import { transformN } from "utils/Utils";
@@ -253,7 +249,6 @@ const ConnectedHeader = connectActionSheet(
 const Screen = ({ navigation }) => {
   const loadingStats = useSelector(state => state.loading.stats);
   const refreshStats = useRefreshStats();
-  const fetch = useInstantRefreshStats();
   React.useEffect(() => {
     refreshStats();
   }, []);
@@ -264,7 +259,7 @@ const Screen = ({ navigation }) => {
         <Loading
           error={loadingStats.error}
           errorKey={"loan"}
-          errorRefresh={fetch}
+          errorRefresh={refreshStats}
           forceLight
         />
       </View>
@@ -273,7 +268,7 @@ const Screen = ({ navigation }) => {
     return <ProgressScreen navigation={navigation} />;
   }
 };
-const ProgressScreen = ({ navigation }) => {
+const ProgressScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const twitterStats = useStatsStore(state => state.twitterStats);
   const redditStats = useStatsStore(state => state.redditStats);
@@ -409,6 +404,6 @@ const ProgressScreen = ({ navigation }) => {
       </ScrollView>
     </View>
   );
-};
+});
 
 export default Screen;

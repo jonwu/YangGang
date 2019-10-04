@@ -54,5 +54,20 @@ class BackendUtils {
   getInstagramStats(params) {
     return instance.get(`/instagram_stats`, { params });
   }
+  postAllEvents(params) {
+    return instance.post(`/allevents`, params);
+  }
+  getAllEvents(params) {
+    return instance.get(`/allevents`, { params });
+  }
+  putEvent(id, params) {
+    return instance.put(`/event/${id}`, params);
+  }
+  getEvent(params) {
+    return instance.get(`/event/${id}`, { params });
+  }
+  deleteEvent(id, params) {
+    return instance.delete(`/event/${id}`, params);
+  }
 }
 export default new BackendUtils();

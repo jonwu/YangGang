@@ -7,6 +7,7 @@ import DescriptionScreen from "components/screens/DescriptionScreen";
 import ProgressScreen from "components/screens/ProgressScreen";
 import MerchScreen from "components/screens/MerchScreen";
 import { useRefreshStats } from "utils/StoreUtils";
+import PostEventsScreen from "./screens/PostEventsScreen";
 
 const MainStack = createStackNavigator(
   {
@@ -34,6 +35,9 @@ const RootStack = createStackNavigator(
     },
     Merch: {
       screen: MerchScreen
+    },
+    PostEvent: {
+      screen: PostEventsScreen
     }
   },
   {

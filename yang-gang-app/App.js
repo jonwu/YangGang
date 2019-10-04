@@ -19,6 +19,7 @@ import * as Amplitude from "expo-analytics-amplitude";
 import Constants from "expo-constants";
 import { Asset } from "expo-asset";
 import { useDimensionStore } from "utils/DimensionUtils";
+
 const { store, persistor } = configureStore();
 
 const onBeforeLift = () => {};

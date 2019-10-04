@@ -5,74 +5,80 @@ import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_OPEN_FREE_MERCH } from "utils/AnalyticsUtils";
+import moment from "moment";
 
 const generateStyles = theme => ({});
 
 const MerchItem = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
-    <TouchableOpacity
-      onPress={() => {
-        Amplitude.logEvent(EVENT_OPEN_FREE_MERCH);
-        navigation.navigate("Merch");
+    <View
+      style={{
+        padding: theme.spacing_4,
+        backgroundColor: theme.yangBlue(),
+        width: 120,
+        height: 96,
+        borderWidth: 1,
+        borderColor: theme.text(0.1)
       }}
     >
       <View
         style={{
-          padding: theme.spacing_4,
-          backgroundColor: theme.yangBlue(),
-          width: 120,
-          height: 96,
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
           borderWidth: 1,
-          borderColor: theme.text(0.1)
+          borderColor: theme.light()
         }}
       >
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            borderWidth: 1,
-            borderColor: theme.light()
-          }}
+        <Text style={[gstyles.h3_bold, { color: theme.light(), fontSize: 28 }]}>
+          FREE
+        </Text>
+        <Text
+          style={[
+            gstyles.h4_bold,
+            { color: theme.yangLightBlue(), marginTop: -10 }
+          ]}
         >
-          <Text
-            style={[gstyles.h3_bold, { color: theme.light(), fontSize: 28 }]}
-          >
-            FREE
-          </Text>
-          <Text
-            style={[
-              gstyles.h4_bold,
-              { color: theme.yangLightBlue(), marginTop: -10 }
-            ]}
-          >
-            MERCH
-          </Text>
-          {/* <Text style={[gstyles.caption_50, { color: theme.light(0.5) }]}>
+          MERCH
+        </Text>
+        {/* <Text style={[gstyles.caption_50, { color: theme.light(0.5) }]}>
             MERCH
           </Text> */}
-        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
-const EventItem = React.memo(({ item, navigation }) => {
+const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
   const {
     month,
     day,
     title,
-    description,
-    location,
+    line1,
+    line2,
     link,
-    id,
-    expiration
+    event_type,
+    event_date
   } = item;
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  if (id === "MERCH") return <MerchItem navigation={navigation} />;
+  if (event_type === "MERCH")
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          onPressEvent && onPressEvent(item);
+          navigation && Amplitude.logEvent(EVENT_OPEN_FREE_MERCH);
+          navigation && navigation.navigate("Merch");
+        }}
+      >
+        <MerchItem navigation={navigation} />
+      </TouchableOpacity>
+    );
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("Webview", { title, uri: link })}
+      onPress={() => {
+        onPressEvent && onPressEvent(item);
+        navigation && navigation.navigate("Webview", { title, uri: link });
+      }}
     >
       <View
         style={{
@@ -87,8 +93,8 @@ const EventItem = React.memo(({ item, navigation }) => {
         <View
           style={{ paddingHorizontal: theme.spacing_4, alignItems: "center" }}
         >
-          <Text style={gstyles.h4}>{day}</Text>
-          <Text style={gstyles.p1_50}>{month}</Text>
+          <Text style={gstyles.h4}>{moment(event_date).format("D")}</Text>
+          <Text style={gstyles.p1_50}>{moment(event_date).format("MMM")}</Text>
           {/* <View
             style={[
               gstyles.top_5,
@@ -118,10 +124,10 @@ const EventItem = React.memo(({ item, navigation }) => {
             numberOfLines={1}
             style={[gstyles.caption_50, { marginBottom: 2 }]}
           >
-            {description}
+            {line1}
           </Text>
           <Text numberOfLines={1} style={[gstyles.caption_50]}>
-            {location}
+            {line2}
           </Text>
         </View>
       </View>

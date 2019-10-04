@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import moment from "moment";
 import ActionBarView from "./ActionBarView";
@@ -9,7 +9,7 @@ const generateStyles = theme => ({});
 const NewsItemContainer = React.memo(({ item, navigation }) => {
   return (
     <ActionBarView
-      openLabel="Open in Safari"
+      openLabel={`Open in ${Platform.OS === "ios" ? "Safari" : "Browser"}`}
       openIcon={"safari"}
       link={item.url}
       message={`${item.title}`}

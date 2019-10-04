@@ -12,6 +12,8 @@ import BackendUtils from "utils/BackendUtils";
 import { useThemeKit } from "utils/ThemeUtils";
 import { EventList } from "./TwitterScreen";
 import Header from "./Header";
+import EventItem from "components/items/EventItem";
+import { useEventsStore } from "utils/StoreUtils";
 
 const generateStyles = theme => ({});
 
@@ -39,6 +41,28 @@ const BasicForm = ({ title, value, setValue }) => {
     </View>
   );
 };
+
+const Button = ({ style, onPress, text }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={[
+          {
+            alignSelf: "flex-end",
+            paddingVertical: theme.spacing_4,
+            paddingHorizontal: theme.spacing_2,
+            backgroundColor: theme.dark(),
+            borderRadius: theme.borderRadius
+          },
+          style
+        ]}
+      >
+        <Text style={[gstyles.p1_bold, { color: theme.light() }]}>{text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 const PostEventsScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [id, setId] = React.useState("");
@@ -53,13 +77,9 @@ const PostEventsScreen = ({ navigation }) => {
   const [hour, setHour] = React.useState("0");
   const [minute, setMinute] = React.useState("0");
   const [event_date, setEventDate] = React.useState("");
-  const [events, setEvents] = React.useState([]);
+  const events = useEventsStore(state => state.events);
+  const fetchEvents = useEventsStore(state => state.fetchEvents);
 
-  const fetchEvents = () => {
-    BackendUtils.getAllEvents().then(response => {
-      setEvents(response.data);
-    });
-  };
   React.useEffect(() => {
     fetchEvents();
   }, []);
@@ -79,14 +99,25 @@ const PostEventsScreen = ({ navigation }) => {
         .toISOString()
     );
   }, [month, date, hour, minute]);
+
+  const params = {
+    event_type,
+    title,
+    line1,
+    line2,
+    image,
+    link,
+    event_date
+  };
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: theme.bg() }}
       // keyboardVerticalOffset={104}
       behavior="padding"
       enabled
     >
       <Header close navigation={navigation} />
+
       <View style={gstyles.bottom_5}>
         <EventList
           events={events}
@@ -98,9 +129,7 @@ const PostEventsScreen = ({ navigation }) => {
             setLine2(event.line2);
             setImage(event.image);
             setLink(event.link);
-            const LAmoment = moment(event.event_date + "Z").tz(
-              "America/Los_Angeles"
-            );
+            const LAmoment = moment(event.event_date).tz("America/Los_Angeles");
             setMonth((LAmoment.month() + 1).toString());
             setDate(LAmoment.date().toString());
             setHour(LAmoment.hour().toString());
@@ -114,77 +143,72 @@ const PostEventsScreen = ({ navigation }) => {
         <BasicForm title={"title"} value={title} setValue={setTitle} />
         <BasicForm title={"line1"} value={line1} setValue={setLine1} />
         <BasicForm title={"line2"} value={line2} setValue={setLine2} />
-        <BasicForm title={"image"} value={image} setValue={setImage} />
         <BasicForm title={"link"} value={link} setValue={setLink} />
-        <View style={{ flexDirection: "row" }}>
+        <BasicForm title={"image"} value={image} setValue={setImage} />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <BasicForm title={"month"} value={month} setValue={setMonth} />
           <BasicForm title={"date"} value={date} setValue={setDate} />
           <BasicForm title={"hour"} value={hour} setValue={setHour} />
           <BasicForm title={"minute"} value={minute} setValue={setMinute} />
+          <Text style={gstyles.caption_bold_50}>Note: hour is 0 - 24 </Text>
         </View>
         <BasicForm
           title={"event_date"}
           value={event_date}
           setValue={setEventDate}
         />
-        <TouchableOpacity
-          onPress={() => {
-            const params = {
-              event_type,
-              title,
-              line1,
-              line2,
-              image,
-              link,
-              event_date
-            };
-            const savePromise = id
-              ? BackendUtils.putEvent(id, params)
-              : BackendUtils.postAllEvents(params);
-            savePromise.then(() => {
-              fetchEvents();
-            });
+        <View
+          style={{
+            padding: theme.spacing_2
           }}
         >
+          <EventItem item={params} />
           <View
-            style={{
-              marginTop: theme.spacing_2,
-              marginRight: theme.spacing_2,
-              alignSelf: "flex-end",
-              paddingVertical: theme.spacing_4,
-              paddingHorizontal: theme.spacing_2,
-              backgroundColor: theme.red(),
-              borderRadius: theme.borderRadius
-            }}
+            style={[
+              { flexDirection: "row", justifyContent: "space-between" },
+              gstyles.top_2
+            ]}
           >
-            <Text style={[gstyles.p1_bold, { color: theme.light() }]}>
-              {id ? "Save" : "Create"}
-            </Text>
+            <Button
+              text="Clear"
+              onPress={() => {
+                setId("");
+                setEventType("");
+                setTitle("");
+                setLine1("");
+                setLine2("");
+                setImage("");
+                setLink("");
+                setMonth(moment().format("MM"));
+                setDate(moment().format("D"));
+                setHour("0");
+                setMinute("0");
+                setEventDate("");
+              }}
+            />
+            <Button
+              text={id ? "Save" : "Create"}
+              style={[{ backgroundColor: theme.red() }, gstyles.bottom_2]}
+              onPress={() => {
+                const savePromise = id
+                  ? BackendUtils.putEvent(id, params)
+                  : BackendUtils.postAllEvents(params);
+                savePromise.then(() => {
+                  fetchEvents();
+                });
+              }}
+            />
+
+            <Button
+              text="Delete"
+              onPress={() =>
+                BackendUtils.deleteEvent(id).then(() => {
+                  fetchEvents();
+                })
+              }
+            />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            BackendUtils.deleteEvent(id).then(() => {
-              fetchEvents();
-            })
-          }
-        >
-          <View
-            style={{
-              marginTop: theme.spacing_2,
-              marginRight: theme.spacing_2,
-              alignSelf: "flex-end",
-              paddingVertical: theme.spacing_4,
-              paddingHorizontal: theme.spacing_2,
-              backgroundColor: theme.dark(),
-              borderRadius: theme.borderRadius
-            }}
-          >
-            <Text style={[gstyles.p1_bold, { color: theme.light() }]}>
-              Delete
-            </Text>
-          </View>
-        </TouchableOpacity>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

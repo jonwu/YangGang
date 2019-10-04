@@ -84,19 +84,24 @@ const SettingsScreen = React.memo(({ navigation }) => {
         }
         label={"Send feedback"}
       />
+
       <SettingsRow
         onPress={StoreReview.requestReview}
         Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
         label={"Rate the app!"}
       />
-      <SettingsRow
-        onPress={() => navigation.navigate("PostEvent")}
-        Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
-        label={"Events Dashboard"}
-      />
-      <View style={[gstyles.top_2, { alignItems: "center" }]}>
-        <Text style={gstyles.footnote_50}>{Constants.installationId}</Text>
-      </View>
+      {Constants.installationId === "56ED3426-D29C-4B1C-AA98-16C5E0BCC08D" && (
+        <SettingsRow
+          onPress={() => navigation.navigate("PostEvent")}
+          Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
+          label={"Events Dashboard"}
+        />
+      )}
+      {/* <View style={[gstyles.top_2, { alignItems: "center" }]}>
+        <Text selectable style={gstyles.footnote_50}>
+          {Constants.installationId}
+        </Text>
+      </View> */}
     </ScrollView>
   );
 });

@@ -111,9 +111,9 @@ const TwitterScreen = React.memo(({ navigation }) => {
     return <TwitterItem item={item} navigation={navigation} />;
   };
 
-  const filteredEvents = events.filter(e =>
-    moment().isBefore(moment(e.event_date))
-  );
+  const filteredEvents = events.filter(e => {
+    return moment().isBefore(moment(e.event_date));
+  });
 
   const fetch = () => {
     Amplitude.logEvent(EVENT_FETCH_TWITTER);

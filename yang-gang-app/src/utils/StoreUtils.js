@@ -41,7 +41,11 @@ const [useEventsStore] = create(set => ({
   events: [],
   fetchEvents: () => {
     BackendUtils.getAllEvents().then(response => {
-      set({ events: response.data });
+      const events = response.data;
+      events.forEach(e => {
+        e.event_date = e.event_date + "Z";
+      });
+      set({ events });
     });
   }
 }));

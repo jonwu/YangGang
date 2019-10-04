@@ -24,7 +24,9 @@ const Back = ({ navigation }) => {
   return (
     <TouchableOpacity
       style={{ padding: 8 }}
-      onPress={() => navigation.goBack()}
+      onPress={() => {
+        navigation.goBack();
+      }}
     >
       <Ionicons name={"ios-arrow-back"} color={theme.light()} size={24} />
     </TouchableOpacity>

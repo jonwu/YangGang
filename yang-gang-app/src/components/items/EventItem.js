@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_OPEN_FREE_MERCH } from "utils/AnalyticsUtils";
-import moment from "moment";
+import moment from "moment-timezone";
 
 const generateStyles = theme => ({});
 
@@ -64,6 +64,7 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
   if (event_type === "MERCH")
     return (
       <TouchableOpacity
+        activeOpacity={0.5}
         onPress={() => {
           onPressEvent && onPressEvent(item);
           navigation && Amplitude.logEvent(EVENT_OPEN_FREE_MERCH);
@@ -73,11 +74,17 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
         <MerchItem navigation={navigation} />
       </TouchableOpacity>
     );
+
+  if (!title) return null;
+
   return (
     <TouchableOpacity
+      activeOpacity={0.5}
       onPress={() => {
         onPressEvent && onPressEvent(item);
-        navigation && navigation.navigate("Webview", { title, uri: link });
+        navigation &&
+          link &&
+          navigation.navigate("Webview", { title, uri: link });
       }}
     >
       <View
@@ -93,8 +100,16 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
         <View
           style={{ paddingHorizontal: theme.spacing_4, alignItems: "center" }}
         >
-          <Text style={gstyles.h4}>{moment(event_date).format("D")}</Text>
-          <Text style={gstyles.p1_50}>{moment(event_date).format("MMM")}</Text>
+          <Text style={gstyles.h4}>
+            {moment(event_date)
+              .tz("America/Los_Angeles")
+              .format("D")}
+          </Text>
+          <Text style={gstyles.p1_50}>
+            {moment(event_date)
+              .tz("America/Los_Angeles")
+              .format("MMM")}
+          </Text>
           {/* <View
             style={[
               gstyles.top_5,

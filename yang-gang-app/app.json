@@ -8,6 +8,7 @@
     "orientation": "portrait",
     "version": "1.0.9",
     "icon": "./src/assets/logo-4.png",
+    "facebookScheme": "fb392773824728181",
     "facebookAppId": "392773824728181",
     "facebookDisplayName": "Yang: Humanity First App",
     "splash": {

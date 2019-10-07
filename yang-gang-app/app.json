@@ -6,7 +6,7 @@
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "icon": "./src/assets/logo-4.png",
     "facebookScheme": "fb392773824728181",
     "facebookAppId": "392773824728181",
@@ -26,10 +26,15 @@
       "appStoreUrl": "https://itunes.apple.com/us/app/yang-humanity-first/id1477732890"
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.jonwu.yang",
       "package": "com.jonwu.yang",
-      "permissions": []
+      "permissions": [],
+      "icon": "./src/assets/logo-4.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/foreground-logo.png",
+        "backgroundColor": "#133467"
+      }
     },
     "androidStatusBar": {
       "barStyle": "light-content",

@@ -16,6 +16,46 @@ r = Redis(host='redis', port=6379)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
+
+@api.route('/notifications/<int:event_id>/<string:expo_id>')
+class NotificationsApi(Resource):
+    def post(self, event_id, expo_id):
+        try:
+            notification = PushNotifications(event_id=event_id, expo_id=expo_id)
+            db.session.add(notification)
+            db.session.commit()
+            return make_response("successfully saved", 201)
+        except Exception as e:
+            abort(404, str(e))
+
+    def delete(self, event_id, expo_id):
+        notification = PushNotifications.query.filter(PushNotifications.event_id == event_id).\
+            filter(PushNotifications.expo_id == expo_id).one_or_none()
+
+        if notification is not None:
+            db.session.delete(notification)
+            db.session.commit()
+            return make_response(
+                "notification for event: {event_id}, expo_id: {expo_id} deleted".format(event_id=event_id,
+                                                                                        expo_id=expo_id), 200
+            )
+
+        else:
+            abort(
+                404,
+                "notification not found for event: {event_id}, expo_id: {expo_id} deleted".format(event_id=event_id,
+                                                                                                  expo_id=expo_id),
+            )
+
+
+@api.route('/usernotifications/<string:expo_id>')
+class AllNotificationsForUser(Resource):
+    def get(self, expo_id):
+        notifications = PushNotifications.query.filter(PushNotifications.expo_id == expo_id).order_by(PushNotifications.created_date).all()
+        notifications_schema = PushNotifcationsSchema(many=True)
+        return notifications_schema.dump(notifications)
+
+
 event_json = api.model('Resource', {
     'title': fields.String,
     'image': fields.String,
@@ -107,6 +147,15 @@ class EventApi(Resource):
         data = events_schema.dump(update)
 
         return data, 200
+
+
+@api.route("/instagram/")
+class InstagramList(Resource):
+    def get(self):
+        """
+        returns a list of top_num instagram posts
+        """
+        return json.loads(r.get('instagram').decode('utf-8'))
 
 
 @api.route("/hotreddit/")
@@ -265,6 +314,24 @@ class Events(db.Model):
 class EventsSchema(ma.ModelSchema):
     class Meta:
         model = Events
+        sqla_session = db.session
+
+
+class PushNotifications(db.Model):
+    __tablename__ = "push_notifications"
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    expo_id = db.Column(db.Text())
+    event_id = db.Column(db.Integer)
+    error_message = db.Column(db.Text())
+    num_retries = db.Column(db.Integer, default=0)
+    __table_args__ = (db.UniqueConstraint('expo_id', 'event_id', name='_expo_id_event_id_uc'),)
+
+
+class PushNotifcationsSchema(ma.ModelSchema):
+    class Meta:
+        model = PushNotifications
         sqla_session = db.session
 
 

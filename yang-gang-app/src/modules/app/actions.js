@@ -139,3 +139,17 @@ export function updateNews() {
     );
   };
 }
+
+export function updateShowMoneyModal(show) {
+  return { type: ActionTypes.UPDATE_MONEY_MODAL, show };
+}
+
+export function updateExpoId(id) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
+    return BackendUtils.postNotifications({
+      eventId: -1,
+      expoId: token
+    });
+  };
+}

@@ -69,5 +69,14 @@ class BackendUtils {
   deleteEvent(id, params) {
     return instance.delete(`/event/${id}`, params);
   }
+  postNotifications(params) {
+    return instance.post(`/notifications`, params);
+  }
+  deleteNotifications(params) {
+    return instance.delete(`/notifications`, params);
+  }
+  getNotifications(params) {
+    return instance.get(`/notifications`, { params });
+  }
 }
 export default new BackendUtils();

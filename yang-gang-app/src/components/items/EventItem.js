@@ -1,11 +1,17 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Linking } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import * as Amplitude from "expo-analytics-amplitude";
-import { EVENT_OPEN_FREE_MERCH } from "utils/AnalyticsUtils";
+import treasureSrc from "assets/treasure.png";
+import {
+  EVENT_OPEN_FREE_MERCH,
+  EVENT_OPEN_FREE_MONEY
+} from "utils/AnalyticsUtils";
 import moment from "moment-timezone";
+import { updateShowMoneyModal } from "modules/app/actions";
+import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
 
 const generateStyles = theme => ({});
 
@@ -49,6 +55,35 @@ const MerchItem = ({ navigation }) => {
     </View>
   );
 };
+
+const MoneyItem = ({ navigation }) => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+
+  return (
+    <View
+      style={{
+        padding: theme.spacing_4,
+        backgroundColor: theme.yangBlue(),
+        width: 120,
+        height: 96,
+        borderWidth: 1,
+        borderColor: theme.text(0.1)
+      }}
+    >
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+          borderWidth: 1,
+          borderColor: theme.light()
+        }}
+      >
+        <Image source={treasureSrc} style={{ height: 48, width: 48 }} />
+      </View>
+    </View>
+  );
+};
 const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
   const {
     month,
@@ -61,6 +96,22 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
     event_date
   } = item;
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const dispatch = useDispatch();
+  const expoId = useSelector(state => state.settings.expoId);
+  const setModalVisible = show => dispatch(updateShowMoneyModal(show));
+  if (event_type === "MONEY")
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() => {
+          onPressEvent && onPressEvent(item);
+          navigation && Amplitude.logEvent(EVENT_OPEN_FREE_MONEY);
+          !onPressEvent && setModalVisible(true);
+        }}
+      >
+        <MoneyItem navigation={navigation} />
+      </TouchableOpacity>
+    );
   if (event_type === "MERCH")
     return (
       <TouchableOpacity
@@ -110,26 +161,35 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
               .tz("America/Los_Angeles")
               .format("MMM")}
           </Text>
-          {/* <View
-            style={[
-              gstyles.top_5,
-              {
-                borderWidth: 1,
-                borderColor: theme.borderColor2,
-                borderRadius: 32,
-                height: 32,
-                width: 32,
-                alignItems: "center",
-                justifyContent: "center"
+          {/* <TouchableOpacity
+            onPress={async () => {
+              if (expoId) {
+              } else {
+                const token = await registerForPushNotificationsAsync();
               }
-            ]}
+            }}
           >
-            <Ionicons
-              name={"ios-notifications-outline"}
-              size={18}
-              color={theme.text()}
-            />
-          </View> */}
+            <View
+              style={[
+                gstyles.top_5,
+                {
+                  borderWidth: 1,
+                  borderColor: theme.borderColor2,
+                  borderRadius: 32,
+                  height: 32,
+                  width: 32,
+                  alignItems: "center",
+                  justifyContent: "center"
+                }
+              ]}
+            >
+              <Ionicons
+                name={"ios-notifications-outline"}
+                size={18}
+                color={theme.text()}
+              />
+            </View>
+          </TouchableOpacity> */}
         </View>
         <View style={{ paddingHorizontal: theme.spacing_4, flex: 1 }}>
           <Text numberOfLines={2} style={[gstyles.p1, { marginBottom: 2 }]}>

@@ -14,6 +14,8 @@ import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
 import NewsScreen from "./NewsScreen";
 import SettingsScreen from "./SettingsScreen";
+import MoneyDropModal from "./MoneyDropModal";
+import instagramIcon from "assets/instagram.png";
 
 import { TabView, TabBar } from "react-native-tab-view";
 import {
@@ -51,6 +53,7 @@ const generateStyles = theme => ({
 });
 
 const renderIcon = ({ route }) => {
+  if (route.image) return route.image;
   switch (route.iconType) {
     case "Entypo":
       return <Entypo name={route.icon} size={24} color={route.color} />;
@@ -71,6 +74,7 @@ const TabScreen = ({ navigation }) => {
       key: "reddit",
       icon: "reddit",
       color: "#FF5700",
+      image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
       iconType: "FontAwesome"
     },
     { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
@@ -78,6 +82,7 @@ const TabScreen = ({ navigation }) => {
       key: "news",
       icon: "newspaper-o",
       iconType: "FontAwesome",
+      // image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
       color: theme.darkGreen()
     },
     {
@@ -125,6 +130,7 @@ const TabScreen = ({ navigation }) => {
 
   return (
     <React.Fragment>
+      <MoneyDropModal />
       {statusBar}
       {/* <Header
         renderTitle={<YangLogo />}

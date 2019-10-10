@@ -1,5 +1,5 @@
 import React from "react";
-import { View, WebView, FlatList } from "react-native";
+import { View, WebView, FlatList, Text } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import TwitterItem from "components/items/TwitterItem";
@@ -13,6 +13,7 @@ import { EVENT_FETCH_TWITTER } from "utils/AnalyticsUtils";
 import EventItem from "components/items/EventItem";
 import moment from "moment";
 import { useEventsStore } from "utils/StoreUtils";
+import MoneyDropModal from "./MoneyDropModal";
 
 const styles = theme => {};
 const dummy = [1, 2, 3, 4, 5];
@@ -134,18 +135,23 @@ const TwitterScreen = React.memo(({ navigation }) => {
     );
 
   return (
-    <FlatList
-      ListHeaderComponent={
-        <EventList navigation={navigation} events={filteredEvents} />
-      }
-      onRefresh={throttledFetch}
-      refreshing={loadingTweets.isRequesting}
-      data={tweets}
-      contentContainerStyle={{ paddingBottom: 72 }}
-      renderItem={renderItem}
-      ItemSeparatorComponent={TwitterSeparator}
-      keyExtractor={item => item.id.toString()}
-    />
+    <>
+      <MoneyDropModal />
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <EventList navigation={navigation} events={filteredEvents} />
+          </>
+        }
+        onRefresh={throttledFetch}
+        refreshing={loadingTweets.isRequesting}
+        data={tweets}
+        contentContainerStyle={{ paddingBottom: 72 }}
+        renderItem={renderItem}
+        ItemSeparatorComponent={TwitterSeparator}
+        keyExtractor={item => item.id.toString()}
+      />
+    </>
   );
 });
 

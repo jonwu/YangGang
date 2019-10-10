@@ -122,6 +122,15 @@ function news(state = null, actions) {
       return state;
   }
 }
+
+function showMoneyModal(state = false, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_MONEY_MODAL:
+      return actions.show;
+    default:
+      return state;
+  }
+}
 export default combineReducers({
   reddit,
   tweets,
@@ -129,5 +138,6 @@ export default combineReducers({
   youtubeDay,
   youtube3Days,
   youtubeAllTime,
-  news
+  news,
+  showMoneyModal
 });

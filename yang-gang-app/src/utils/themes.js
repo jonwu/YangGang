@@ -33,6 +33,7 @@ const shared = {
   light: colors.LIGHT,
   dark: colors.DARK,
   yang: colors.YANG,
+  black: colors.BLACK,
   activeOpacity: 1
 };
 

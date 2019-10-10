@@ -1,5 +1,7 @@
 APScheduler
 confuse
+exponent_server_sdk
+igramscraper
 newsapi-python
 praw
 pymysql

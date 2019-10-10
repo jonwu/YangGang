@@ -148,7 +148,7 @@ class EventApi(Resource):
 
 
 @api.route("/instagram/")
-class HotRedditList(Resource):
+class InstagramList(Resource):
     def get(self):
         """
         returns a list of top_num instagram posts

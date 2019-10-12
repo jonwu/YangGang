@@ -8,7 +8,8 @@ const FEATURES = [
   "youtubeAllTime",
   "fetchYoutube",
   "news",
-  "stats"
+  "stats",
+  "loadingInstagram"
 ];
 const defaultState = FEATURES.reduce(
   (previous, current) =>

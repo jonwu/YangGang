@@ -46,7 +46,7 @@ const RedditScreen = React.memo(({ navigation }) => {
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.id}
-      contentContainerStyle={{ paddingBottom: 72 }}
+      contentContainerStyle={{ paddingBottom: 88 }}
     />
   );
 });

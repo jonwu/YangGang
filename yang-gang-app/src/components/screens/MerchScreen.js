@@ -112,7 +112,7 @@ const MerchScreen = ({ navigation }) => {
             backgroundColor: "white",
             paddingHorizontal: theme.spacing_2,
             paddingVertical: 64,
-            paddingBottom: 80
+            paddingBottom: 88
           }}
         >
           <Text style={[gstyles.h3_bold, { color: theme.dark() }]}>

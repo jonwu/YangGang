@@ -59,7 +59,7 @@ const NewsScreen = React.memo(({ navigation }) => {
         onRefresh={throttledFetch}
         refreshing={loadingNews.isRequesting}
         data={lodash.chunk(news, 2)}
-        contentContainerStyle={{ paddingBottom: 72 }}
+        contentContainerStyle={{ paddingBottom: 88 }}
         renderItem={renderDuoItem}
         keyExtractor={(item, i) => i.toString()}
       />
@@ -70,7 +70,7 @@ const NewsScreen = React.memo(({ navigation }) => {
       onRefresh={throttledFetch}
       refreshing={loadingNews.isRequesting}
       data={news}
-      contentContainerStyle={{ paddingBottom: 72 }}
+      contentContainerStyle={{ paddingBottom: 88 }}
       renderItem={renderItem}
       // ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.url}

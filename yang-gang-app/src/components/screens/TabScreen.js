@@ -14,6 +14,7 @@ import TwitterScreen from "./TwitterScreen";
 import YoutubeScreen from "./YoutubeScreen";
 import NewsScreen from "./NewsScreen";
 import SettingsScreen from "./SettingsScreen";
+import InstagramScreen from "./InstagramScreen";
 import MoneyDropModal from "./MoneyDropModal";
 import instagramIcon from "assets/instagram.png";
 
@@ -98,7 +99,9 @@ const TabScreen = ({ navigation }) => {
       case "twitter":
         return <TwitterScreen navigation={navigation} />;
       case "reddit":
-        return <RedditScreen navigation={navigation} />;
+        return <InstagramScreen navigation={navigation} />;
+      // case "reddit":
+      //   return <RedditScreen navigation={navigation} />;
       case "youtube":
         return <YoutubeScreen navigation={navigation} />;
       case "news":

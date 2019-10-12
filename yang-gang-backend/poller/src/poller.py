@@ -71,8 +71,6 @@ newsapi = NewsApiClient(api_key=env_configs['news']['api_key'])
 youtube_api_key1 = env_configs['youtube']['api_key1']
 youtube_api_key2 = env_configs['youtube']['api_key2']
 
-# instagram scraper
-instagram = Instagram()
 
 def get_youtube_params(published_after, api_key):
     if published_after is None:
@@ -180,11 +178,19 @@ def fetch_news():
 
 
 def fetch_instagram():
+    start = time.time()
     instagram_num = 30
+    instagram = Instagram()
     medias = instagram.get_medias("andrewyang2020", instagram_num)
     medias = [{k:v for k,v in vars(media).items() if is_jsonable(v)} for media in medias]
+    for d in medias:
+        try:
+            d['url'] = json.loads(requests.get(VIEW_MEDIA_URL.format(d['short_code'])).text)['graphql']['shortcode_media']['video_url']
+        except:
+            d['url'] = None
     r.set('instagram', json.dumps(medias))
-    print('fetched {} instagram items at {}'.format(len(medias), datetime.now()))
+    end = time.time()
+    print('fetched {} instagram items at {} in {} seconds'.format(len(medias), datetime.now(), end - start))
 
 
 
@@ -283,7 +289,7 @@ scheduler.add_job(fill_stats_twitter, 'interval', minutes=60, id='fill_stats_twi
 scheduler.add_job(fill_stats_reddit, 'interval', minutes=60, id='fill_stats_reddit')
 scheduler.add_job(fill_stats_instagram, 'interval', minutes=60, id='fill_stats_instagram')
 scheduler.add_job(fetch_hot_reddit, 'interval', seconds=10, id='fetch_hot_reddit')
-scheduler.add_job(fetch_instagram, 'interval', seconds=10, id='fetch_instagram')
+scheduler.add_job(fetch_instagram, 'interval', minutes=2, id='fetch_instagram')
 scheduler.add_job(fetch_twitter, 'interval', seconds=10, id='fetch_twitter')
 scheduler.add_job(fetch_news, 'interval', minutes=30, id='fetch_news')
 scheduler.add_job(lambda: fetch_youtube(7, 'youtube', youtube_api_key1),

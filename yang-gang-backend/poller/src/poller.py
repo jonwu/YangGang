@@ -8,11 +8,11 @@ import tweepy
 import time
 import traceback
 from newsapi import NewsApiClient
-from igramscraper.instagram import Instagram
 from constants import *
 import pymysql
 import confuse
 import sys
+import hashlib
 
 
 # initialize redis
@@ -177,21 +177,48 @@ def fetch_news():
     print('fetched {} news items at {} with {} datestring'.format(all_articles['totalResults'], datetime.now(), today_datestring))
 
 
+def get_ig_gis(rhx_gis, params):
+    data = rhx_gis + ":" + params
+    if sys.version_info.major >= 3:
+        return hashlib.md5(data.encode('utf-8')).hexdigest()
+    else:
+        return hashlib.md5(data).hexdigest()
+
+
+def update_ig_gis_header(params, session):
+    session.headers.update({
+        'x-instagram-gis': get_ig_gis(
+            "",
+            params
+        )
+    })
+
+
 def fetch_instagram():
     start = time.time()
-    instagram_num = 30
-    instagram = Instagram()
-    medias = instagram.get_medias("andrewyang2020", instagram_num)
-    medias = [{k:v for k,v in vars(media).items() if is_jsonable(v)} for media in medias]
-    for d in medias:
+    with requests.Session() as session:
+        session.headers.update({'Referer': BASE_URL, 'user-agent': STORIES_UA})
+        req = session.get(BASE_URL)
+        session.headers.update({'X-CSRFToken': req.cookies['csrftoken']})
+        session.headers.update({'user-agent': CHROME_WIN_UA})
+        params = QUERY_MEDIA_VARS.format('3969496290', '')
+        update_ig_gis_header(params, session)
         try:
-            d['url'] = json.loads(requests.get(VIEW_MEDIA_URL.format(d['short_code'])).text)['graphql']['shortcode_media']['video_url']
+            media = json.loads(session.get(QUERY_MEDIA.format(params)).text)['data']['user']['edge_owner_to_timeline_media']['edges']
+            # remove 'node' key wrapper
+            media = [x['node'] for x in media]
+            for m in media:
+                if m['__typename'] == 'GraphVideo':
+                    m['actual_url'] = json.loads(requests.get(VIEW_MEDIA_URL.format(m['shortcode'])).text)['graphql']['shortcode_media']['video_url']
+                else:
+                    m['actual_url'] = None
+            r.set('instagram', json.dumps(media))
+            end = time.time()
+            print('fetched {} instagram items at {} in {} seconds'.format(len(media), datetime.now(), end - start))
+            session.cookies.clear()
         except:
-            d['url'] = None
-    r.set('instagram', json.dumps(medias))
-    end = time.time()
-    print('fetched {} instagram items at {} in {} seconds'.format(len(medias), datetime.now(), end - start))
-
+            traceback.print_exc()
+            session.cookies.clear()
 
 
 def fill_stats_reddit():
@@ -305,13 +332,14 @@ fetch_hot_reddit()
 fetch_twitter()
 fetch_news()
 fetch_instagram()
+fill_stats_instagram()
 fetch_youtube(7, 'youtube', youtube_api_key1)
 fetch_youtube(1, 'youtube_day', youtube_api_key1)
 fetch_youtube(3, 'youtube_3day', youtube_api_key2)
 fetch_youtube(None, 'youtube_all_time', youtube_api_key2)
 fill_stats_reddit()
 fill_stats_twitter()
-fill_stats_instagram()
+
 
 scheduler.start()
 

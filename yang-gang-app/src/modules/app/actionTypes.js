@@ -9,3 +9,4 @@ export const UPDATE_NEWS = "app/UPDATE_NEWS";
 export const UPDATE_MONEY_MODAL = "app/UPDATE_MONEY_MODAL";
 export const UPDATE_EXPO_ID = "app/UPDATE_EXPO_ID";
 export const UPDATE_NOTIFICATIONS = "app/UPDATE_NOTIFICATIONS";
+export const UPDATE_INSTAGRAM = "app/UPDATE_INSTAGRAM";

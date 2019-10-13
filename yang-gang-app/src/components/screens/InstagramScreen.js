@@ -15,34 +15,35 @@ const styles = theme => {};
 const keyExtractor = item => item.id;
 const InstagramScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
-  // const dispatch = useDispatch();
-  // const instagram = useSelector(state => state.app.instagram);
-  // const loadingInstagram = useSelector(state => state.loading.instagram);
-  const instagram = [1,2,3,4,5,6]
+  const dispatch = useDispatch();
+  const instagram = useSelector(state => state.app.instagram);
+  const loadingInstagram = useSelector(state => state.loading.instagram);
+
   const renderItem = ({ item: instagram }) => {
     return <InstagramItem item={instagram} navigation={navigation} />;
   };
 
-  // const fetch = () => {
-  //   Amplitude.logEvent(EVENT_FETCH_INSTAGRAM);
-  //   dispatch(updateInstagram());
-  // };
-  // const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
-  //   .current;
-  // React.useEffect(fetch, []);
+  const fetch = () => {
+    Amplitude.logEvent(EVENT_FETCH_INSTAGRAM);
+    dispatch(updateInstagram());
+  };
+  const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
+    .current;
+  React.useEffect(fetch, []);
 
-  // if (!loadingInstagram.isReceived)
-  //   return (
-  //     <Loading
-  //       error={loadingInstagram.error}
-  //       errorKey={"wall"}
-  //       errorRefresh={fetch}
-  //     />
-  //   );
+  if (!loadingInstagram.isReceived)
+    return (
+      <Loading
+        error={loadingInstagram.error}
+        errorKey={"wall"}
+        errorRefresh={fetch}
+      />
+    );
+
   return (
     <FlatList
-      // onRefresh={throttledFetch}
-      // refreshing={loadingInstagram.isRequesting}
+      onRefresh={throttledFetch}
+      refreshing={loadingInstagram.isRequesting}
       data={instagram}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}

@@ -29,6 +29,7 @@ import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
+import Header from "./Header";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -72,20 +73,25 @@ const TabScreen = ({ navigation }) => {
   const routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
     {
-      key: "reddit",
-      icon: "reddit",
-      color: "#FF5700",
+      key: "instagram",
+      icon: "instagram",
       image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
       iconType: "FontAwesome"
     },
+
     { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
     {
-      key: "news",
-      icon: "newspaper-o",
-      iconType: "FontAwesome",
-      // image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
-      color: theme.darkGreen()
+      key: "reddit",
+      icon: "reddit",
+      color: "#FF5700",
+      iconType: "FontAwesome"
     },
+    // {
+    //   key: "news",
+    //   icon: "newspaper-o",
+    //   iconType: "FontAwesome",
+    //   color: theme.darkGreen()
+    // }
     {
       key: "settings",
       icon: "md-settings",
@@ -98,12 +104,12 @@ const TabScreen = ({ navigation }) => {
     switch (route.key) {
       case "twitter":
         return <TwitterScreen navigation={navigation} />;
-      case "reddit":
+      case "instagram":
         return <InstagramScreen navigation={navigation} />;
-      // case "reddit":
-      //   return <RedditScreen navigation={navigation} />;
       case "youtube":
         return <YoutubeScreen navigation={navigation} />;
+      case "reddit":
+        return <RedditScreen navigation={navigation} />;
       case "news":
         return <NewsScreen navigation={navigation} />;
       case "settings":
@@ -136,8 +142,9 @@ const TabScreen = ({ navigation }) => {
       <MoneyDropModal />
       {statusBar}
       {/* <Header
+        bgColor={theme.bgTabs()}
         renderTitle={<YangLogo />}
-        // renderRight={<ThemeIcon />}
+        renderRight={<ThemeIcon />}
         navigation={navigation}
       /> */}
       {/* <Image source={header} style={{ width: "100%", height: 180 }} />

@@ -9,7 +9,7 @@ const FEATURES = [
   "fetchYoutube",
   "news",
   "stats",
-  "loadingInstagram"
+  "instagram"
 ];
 const defaultState = FEATURES.reduce(
   (previous, current) =>

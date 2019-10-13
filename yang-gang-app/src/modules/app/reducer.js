@@ -122,6 +122,14 @@ function news(state = null, actions) {
       return state;
   }
 }
+function instagram(state = null, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_INSTAGRAM:
+      return actions.instagram;
+    default:
+      return state;
+  }
+}
 
 function showMoneyModal(state = false, actions) {
   switch (actions.type) {
@@ -139,5 +147,6 @@ export default combineReducers({
   youtube3Days,
   youtubeAllTime,
   news,
-  showMoneyModal
+  showMoneyModal,
+  instagram
 });

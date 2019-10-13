@@ -116,6 +116,23 @@ export function updateYoutubeAllTime() {
     );
   };
 }
+export function updateInstagram() {
+  return dispatch => {
+    return dispatch(
+      load(
+        "instagram",
+        BackendUtils.getInstagram().then(response => {
+          const instagram = response.data;
+          dispatch({
+            type: ActionTypes.UPDATE_INSTAGRAM,
+            instagram
+          });
+          return instagram;
+        })
+      )
+    );
+  };
+}
 export function updateNews() {
   return dispatch => {
     return dispatch(

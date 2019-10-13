@@ -29,7 +29,6 @@ import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
-import Header from "./Header";
 
 const generateStyles = theme => ({
   tabbar: {

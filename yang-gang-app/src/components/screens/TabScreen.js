@@ -29,6 +29,7 @@ import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
+import Header from "./Header";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -72,31 +73,32 @@ const TabScreen = ({ navigation }) => {
   const routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
     {
-      key: "instagram",
-      icon: "instagram",
-      image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
-      iconType: "FontAwesome"
-    },
-
-    { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
-    {
       key: "reddit",
       icon: "reddit",
       color: "#FF5700",
       iconType: "FontAwesome"
     },
-    // {
-    //   key: "news",
-    //   icon: "newspaper-o",
-    //   iconType: "FontAwesome",
-    //   color: theme.darkGreen()
-    // }
+
+    { key: "youtube", icon: "logo-youtube", color: "#FF0000" },
+
     {
-      key: "settings",
-      icon: "md-settings",
-      // iconType: "FontAwesome",
-      color: theme.text()
+      key: "news",
+      icon: "newspaper-o",
+      iconType: "FontAwesome",
+      color: theme.darkGreen()
+    },
+    {
+      key: "instagram",
+      icon: "instagram",
+      image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
+      iconType: "FontAwesome"
     }
+    // {
+    //   key: "settings",
+    //   icon: "md-settings",
+    //   // iconType: "FontAwesome",
+    //   color: theme.text()
+    // }
   ];
 
   const renderScene = ({ route }) => {

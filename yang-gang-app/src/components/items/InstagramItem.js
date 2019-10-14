@@ -28,13 +28,13 @@ const InstagramItem = ({ item, navigation }) => {
   const deviceWidth = useDimensionStore(state => state.deviceWidth);
   const { thumbnail_resources, dimensions } = item;
   let prevWidth = 0;
-  let imageSource = null;
-  thumbnail_resources.forEach(resource => {
-    if (resource.config_width > prevWidth && prevWidth <= deviceWidth) {
-      imageSource = resource.src;
-      prevWidth = resource.config_width;
-    }
-  });
+  let imageSource = item.display_url;
+  // thumbnail_resources.forEach(resource => {
+  //   if (resource.config_width > prevWidth && prevWidth <= deviceWidth) {
+  //     imageSource = resource.src;
+  //     prevWidth = resource.config_width;
+  //   }
+  // });
 
   if (!imageSource) return null;
   const imageHeight = (deviceWidth * dimensions.height) / dimensions.width;

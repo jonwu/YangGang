@@ -17,7 +17,6 @@ const keyExtractor = item => item.id;
 
 export const NewsList = React.memo(({ navigation, news }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
-  console.log(news && news.length);
   if (!news || news.length === 0) return null;
   return (
     <>
@@ -51,7 +50,7 @@ const RedditScreen = React.memo(({ navigation }) => {
   const fetch = () => {
     Amplitude.logEvent(EVENT_FETCH_REDDIT);
     dispatch(updateReddit());
-    dispatch(updateNews());
+    // dispatch(updateNews());
   };
   const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
     .current;
@@ -66,7 +65,7 @@ const RedditScreen = React.memo(({ navigation }) => {
     );
   return (
     <FlatList
-      ListHeaderComponent={<NewsList navigation={navigation} news={news} />}
+      // ListHeaderComponent={<NewsList navigation={navigation} news={news} />}
       onRefresh={throttledFetch}
       refreshing={loadingReddit.isRequesting}
       data={reddit}

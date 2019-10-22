@@ -8,6 +8,8 @@ import ProgressScreen from "components/screens/ProgressScreen";
 import MerchScreen from "components/screens/MerchScreen";
 import { useRefreshStats } from "utils/StoreUtils";
 import PostEventsScreen from "./screens/PostEventsScreen";
+import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
+import { useSelector, useDispatch } from "react-redux";
 
 const MainStack = createStackNavigator(
   {
@@ -47,8 +49,10 @@ const RootStack = createStackNavigator(
 );
 const Root = React.memo(() => {
   const refreshStats = useRefreshStats();
+  // const dispatch = useDispatch();
   React.useEffect(() => {
     refreshStats();
+    // dispatch(registerForPushNotificationsAsync());
   }, []);
 
   const App = createAppContainer(RootStack);

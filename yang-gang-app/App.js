@@ -107,7 +107,8 @@ export default function App() {
       require("assets/loan.png"),
       require("assets/lobby.png"),
       require("assets/wall.png"),
-      require("assets/treasure.png")
+      require("assets/treasure.png"),
+      require("assets/modalbg.jpg")
     ]);
 
     cacheImages([

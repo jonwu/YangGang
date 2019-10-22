@@ -6,7 +6,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from "react-native";
 import BackendUtils from "utils/BackendUtils";
 import { useThemeKit } from "utils/ThemeUtils";
@@ -77,6 +78,7 @@ const PostEventsScreen = ({ navigation }) => {
   const [hour, setHour] = React.useState("0");
   const [minute, setMinute] = React.useState("0");
   const [event_date, setEventDate] = React.useState("");
+  const [body, setBody] = React.useState("");
   const events = useEventsStore(state => state.events);
   const fetchEvents = useEventsStore(state => state.fetchEvents);
 
@@ -204,6 +206,22 @@ const PostEventsScreen = ({ navigation }) => {
               onPress={() =>
                 BackendUtils.deleteEvent(id).then(() => {
                   fetchEvents();
+                })
+              }
+            />
+          </View>
+        </View>
+        <View style={gstyles.top_2}>
+          <BasicForm title={"body"} value={body} setValue={setBody} />
+          <View style={{ padding: theme.spacing_2 }}>
+            <Button
+              text="Post Message"
+              style={[{ backgroundColor: theme.red() }]}
+              onPress={() =>
+                BackendUtils.postMessage({
+                  body
+                }).then(() => {
+                  alert("Success!");
                 })
               }
             />

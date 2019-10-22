@@ -69,8 +69,8 @@ class BackendUtils {
   deleteEvent(id, params) {
     return instance.delete(`/event/${id}`, params);
   }
-  postNotifications(params) {
-    return instance.post(`/notifications`, params);
+  postNotifications(eventId, expoId, params) {
+    return instance.post(`/notifications/${eventId}/${expoId}`, params);
   }
   deleteNotifications(params) {
     return instance.delete(`/notifications`, params);
@@ -80,6 +80,9 @@ class BackendUtils {
   }
   getInstagram(params) {
     return instance.get(`/instagram`, { params });
+  }
+  postMessage(params) {
+    return instance.post(`/message`, params);
   }
 }
 export default new BackendUtils();

@@ -122,7 +122,13 @@ export function updateInstagram() {
       load(
         "instagram",
         BackendUtils.getInstagram().then(response => {
-          const instagram = response.data;
+          const data = response.data;
+          const instagram = data.filter(i => {
+            if (i.actual_url != null) {
+              return !i.actual_url.includes("null");
+            }
+            return true;
+          });
           dispatch({
             type: ActionTypes.UPDATE_INSTAGRAM,
             instagram
@@ -164,9 +170,7 @@ export function updateShowMoneyModal(show) {
 export function updateExpoId(id) {
   return dispatch => {
     dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
-    return BackendUtils.postNotifications({
-      eventId: -1,
-      expoId: token
-    });
+    console.log("INSEDE");
+    return BackendUtils.postNotifications(0, id);
   };
 }

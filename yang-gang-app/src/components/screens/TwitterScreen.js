@@ -13,7 +13,6 @@ import { EVENT_FETCH_TWITTER } from "utils/AnalyticsUtils";
 import EventItem from "components/items/EventItem";
 import moment from "moment";
 import { useEventsStore } from "utils/StoreUtils";
-import MoneyDropModal from "./MoneyDropModal";
 
 const styles = theme => {};
 const dummy = [1, 2, 3, 4, 5];
@@ -136,7 +135,6 @@ const TwitterScreen = React.memo(({ navigation }) => {
 
   return (
     <>
-      <MoneyDropModal />
       <FlatList
         ListHeaderComponent={
           <>

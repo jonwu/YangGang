@@ -23,13 +23,15 @@ import {
   Ionicons,
   FontAwesome,
   Entypo,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
+  Octicons
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
-import { updateTheme } from "modules/app/actions";
+import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
+import MoreModal from "./MoreModal";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -69,6 +71,7 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
+  const dispatch = useDispatch();
 
   const routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
@@ -140,7 +143,8 @@ const TabScreen = ({ navigation }) => {
 
   return (
     <React.Fragment>
-      <MoneyDropModal />
+      <MoreModal navigation={navigation} />
+      {/* <MoneyDropModal /> */}
       {statusBar}
       {/* <Header
         bgColor={theme.bgTabs()}
@@ -172,7 +176,7 @@ const TabScreen = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           Haptics.selectionAsync();
-          navigation.navigate("Progress");
+          dispatch(updateShowMoneyModal(true));
         }}
         style={{
           position: "absolute",
@@ -196,11 +200,7 @@ const TabScreen = ({ navigation }) => {
               justifyContent: "center"
             }}
           >
-            <MaterialCommunityIcons
-              name="chart-bar"
-              color={theme.light()}
-              size={24}
-            />
+            <Octicons name="three-bars" color={theme.light()} size={24} />
           </View>
         </SafeAreaView>
       </TouchableOpacity>

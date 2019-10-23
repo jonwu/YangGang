@@ -228,16 +228,21 @@ def fill_stats_reddit():
         num_followers_warren = reddit.subreddit('ElizabethWarren').subscribers
         num_followers_buttigieg = reddit.subreddit('Pete_buttigieg').subscribers
         num_followers_kamala = reddit.subreddit('Kamala').subscribers
+        # num_followers_trump = None  # can't reach the donald (because it's quarantined?)
+        num_followers_gabbard = reddit.subreddit('tulsi').subscribers
         with connection.cursor() as cursor:
             sql = "INSERT INTO `reddit_stats` (`num_followers_yang`, " \
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
-                  "`num_followers_kamala`) VALUES ({}, {}, {}, {}, {})".format(num_followers_yang,
-                                                                               num_followers_sanders,
-                                                                               num_followers_warren,
-                                                                               num_followers_buttigieg,
-                                                                               num_followers_kamala)
+                  "`num_followers_gabbard`, " \
+                  "`num_followers_kamala`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                                   num_followers_sanders,
+                                                                                   num_followers_warren,
+                                                                                   num_followers_buttigieg,
+                                                                                   num_followers_gabbard,
+                                                                                   num_followers_kamala)
+
             print(sql)
             cursor.execute(sql)
             connection.commit()
@@ -253,18 +258,24 @@ def fill_stats_twitter():
         num_followers_buttigieg = api.get_user('PeteButtigieg').followers_count
         num_followers_kamala = api.get_user('KamalaHarris').followers_count
         num_followers_biden = api.get_user('JoeBiden').followers_count
+        num_followers_trump = api.get_user('realDonaldTrump').followers_count
+        num_followers_gabbard = api.get_user('TulsiGabbard').followers_count
         with connection.cursor() as cursor:
             sql = "INSERT INTO `twitter_stats` (`num_followers_yang`, " \
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
                   "`num_followers_kamala`, " \
-                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
-                                                                                  num_followers_sanders,
-                                                                                  num_followers_warren,
-                                                                                  num_followers_buttigieg,
-                                                                                  num_followers_kamala,
-                                                                                  num_followers_biden)
+                  "`num_followers_gabbard`, " \
+                  "`num_followers_trump`, " \
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                                          num_followers_sanders,
+                                                                                          num_followers_warren,
+                                                                                          num_followers_buttigieg,
+                                                                                          num_followers_kamala,
+                                                                                          num_followers_gabbard,
+                                                                                          num_followers_trump,
+                                                                                          num_followers_biden)
             print(sql)
             cursor.execute(sql)
             connection.commit()
@@ -292,18 +303,24 @@ def fill_stats_instagram():
         num_followers_buttigieg = get_instagram_followers('pete.buttigieg')
         num_followers_kamala = get_instagram_followers('kamalaharris')
         num_followers_biden = get_instagram_followers('joebiden')
+        num_followers_trump = get_instagram_followers('realdonaldtrump')
+        num_followers_gabbard = get_instagram_followers('tulsigabbard')
         with connection.cursor() as cursor:
             sql = "INSERT INTO `instagram_stats` (`num_followers_yang`, " \
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
                   "`num_followers_kamala`, " \
-                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
-                                                                                  num_followers_sanders,
-                                                                                  num_followers_warren,
-                                                                                  num_followers_buttigieg,
-                                                                                  num_followers_kamala,
-                                                                                  num_followers_biden)
+                  "`num_followers_trump`, " \
+                  "`num_followers_gabbard`, " \
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                                          num_followers_sanders,
+                                                                                          num_followers_warren,
+                                                                                          num_followers_buttigieg,
+                                                                                          num_followers_kamala,
+                                                                                          num_followers_trump,
+                                                                                          num_followers_gabbard,
+                                                                                          num_followers_biden)
             print(sql)
             cursor.execute(sql)
             connection.commit()
@@ -333,13 +350,12 @@ fetch_twitter()
 fetch_news()
 fetch_instagram()
 fill_stats_instagram()
+fill_stats_reddit()
+fill_stats_twitter()
 fetch_youtube(7, 'youtube', youtube_api_key1)
 fetch_youtube(1, 'youtube_day', youtube_api_key1)
 fetch_youtube(3, 'youtube_3day', youtube_api_key2)
 fetch_youtube(None, 'youtube_all_time', youtube_api_key2)
-fill_stats_reddit()
-fill_stats_twitter()
-
 
 scheduler.start()
 

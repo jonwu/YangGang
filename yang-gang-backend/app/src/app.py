@@ -15,16 +15,23 @@ from requests.exceptions import HTTPError
 import traceback
 
 
+def is_exponent_push_token(token):
+    """Returns `True` if the token is an Exponent push token"""
+    import six
+
+    return (
+            isinstance(token, six.string_types) and
+            token.startswith('ExponentPushToken'))
+
+
 # Basic arguments. You should extend this function with the push features you
 # want to use, or simply pass in a `PushMessage` object.
-def send_push_message(token, message, extra=None):
+def send_push_message(tokens, message, extra=None):
     try:
-        print('sending message for tokens {}'.format(token))
-        response = PushClient().publish(
-            PushMessage(to=token,
-                        body=message,
-                        data=extra))
-        print('response: {}'.format(response))
+        print('sending message for tokens {}'.format(tokens))
+        message_list = [PushMessage(to=token, body=message, data=extra) for token in tokens]
+        responses = PushClient().publish_multiple(message_list)
+        print('response: {}'.format(responses))
     except PushServerError:
         # Encountered some likely formatting/validation error.
         traceback.print_exc()
@@ -38,7 +45,8 @@ def send_push_message(token, message, extra=None):
         # We got a response back, but we don't know whether it's an error yet.
         # This call raises errors so we can handle them with normal exception
         # flows.
-        response.validate_response()
+        for response in responses:
+            response.validate_response()
     except DeviceNotRegisteredError:
         pass # TODO: handle this case
     except PushResponseError as exc:
@@ -124,7 +132,7 @@ class SimpleGetPushApi(Resource):
     def post(self):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
-        push_list = [push_id.id for push_id in PushIds.query.all()]
+        push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         send_push_message(push_list, message['body'])
 
 

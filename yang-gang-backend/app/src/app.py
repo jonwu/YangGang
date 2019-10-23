@@ -5,6 +5,45 @@ from flask_marshmallow import Marshmallow
 from datetime import date, timedelta
 from redis import Redis
 import json
+from exponent_server_sdk import DeviceNotRegisteredError
+from exponent_server_sdk import PushClient
+from exponent_server_sdk import PushMessage
+from exponent_server_sdk import PushResponseError
+from exponent_server_sdk import PushServerError
+from requests.exceptions import ConnectionError
+from requests.exceptions import HTTPError
+import traceback
+
+
+# Basic arguments. You should extend this function with the push features you
+# want to use, or simply pass in a `PushMessage` object.
+def send_push_message(token, message, extra=None):
+    try:
+        response = PushClient().publish(
+            PushMessage(to=token,
+                        body=message,
+                        data=extra))
+        print('response for token {}: {}'.format(token, response))
+    except PushServerError:
+        # Encountered some likely formatting/validation error.
+        traceback.print_exc()
+        return
+    except (ConnectionError, HTTPError):
+        # Encountered some Connection or HTTP error - retry a few times in
+        # case it is transient.
+        traceback.print_exc()
+        return
+    try:
+        # We got a response back, but we don't know whether it's an error yet.
+        # This call raises errors so we can handle them with normal exception
+        # flows.
+        response.validate_response()
+    except DeviceNotRegisteredError:
+        pass # TODO: handle this case
+    except PushResponseError as exc:
+        # Encountered some other per-notification error.
+        traceback.print_exc()
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@db:3306/db'
@@ -66,6 +105,11 @@ event_json = api.model('Resource', {
     'link': fields.String,
 })
 
+message_json = api.model('Resource', {
+    'body': fields.String,
+    'data': fields.String
+})
+
 
 @api.route("/getpush/")
 class SimpleGetPushApi(Resource):
@@ -74,6 +118,13 @@ class SimpleGetPushApi(Resource):
         # Serialize the data for the response
         push_schema = PushIdsSchema(many=True)
         return push_schema.dump(ids)
+
+    @api.expect(message_json)
+    def post(self):
+        message = request.get_json()
+        ids = PushIds.query.all()
+        for push_id in ids:
+            send_push_message(push_id.id, message['body'])
 
 
 @api.route("/simplepush/<string:expo_id>")

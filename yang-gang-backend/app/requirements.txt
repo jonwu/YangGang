@@ -1,4 +1,5 @@
 alembic
+exponent_server_sdk
 flask
 flask-marshmallow
 flask-restplus

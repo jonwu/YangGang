@@ -12,6 +12,7 @@ import {
 import moment from "moment-timezone";
 import { updateShowMoneyModal } from "modules/app/actions";
 import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
+import * as WebBrowser from "expo-web-browser";
 
 const generateStyles = theme => ({});
 
@@ -131,11 +132,11 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
+      disabled={!onPressEvent && !link}
       onPress={() => {
         onPressEvent && onPressEvent(item);
-        navigation &&
-          link &&
-          navigation.navigate("Webview", { title, uri: link });
+        navigation && link && WebBrowser.openBrowserAsync(link);
+        // navigation.navigate("Webview", { title, uri: link });
       }}
     >
       <View

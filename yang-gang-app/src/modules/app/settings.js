@@ -13,16 +13,8 @@ function theme(state = 0, action) {
 function expoId(state = null, action) {
   switch (action.type) {
     case ActionTypes.UPDATE_EXPO_ID:
+      console.log("DISPATHC TO ME!!!!", action.id);
       return action.id;
-    default:
-      return state;
-  }
-}
-
-function notifications(state = [], action) {
-  switch (action.type) {
-    case ActionTypes.UPDATE_NOTIFICATIONS:
-      return action.notifications;
     default:
       return state;
   }
@@ -30,6 +22,5 @@ function notifications(state = [], action) {
 
 export default combineReducers({
   theme,
-  expoId,
-  notifications
+  expoId
 });

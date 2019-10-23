@@ -83,7 +83,7 @@ const InstagramItem = ({ item, navigation }) => {
       ) : (
         <VideoItem
           width={imageWidth}
-          height={imageHeight}
+          height={imageWidth * 0.56}
           src={item.actual_url}
         />
       )}

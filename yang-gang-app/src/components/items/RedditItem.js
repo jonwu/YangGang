@@ -16,6 +16,7 @@ import { transformN } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
 import YoutubeIcon from "assets/youtube_icon.png";
+import * as WebBrowser from "expo-web-browser";
 
 const generateStyles = theme => ({
   body: {
@@ -199,14 +200,14 @@ const RedditYoutube = ({ item, navigation }) => {
     <View>
       <TouchableOpacity
         activeOpacity={theme.activeOpacity}
-        onPress={() => navigation.navigate("Webview", { title, uri: url })}
+        onPress={() => WebBrowser.openBrowserAsync(url)}
       >
         <RedditTitle title={title} />
       </TouchableOpacity>
 
       <TouchableOpacity
         activeOpacity={1.0}
-        onPress={() => navigation.navigate("Webview", { title, uri: url })}
+        onPress={() => WebBrowser.openBrowserAsync(url)}
       >
         <View style={{ borderRadius: theme.borderRadius, overflow: "hidden" }}>
           <Image
@@ -287,7 +288,7 @@ const RedditThumbnail = ({ item, navigation }) => {
   return (
     <TouchableOpacity
       activeOpacity={theme.activeOpacity}
-      onPress={() => navigation.navigate("Webview", { title, uri: url })}
+      onPress={() => WebBrowser.openBrowserAsync(url)}
     >
       <View>
         <View style={styles.thumbnailContainer}>
@@ -296,7 +297,7 @@ const RedditThumbnail = ({ item, navigation }) => {
           </Text>
           <TouchableOpacity
             activeOpacity={theme.activeOpacity}
-            onPress={() => navigation.navigate("Webview", { title, uri: url })}
+            onPress={() => WebBrowser.openBrowserAsync(url)}
           >
             <View
               style={{

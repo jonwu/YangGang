@@ -14,6 +14,7 @@ import { transformN } from "utils/Utils";
 import moment from "moment";
 import { XmlEntities as Entities } from "html-entities";
 import { useDimensionStore } from "utils/DimensionUtils";
+import * as WebBrowser from "expo-web-browser";
 
 const xmlEntities = new Entities();
 
@@ -117,10 +118,11 @@ const TwitterItem = ({ item, navigation }) => {
     if (ent.expanded_url && !ent.type)
       replacement = (
         <Text
-          onPress={() =>
-            navigation.navigate("Webview", {
-              uri: ent.expanded_url
-            })
+          onPress={
+            () => WebBrowser.openBrowserAsync(ent.expanded_url)
+            // navigation.navigate("Webview", {
+            //   uri: ent.expanded_url
+            // })
           }
           key={startIndex}
           style={{ color: theme.tweetLinkColor() }}

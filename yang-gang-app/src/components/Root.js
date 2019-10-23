@@ -50,6 +50,7 @@ const RootStack = createStackNavigator(
 const Root = React.memo(() => {
   const refreshStats = useRefreshStats();
   // const dispatch = useDispatch();
+
   React.useEffect(() => {
     refreshStats();
     // dispatch(registerForPushNotificationsAsync());

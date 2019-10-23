@@ -220,9 +220,13 @@ const PostEventsScreen = ({ navigation }) => {
               onPress={() =>
                 BackendUtils.postMessage({
                   body
-                }).then(() => {
-                  alert("Success!");
                 })
+                  .then(() => {
+                    alert("Success!");
+                  })
+                  .catch(() => {
+                    alert("Error");
+                  })
               }
             />
           </View>

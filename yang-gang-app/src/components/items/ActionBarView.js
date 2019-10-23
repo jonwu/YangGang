@@ -13,6 +13,7 @@ import {
   EVENT_SHARE_TWITTER,
   EVENT_SHARE_NEWS
 } from "utils/AnalyticsUtils";
+import * as WebBrowser from "expo-web-browser";
 
 const generateStyles = theme => ({
   item: {
@@ -83,6 +84,7 @@ const ActionBarView = ({
             default:
               break;
           }
+          // WebBrowser.openAuthSessionAsync(link);
           Linking.openURL(link);
         }}
       />

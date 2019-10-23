@@ -7,6 +7,7 @@ import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
 import moment from "moment";
 import placeholder from "assets/news_placeholder.png";
+import * as WebBrowser from "expo-web-browser";
 
 const entities = new Entities();
 
@@ -20,10 +21,11 @@ const YoutubeTinyItem = ({ item, navigation }) => {
       activeOpacity={theme.activeOpacity}
       onPress={() => {
         Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
-        navigation.navigate("Webview", {
-          uri: url,
-          title: title
-        });
+        WebBrowser.openBrowserAsync(url);
+        // navigation.navigate("Webview", {
+        //   uri: url,
+        //   title: title
+        // });
       }}
     >
       <View style={{ width: 96 * (16 / 9) }}>

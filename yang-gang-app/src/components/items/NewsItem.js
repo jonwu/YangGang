@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import moment from "moment";
 import ActionBarView from "./ActionBarView";
+import * as WebBrowser from "expo-web-browser";
 
 const generateStyles = theme => ({});
 
@@ -26,7 +27,7 @@ const NewsItem = ({ item, navigation }) => {
   return (
     <TouchableOpacity
       activeOpacity={theme.activeOpacity}
-      onPress={() => navigation.navigate("Webview", { uri: url, title })}
+      onPress={() => WebBrowser.openBrowserAsync(url)}
     >
       <View style={{ padding: theme.spacing_2 }}>
         <View

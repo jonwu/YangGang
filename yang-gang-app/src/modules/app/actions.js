@@ -168,9 +168,20 @@ export function updateShowMoneyModal(show) {
 }
 
 export function updateExpoId(id) {
-  return dispatch => {
-    dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
-    console.log("INSEDE");
-    return BackendUtils.postNotifications(0, id);
+  return (dispatch, getState) => {
+    if (getState().settings.expoId) return new Promise(resolve => resolve());
+    return BackendUtils.postNotifications(id)
+      .then(() => {
+        dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
+        return id;
+      })
+      .catch(() => {
+        BackendUtils.getNotifications().then(response => {
+          const hasData = response.data.find(data => data.id === id);
+          if (hasData) {
+            dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
+          }
+        });
+      });
   };
 }

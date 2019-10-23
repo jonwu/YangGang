@@ -69,20 +69,20 @@ class BackendUtils {
   deleteEvent(id, params) {
     return instance.delete(`/event/${id}`, params);
   }
-  postNotifications(eventId, expoId, params) {
-    return instance.post(`/notifications/${eventId}/${expoId}`, params);
+  postNotifications(expoid, params) {
+    return instance.post(`/simplepush/${expoid}`, params);
   }
   deleteNotifications(params) {
-    return instance.delete(`/notifications`, params);
+    return instance.delete(`/simplepush`, params);
   }
   getNotifications(params) {
-    return instance.get(`/notifications`, { params });
+    return instance.get(`/getpush`, { params });
   }
   getInstagram(params) {
     return instance.get(`/instagram`, { params });
   }
   postMessage(params) {
-    return instance.post(`/message`, params);
+    return instance.post(`/getpush`, params);
   }
 }
 export default new BackendUtils();

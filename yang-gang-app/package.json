@@ -17,6 +17,7 @@
     "expo-haptics": "~6.0.0",
     "expo-linear-gradient": "~6.0.0",
     "expo-mail-composer": "~6.0.0",
+    "expo-web-browser": "~6.0.0",
     "html-entities": "^1.2.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",

@@ -67,6 +67,27 @@ event_json = api.model('Resource', {
 })
 
 
+@api.route("/getpush/")
+class SimpleGetPushApi(Resource):
+    def get(self):
+        ids = PushIds.query.all()
+        # Serialize the data for the response
+        push_schema = PushIdsSchema(many=True)
+        return push_schema.dump(ids)
+
+
+@api.route("/simplepush/<string:expo_id>")
+class SimplePushApi(Resource):
+    def post(self, expo_id):
+        try:
+            push_object = PushIds(id=expo_id)
+            db.session.add(push_object)
+            db.session.commit()
+            return 'added id {} to database'.format(expo_id), 200
+        except Exception as e:
+            abort(404, 'internal server error: {}'.format(str(e)))
+
+
 @api.route("/allevents/")
 class AllEventsApi(Resource):
     def get(self):
@@ -295,6 +316,18 @@ class RedditStats(db.Model):
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+
+
+class PushIds(db.Model):
+    __tablename__ = "push_ids"
+
+    id = db.Column(db.String(1024), primary_key=True, autoincrement=False)
+
+
+class PushIdsSchema(ma.ModelSchema):
+    class Meta:
+        model = PushIds
+        sqla_session = db.session
 
 
 class Events(db.Model):

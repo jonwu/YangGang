@@ -19,12 +19,12 @@ import traceback
 # want to use, or simply pass in a `PushMessage` object.
 def send_push_message(token, message, extra=None):
     try:
-        print('sending message for token {}'.format(token))
+        print('sending message for tokens {}'.format(token))
         response = PushClient().publish(
             PushMessage(to=token,
                         body=message,
                         data=extra))
-        print('response for token {}: {}'.format(token, response))
+        print('response: {}'.format(response))
     except PushServerError:
         # Encountered some likely formatting/validation error.
         traceback.print_exc()
@@ -124,9 +124,8 @@ class SimpleGetPushApi(Resource):
     def post(self):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
-        ids = PushIds.query.all()
-        for push_id in ids:
-            send_push_message(push_id.id, message['body'])
+        push_list = [push_id.id for push_id in PushIds.query.all()]
+        send_push_message(push_list, message['body'])
 
 
 @api.route("/simplepush/<string:expo_id>")

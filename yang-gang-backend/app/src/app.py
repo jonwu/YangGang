@@ -19,6 +19,7 @@ import traceback
 # want to use, or simply pass in a `PushMessage` object.
 def send_push_message(token, message, extra=None):
     try:
+        print('sending message for token {}'.format(token))
         response = PushClient().publish(
             PushMessage(to=token,
                         body=message,
@@ -122,6 +123,7 @@ class SimpleGetPushApi(Resource):
     @api.expect(message_json)
     def post(self):
         message = request.get_json()
+        print('payload for push received: {}'.format(message))
         ids = PushIds.query.all()
         for push_id in ids:
             send_push_message(push_id.id, message['body'])

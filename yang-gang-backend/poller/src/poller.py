@@ -95,7 +95,8 @@ def fetch_twitter_aggregate():
 
 def fetch_reddit_aggregate():
     for candidate_name, api_dict in candidate_dict.items():
-        fetch_hot_reddit(api_dict['subreddit_api'], r, candidate_name)
+        if candidate_name != 'donald_trump':
+            fetch_hot_reddit(api_dict['subreddit_api'], r, candidate_name)
 
 
 def fetch_youtube_aggregate():

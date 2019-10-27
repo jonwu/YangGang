@@ -26,8 +26,8 @@ dev:
       user_id: '3969496290'
   bernie_sanders:
     youtube:
-      api_key1: "AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k"
-      api_key2: "AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k"
+      api_key1: "AIzaSyDKf3-4uLVuSbAZt6U1DOHWFGAjxsOPErc"
+      api_key2: "AIzaSyD9c7el7P9GYWjvGzdOVY_EeqpVwq41Vw8"
       query: "bernie sanders"
     twitter:
       screen_name: "BernieSanders"
@@ -47,6 +47,29 @@ dev:
       query: 'Bernie Sanders'
     instagram:
       user_id: '2109645194'
+  donald_trump:
+    youtube:
+      api_key1: "AIzaSyDKf3-4uLVuSbAZt6U1DOHWFGAjxsOPErc"
+      api_key2: "AIzaSyD9c7el7P9GYWjvGzdOVY_EeqpVwq41Vw8"
+      query: "donald trump"
+    twitter:
+      screen_name: "realDonaldTrump"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    reddit:
+      subreddit_name: 'The_Donald'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Donald Trump'
+    instagram:
+      user_id: '347696668'
 
 
 prod:

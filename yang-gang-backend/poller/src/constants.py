@@ -11,7 +11,6 @@ youtube_url = 'https://www.googleapis.com/youtube/v3/search'
 youtube_vid_url = 'https://www.googleapis.com/youtube/v3/videos'
 
 top_num = 30
-
 top_num_tweets = 50
 
 # instagram voodoo

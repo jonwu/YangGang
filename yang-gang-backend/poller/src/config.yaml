@@ -1,36 +1,99 @@
 dev:
-  youtube:
-    api_key1: "AIzaSyCn-l70DoDoBBO2aYdYBGlTQDyA-Elv-Wg"
-    api_key2: "AIzaSyAzK4LuxH38FMKZ7XwyYkCjyAzDNjwNg9Q"
-  twitter:
-    consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
-    consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
-    access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
-    access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
-  reddit:
-    client_id: 'zbq0UkrFL0PHdg'
-    client_secret: 'Agxcmj0l4hN-ug5xPO_YT0g8_wM'
-    user_agent: 'yang'
-    username: 'jonwu92'
-    password: 'bethankfuleveryday'
-  news:
-    api_key: 'd09d502864124079b98a360312bfb211'
+  andrew_yang:
+    youtube:
+#      api_key1: "AIzaSyCn-l70DoDoBBO2aYdYBGlTQDyA-Elv-Wg"
+#      api_key2: "AIzaSyAzK4LuxH38FMKZ7XwyYkCjyAzDNjwNg9Q"
+      api_key1: "AIzaSyDufbfH1iibIEDDFaLOsOkQ2_EwXcw19cw"
+      api_key2: "AIzaSyBup_UK7ekub45wu-k-pl58epfuKrm2qMg"
+      query: 'andrew yang'
+    twitter:
+      screen_name: "AndrewYang"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    reddit:
+      subreddit_name: 'YangForPresidentHQ'
+      client_id: 'zbq0UkrFL0PHdg'
+      client_secret: 'Agxcmj0l4hN-ug5xPO_YT0g8_wM'
+      user_agent: 'yang'
+      username: 'jonwu92'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Andrew Yang'
+    instagram:
+      user_id: '3969496290'
+  bernie_sanders:
+    youtube:
+      api_key1: "AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k"
+      api_key2: "AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k"
+      query: "bernie sanders"
+    twitter:
+      screen_name: "BernieSanders"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    reddit:
+      subreddit_name: 'SandersForPresident'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Bernie Sanders'
+    instagram:
+      user_id: '2109645194'
 
 
 prod:
-  youtube:
-    api_key1: 'AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k'
-    api_key2: 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
-  twitter:
-    consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
-    consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
-    access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
-    access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
-  reddit:
-    client_id: 'xuKSovdtrPCrOg'
-    client_secret: 'bwMxzy_4Ytpdj8P0VzMhuNeXTGE'
-    user_agent: 'yanggangtest'
-    username: 'sylla-bear'
-    password: 'pdZ4dF4V8Fbxd3L'
-  news:
-    api_key: 'd09d502864124079b98a360312bfb211'
+  andrew_yang:
+    youtube:
+      api_key1: 'AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k'
+      api_key2: 'AIzaSyD7Sm-6RxDsdw73HLnF8YDvM0YEkOzBhks'
+      query: "andrew yang"
+    twitter:
+      screen_name: "AndrewYang"
+      consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
+      consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+      access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+      access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+    reddit:
+      subreddit_name: 'YangForPresidentHQ'
+      client_id: 'xuKSovdtrPCrOg'
+      client_secret: 'bwMxzy_4Ytpdj8P0VzMhuNeXTGE'
+      user_agent: 'yanggangtest'
+      username: 'sylla-bear'
+      password: 'pdZ4dF4V8Fbxd3L'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Andrew Yang'
+    instagram:
+      user_id: '3969496290'
+#  TODO: change these configs for prod
+  bernie_sanders:
+    youtube:
+      api_key1: "AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k"
+      api_key2: "AIzaSyBjrxjITLFDSpp6WWM4grQeEjPqzGvns5k"
+      query: "bernie sanders"
+    twitter:
+      screen_name: "BernieSanders"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    reddit:
+      subreddit_name: 'SandersForPresident'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Bernie Sanders'
+    instagram:
+      user_id: '2109645194'

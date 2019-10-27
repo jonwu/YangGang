@@ -133,7 +133,11 @@ class SimpleGetPushApi(Resource):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
-        send_push_message(push_list, message['body'])
+        try:
+            send_push_message(push_list, message['body'])
+            return 'success', 200
+        except Exception as e:
+            abort(404, 'internal server error: {}'.format(str(e)))
 
 
 @api.route("/simplepush/<string:expo_id>")
@@ -228,78 +232,93 @@ class EventApi(Resource):
         return data, 200
 
 
-@api.route("/instagram/")
+@api.route('/instagram/')
+@api.route("/instagram/<string:candidate_name>")
 class InstagramList(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of top_num instagram posts
         """
-        return json.loads(r.get('instagram').decode('utf-8'))
+        redis_key = '{}_instagram'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/hotreddit/")
+@api.route("/hotreddit/<string:candidate_name>")
 class HotRedditList(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of top_num reddit posts
         """
-        return json.loads(r.get('reddit').decode('utf-8'))
+
+        redis_key = '{}_reddit'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/news/")
+@api.route("/news/<string:candidate_name>")
 class NewsList(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of news posts
         """
-        return json.loads(r.get('news').decode('utf-8'))
+        redis_key = '{}_news'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/tweets/")
+@api.route("/tweets/<string:candidate_name>")
 class TweetList(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of andrew yang tweets
         """
-        # print('loaded {} tweets from redis'.format(r.llen('twitter')))
-        # return [json.loads(x.decode('utf-8')) for x in r.lrange('twitter', 0, 30)]
-        return json.loads(r.get('twitter').decode('utf-8'))
+        redis_key = '{}_twitter'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/youtube/")
+@api.route("/youtube/<string:candidate_name>")
 class YoutubeList(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of recent andrew yang youtube videos
         """
-        return json.loads(r.get('youtube').decode('utf-8'))
+        redis_key = '{}_youtube'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/youtube_day/")
+@api.route("/youtube_day/<string:candidate_name>")
 class YoutubeListDay(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of recent andrew yang youtube videos today
         """
-        return json.loads(r.get('youtube_day').decode('utf-8'))
+        redis_key = '{}_youtube_day'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/youtube_3day/")
+@api.route("/youtube_3day/<string:candidate_name>")
 class YoutubeList3Day(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of recent andrew yang youtube videos today
         """
-        return json.loads(r.get('youtube_3day').decode('utf-8'))
+        redis_key = '{}_youtube_3day'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/youtube_all_time/")
+@api.route("/youtube_all_time/<string:candidate_name>")
 class YoutubeListAllTime(Resource):
-    def get(self):
+    def get(self, candidate_name='andrew_yang'):
         """
         returns a list of recent andrew yang youtube videos all time
         """
-        return json.loads(r.get('youtube_all_time').decode('utf-8'))
+        redis_key = '{}_youtube_all_time'.format(candidate_name)
+        return json.loads(r.get(redis_key).decode('utf-8'))
 
 
 @api.route("/twitter_stats/")

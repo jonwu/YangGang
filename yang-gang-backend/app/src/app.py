@@ -364,6 +364,8 @@ class TwitterStats(db.Model):
     num_followers_buttigieg = db.Column(db.Integer)
     num_followers_biden = db.Column(db.Integer)
     num_followers_kamala = db.Column(db.Integer)
+    num_followers_gabbard = db.Column(db.Integer)
+    num_followers_trump = db.Column(db.Integer)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
@@ -380,6 +382,8 @@ class InstagramStats(db.Model):
     num_followers_buttigieg = db.Column(db.Integer)
     num_followers_biden = db.Column(db.Integer)
     num_followers_kamala = db.Column(db.Integer)
+    num_followers_gabbard = db.Column(db.Integer)
+    num_followers_trump = db.Column(db.Integer)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
@@ -395,6 +399,7 @@ class RedditStats(db.Model):
     num_followers_warren = db.Column(db.Integer)
     num_followers_buttigieg = db.Column(db.Integer)
     num_followers_kamala = db.Column(db.Integer)
+    num_followers_gabbard = db.Column(db.Integer)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}

@@ -133,11 +133,16 @@ class SimpleGetPushApi(Resource):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
+        print('number of total push_ids: {}'.format(len(push_list)))
+        increment = 100
+        i = 0
         try:
-            send_push_message(push_list, message['body'])
-            return 'success', 200
+            while i < len(push_list):
+                send_push_message(push_list[i: i + increment], message['body'])
+                i += increment
+            return 'success, pushed a total of {} messages'.format(len(push_list)), 200
         except Exception as e:
-            abort(404, 'internal server error: {}'.format(str(e)))
+            abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
 
 
 @api.route("/simplepush/<string:expo_id>")

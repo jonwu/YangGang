@@ -1,8 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime, timezone, timedelta, date
 from redis import Redis
 import praw
-import json
 import requests
 import tweepy
 import time
@@ -12,8 +10,11 @@ from constants import *
 import pymysql
 import confuse
 import sys
-import hashlib
-
+from twitter_helper import fetch_twitter
+from instagram_helper import fetch_instagram
+from news_helper import fetch_news
+from reddit_helper import fetch_hot_reddit
+from youtube_helper import fetch_youtube
 
 # initialize redis
 r = Redis(host='redis', port=6379)
@@ -48,177 +49,79 @@ print('initializing with settings for {} environment'.format(environment))
 env_configs = config[environment].get()
 
 
-# reddit api
-reddit = praw.Reddit(client_id=env_configs['reddit']['client_id'],
-                     client_secret=env_configs['reddit']['client_secret'],
-                     user_agent=env_configs['reddit']['user_agent'],
-                     username=env_configs['reddit']['username'],
-                     password=env_configs['reddit']['password'])
+def get_api_dict(candidate_name):
+    api_dict = {}
+    # reddit api
+    reddit = praw.Reddit(client_id=env_configs[candidate_name]['reddit']['client_id'],
+                         client_secret=env_configs[candidate_name]['reddit']['client_secret'],
+                         user_agent=env_configs[candidate_name]['reddit']['user_agent'],
+                         username=env_configs[candidate_name]['reddit']['username'],
+                         password=env_configs[candidate_name]['reddit']['password'])
 
-subreddit = reddit.subreddit('YangForPresidentHQ')
+    api_dict['reddit_api'] = reddit
+    api_dict['subreddit_api'] = reddit.subreddit(env_configs[candidate_name]['reddit']['subreddit_name'])
 
+    # twitter api
+    auth = tweepy.OAuthHandler(env_configs[candidate_name]['twitter']['consumer_key'],
+                               env_configs[candidate_name]['twitter']['consumer_secret'])
+    auth.set_access_token(env_configs[candidate_name]['twitter']['access_token'],
+                          env_configs[candidate_name]['twitter']['access_token_secret'])
 
-# twitter api
-auth = tweepy.OAuthHandler(env_configs['twitter']['consumer_key'], env_configs['twitter']['consumer_secret'])
-auth.set_access_token(env_configs['twitter']['access_token'], env_configs['twitter']['access_token_secret'])
-api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+    api_dict['twitter_api'] = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
+    # news api
+    # api_dict['news_api'] = NewsApiClient(api_key=env_configs[candidate_name]['news']['api_key'])
 
-# news api
-newsapi = NewsApiClient(api_key=env_configs['news']['api_key'])
+    # youtube api
+    api_dict['youtube_api_key1'] = env_configs[candidate_name]['youtube']['api_key1']
+    api_dict['youtube_api_key2'] = env_configs[candidate_name]['youtube']['api_key2']
 
-# youtube api
-youtube_api_key1 = env_configs['youtube']['api_key1']
-youtube_api_key2 = env_configs['youtube']['api_key2']
-
-
-def get_youtube_params(published_after, api_key):
-    if published_after is None:
-        return {
-            'part': 'snippet',
-            'order': 'viewCount',
-            'q': 'andrew yang',
-            'type': 'video',
-            'maxResults': str(top_num),
-            'key': api_key
-        }
-    return {
-        'part': 'snippet',
-        'order': 'viewCount',
-        'publishedAfter': published_after,
-        'q': 'andrew yang',
-        'type': 'video',
-        'maxResults': str(top_num),
-        'key': api_key
-    }
+    return api_dict
 
 
-def get_youtube_stat_params(vid_list, api_key):
-    return {
-        'part': 'contentDetails,statistics',
-        'id': ','.join(vid_list),
-        'key': api_key
-    }
+candidate_dict = {candidate_name: get_api_dict(candidate_name) for candidate_name in env_configs.keys()}
+
+# TODO: may want to use different api keys for stats in the future
+yang_api_dict = candidate_dict['andrew_yang']
+reddit = yang_api_dict['reddit_api']
+api = yang_api_dict['twitter_api']
 
 
-# reddit job helper functions
-def is_jsonable(x):
-    try:
-        json.dumps(x)
-        return True
-    except (TypeError, OverflowError):
-        return False
+def fetch_twitter_aggregate():
+    for candidate_name, api_dict in candidate_dict.items():
+        fetch_twitter(api_dict['twitter_api'], r, candidate_name,
+                      env_configs[candidate_name]['twitter']['screen_name'])
 
 
-def fetch_hot_reddit():
-    reddit_items = [{k:v for k,v in vars(submission).items() if k in reddit_fields and is_jsonable(v)} for submission in subreddit.hot(limit=top_num)]
-    print('fetched new reddit items at {}'.format(datetime.now()))
-    r.set('reddit', json.dumps(reddit_items))
+def fetch_reddit_aggregate():
+    for candidate_name, api_dict in candidate_dict.items():
+        if candidate_name != 'donald_trump':
+            fetch_hot_reddit(api_dict['subreddit_api'], r, candidate_name)
 
 
-def fetch_twitter():
-    start = time.time()
-    tweet_list = []
-    s_timeline = tweepy.Cursor(api.user_timeline, screen_name='@AndrewYang', tweet_mode="extended").items()
-    count = 0
-    for tweet in s_timeline:
-        j = tweet._json
-        if j['in_reply_to_screen_name'] is None or j['in_reply_to_screen_name'] == 'AndrewYang':
-            tweet_list.append(j)
-            count += 1
-            if len(tweet_list) == top_num_tweets:
-                break
-    print('num traversed: {}'.format(count))
-    tweet_list = [{k:v for k,v in tweet.items() if k in twitter_fields} for tweet in tweet_list]
-    r.set('twitter', json.dumps(tweet_list))
-    end = time.time()
-    print('fetched {} new twitter items at {} in {} seconds'.format(len(tweet_list), datetime.now(), end - start))
+def fetch_youtube_aggregate():
+    for candidate_name, _ in candidate_dict.items():
+        fetch_youtube(7, candidate_name, 'youtube', env_configs[candidate_name]['youtube']['api_key1'],
+                      r, env_configs[candidate_name]['youtube']['query'])
+        fetch_youtube(1, candidate_name, 'youtube_day', env_configs[candidate_name]['youtube']['api_key1'],
+                      r, env_configs[candidate_name]['youtube']['query'])
+        fetch_youtube(3, candidate_name, 'youtube_3day', env_configs[candidate_name]['youtube']['api_key2'],
+                      r, env_configs[candidate_name]['youtube']['query'])
+        fetch_youtube(None, candidate_name, 'youtube_all_time', env_configs[candidate_name]['youtube']['api_key2'],
+                      r, env_configs[candidate_name]['youtube']['query'])
 
 
-def fetch_youtube(days_lag, redis_key, api_key):
-    try:
-        if days_lag is not None:
-            published_after = (datetime.now(timezone.utc) - timedelta(days=days_lag)).isoformat()
-        else:
-            published_after = None
-        params = get_youtube_params(published_after, api_key)
-
-        initial_response = requests.get(url=youtube_url, params=params).json()
-        response = initial_response['items']
-        vid_ids = [x['id']['videoId'] for x in response]
-        print('fetched new youtube items at {} using {} params with api key: {}'.format(datetime.now(), redis_key, params['key']))
-        view_counts = requests.get(url=youtube_vid_url,
-                                   params=get_youtube_stat_params(vid_ids, params['key'])).json()['items']
-        for i in range(len(response)):
-            response[i] = {k: v for k,v in response[i].items() if k in youtube_vid_fields}
-            response[i].update(view_counts[i])
-        r.set(redis_key, json.dumps(response))
-        print('set: {} with: {}'.format(redis_key, response[0]['statistics']))
-    except:
-        print('exception in getting video responses')
-        print('error code: {}'.format(initial_response))
-        traceback.print_exc()
+def fetch_news_aggregate():
+    for candidate_name, _ in candidate_dict.items():
+        fetch_news(r,
+                   candidate_name,
+                   env_configs[candidate_name]['news']['query'],
+                   env_configs[candidate_name]['news']['api_key'])
 
 
-def fetch_news():
-    today_datestring = (date.today() - timedelta(days=3)).strftime("%Y-%m-%d")
-    params = {
-        'qInTitle': 'andrew yang',
-        'language': 'en',
-        'sortBy': 'popularity',
-        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org, slickdeals.net, fark.com, knowyourmeme.com',
-        'from': today_datestring,
-        'apiKey': '84dbae84af624aeaa6e1a3fc92c97d6d',
-        'pageSize': '100',
-    }
-    news_url = 'https://newsapi.org/v2/everything'
-    all_articles = requests.get(url=news_url, params=params).json()
-    r.set('news', json.dumps(all_articles))
-    print('fetched {} news items at {} with {} datestring'.format(all_articles['totalResults'], datetime.now(), today_datestring))
-
-
-def get_ig_gis(rhx_gis, params):
-    data = rhx_gis + ":" + params
-    if sys.version_info.major >= 3:
-        return hashlib.md5(data.encode('utf-8')).hexdigest()
-    else:
-        return hashlib.md5(data).hexdigest()
-
-
-def update_ig_gis_header(params, session):
-    session.headers.update({
-        'x-instagram-gis': get_ig_gis(
-            "",
-            params
-        )
-    })
-
-
-def fetch_instagram():
-    start = time.time()
-    with requests.Session() as session:
-        session.headers.update({'Referer': BASE_URL, 'user-agent': STORIES_UA})
-        req = session.get(BASE_URL)
-        session.headers.update({'X-CSRFToken': req.cookies['csrftoken']})
-        session.headers.update({'user-agent': CHROME_WIN_UA})
-        params = QUERY_MEDIA_VARS.format('3969496290', '')
-        update_ig_gis_header(params, session)
-        try:
-            media = json.loads(session.get(QUERY_MEDIA.format(params)).text)['data']['user']['edge_owner_to_timeline_media']['edges']
-            # remove 'node' key wrapper
-            media = [x['node'] for x in media]
-            for m in media:
-                if m['__typename'] == 'GraphVideo':
-                    m['actual_url'] = json.loads(requests.get(VIEW_MEDIA_URL.format(m['shortcode'])).text)['graphql']['shortcode_media']['video_url']
-                else:
-                    m['actual_url'] = None
-            r.set('instagram', json.dumps(media))
-            end = time.time()
-            print('fetched {} instagram items at {} in {} seconds'.format(len(media), datetime.now(), end - start))
-            session.cookies.clear()
-        except:
-            traceback.print_exc()
-            session.cookies.clear()
+def fetch_instagram_aggregate():
+    for candidate_name, _ in candidate_dict.items():
+        fetch_instagram(r, candidate_name, env_configs[candidate_name]['instagram']['user_id'])
 
 
 def fill_stats_reddit():
@@ -332,30 +235,22 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(fill_stats_twitter, 'interval', minutes=60, id='fill_stats_twitter')
 scheduler.add_job(fill_stats_reddit, 'interval', minutes=60, id='fill_stats_reddit')
 scheduler.add_job(fill_stats_instagram, 'interval', minutes=60, id='fill_stats_instagram')
-scheduler.add_job(fetch_hot_reddit, 'interval', seconds=10, id='fetch_hot_reddit')
-scheduler.add_job(fetch_instagram, 'interval', minutes=2, id='fetch_instagram')
-scheduler.add_job(fetch_twitter, 'interval', seconds=10, id='fetch_twitter')
-scheduler.add_job(fetch_news, 'interval', minutes=30, id='fetch_news')
-scheduler.add_job(lambda: fetch_youtube(7, 'youtube', youtube_api_key1),
-                  'interval', minutes=60, id='fetch_youtube')
-scheduler.add_job(lambda: fetch_youtube(1, 'youtube_day', youtube_api_key1),
-                  'interval', minutes=60, id='fetch_youtube_day')
-scheduler.add_job(lambda: fetch_youtube(3, 'youtube_3day', youtube_api_key2),
-                  'interval', minutes=60, id='fetch_youtube_3day')
-scheduler.add_job(lambda: fetch_youtube(None, 'youtube_all_time', youtube_api_key2),
-                  'interval', minutes=60, id='fetch_youtube_all_time')
+scheduler.add_job(fetch_reddit_aggregate, 'interval', seconds=20, id='fetch_reddit')
+scheduler.add_job(fetch_instagram_aggregate, 'interval', minutes=4, id='fetch_instagram')
+scheduler.add_job(fetch_twitter_aggregate, 'interval', seconds=20, id='fetch_twitter')
+scheduler.add_job(fetch_news_aggregate, 'interval', minutes=30, id='fetch_news')
+scheduler.add_job(fetch_youtube_aggregate, 'interval', minutes=60, id='fetch_youtube')
 
-fetch_hot_reddit()
-fetch_twitter()
-fetch_news()
-fetch_instagram()
+fetch_youtube_aggregate()
+fetch_news_aggregate()
+fetch_reddit_aggregate()
+fetch_twitter_aggregate()
+fetch_instagram_aggregate()
+
+# stats
 fill_stats_instagram()
 fill_stats_reddit()
 fill_stats_twitter()
-fetch_youtube(7, 'youtube', youtube_api_key1)
-fetch_youtube(1, 'youtube_day', youtube_api_key1)
-fetch_youtube(3, 'youtube_3day', youtube_api_key2)
-fetch_youtube(None, 'youtube_all_time', youtube_api_key2)
 
 scheduler.start()
 

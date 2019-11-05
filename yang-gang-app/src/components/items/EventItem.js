@@ -13,6 +13,7 @@ import moment from "moment-timezone";
 import { updateShowMoneyModal } from "modules/app/actions";
 import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
 import * as WebBrowser from "expo-web-browser";
+import { openWebBrowser } from "utils/Utils";
 
 const generateStyles = theme => ({});
 
@@ -135,7 +136,7 @@ const EventItem = React.memo(({ item, navigation, onPressEvent }) => {
       disabled={!onPressEvent && !link}
       onPress={() => {
         onPressEvent && onPressEvent(item);
-        navigation && link && WebBrowser.openBrowserAsync(link);
+        navigation && link && openWebBrowser(link, theme);
         // navigation.navigate("Webview", { title, uri: link });
       }}
     >

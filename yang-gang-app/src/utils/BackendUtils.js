@@ -24,26 +24,38 @@ instance.interceptors.request.use(
   }
 );
 class BackendUtils {
-  getTwitter(id, params) {
-    return instance.get(`/tweets`, { params });
+  getTwitter(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/tweets/${candidate}`, { params });
   }
-  getReddit(params) {
-    return instance.get(`/hotreddit`, { params });
+  getReddit(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    if (candidate === "donald_trump") return new Promise(resolve => resolve());
+    return instance.get(`/hotreddit/${candidate}`, { params });
   }
-  getYoutube(params) {
-    return instance.get(`/youtube`, { params });
+  getYoutube(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/youtube/${candidate}`, { params });
   }
-  getYoutubeDay(params) {
-    return instance.get(`/youtube_day`, { params });
+  getYoutubeDay(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/youtube_day/${candidate}`, { params });
   }
-  getYoutube3Days(params) {
-    return instance.get(`/youtube_3day`, { params });
+  getYoutube3Days(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/youtube_3day/${candidate}`, { params });
   }
-  getYoutubeAllTime(params) {
-    return instance.get(`/youtube_all_time`, { params });
+  getYoutubeAllTime(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/youtube_all_time/${candidate}`, { params });
   }
-  getNews(params) {
-    return instance.get(`/news`, { params });
+  getNews(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/news/${candidate}`, { params });
+  }
+  getInstagram(candidate = "andrew_yang", params) {
+    if (candidate === "andrew_yang") candidate = "";
+    return instance.get(`/instagram/${candidate}`, { params });
   }
   getRedditStats(params) {
     return instance.get(`/reddit_stats/`, { params });
@@ -78,9 +90,7 @@ class BackendUtils {
   getNotifications(params) {
     return instance.get(`/getpush`, { params });
   }
-  getInstagram(params) {
-    return instance.get(`/instagram`, { params });
-  }
+
   postMessage(params) {
     return instance.post(`/getpush`, params);
   }

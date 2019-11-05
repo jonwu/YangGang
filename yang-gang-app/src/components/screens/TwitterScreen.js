@@ -8,8 +8,6 @@ import { updateTweets } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
-import * as Amplitude from "expo-analytics-amplitude";
-import { EVENT_FETCH_TWITTER } from "utils/AnalyticsUtils";
 import EventItem from "components/items/EventItem";
 import moment from "moment";
 import { useEventsStore } from "utils/StoreUtils";
@@ -102,7 +100,7 @@ export const EventList = React.memo(({ navigation, events, onPressEvent }) => {
 const TwitterScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const tweets = useSelector(state => state.app.tweets);
+  const tweets = useSelector(state => state.app.tweets[state.app.candidate]);
   const loadingTweets = useSelector(state => state.loading.tweets);
   const events = useEventsStore(state => state.events);
   const fetchEvents = useEventsStore(state => state.fetchEvents);
@@ -116,15 +114,14 @@ const TwitterScreen = React.memo(({ navigation }) => {
   });
 
   const fetch = () => {
-    Amplitude.logEvent(EVENT_FETCH_TWITTER);
-    dispatch(updateTweets());
+    if (!loadingTweets.isRequesting) dispatch(updateTweets());
     fetchEvents();
   };
   const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
     .current;
-  React.useEffect(fetch, []);
+  // React.useEffect(fetch, []);
 
-  if (!loadingTweets.isReceived)
+  if (!tweets)
     return (
       <Loading
         error={loadingTweets.error}

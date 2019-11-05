@@ -3,6 +3,14 @@ import BackendUtils from "utils/BackendUtils";
 import { load } from "modules/loading/actions";
 import lodash from "lodash";
 import moment from "moment";
+import * as Amplitude from "expo-analytics-amplitude";
+import {
+  EVENT_FETCH_YOUTUBE,
+  EVENT_FETCH_REDDIT,
+  EVENT_FETCH_TWITTER,
+  EVENT_FETCH_INSTAGRAM,
+  EVENT_FETCH_NEWS
+} from "utils/AnalyticsUtils";
 
 export function updateTheme(theme) {
   return {
@@ -11,18 +19,38 @@ export function updateTheme(theme) {
   };
 }
 
-export function updateReddit() {
+export function updateAllYoutubes() {
+  Amplitude.logEvent(EVENT_FETCH_YOUTUBE);
   return dispatch => {
     return dispatch(
       load(
+        "fetchYoutube",
+        Promise.all([
+          dispatch(updateYoutube()),
+          dispatch(updateYoutubeDay()),
+          dispatch(updateYoutube3Days()),
+          dispatch(updateYoutubeAllTime())
+        ])
+      )
+    );
+  };
+}
+
+export function updateReddit() {
+  Amplitude.logEvent(EVENT_FETCH_REDDIT);
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
+    return dispatch(
+      load(
         "reddit",
-        BackendUtils.getReddit().then(response => {
+        BackendUtils.getReddit(candidate).then(response => {
           const reddit = response.data.filter(item => {
             return !item.stickied || item.score > 100;
           });
 
           dispatch({
             type: ActionTypes.UPDATE_REDDIT,
+            candidate,
             reddit
           });
           return reddit;
@@ -31,15 +59,19 @@ export function updateReddit() {
     );
   };
 }
+
 export function updateTweets() {
-  return dispatch => {
+  Amplitude.logEvent(EVENT_FETCH_TWITTER);
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "tweets",
-        BackendUtils.getTwitter().then(response => {
+        BackendUtils.getTwitter(candidate).then(response => {
           const tweets = response.data;
           dispatch({
             type: ActionTypes.UPDATE_TWEETS,
+            candidate,
             tweets
           });
           return tweets;
@@ -49,14 +81,16 @@ export function updateTweets() {
   };
 }
 export function updateYoutube() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "youtube",
-        BackendUtils.getYoutube().then(response => {
+        BackendUtils.getYoutube(candidate).then(response => {
           const youtube = response.data;
           dispatch({
             type: ActionTypes.UPDATE_YOUTUBE,
+            candidate,
             youtube
           });
           return youtube;
@@ -66,14 +100,16 @@ export function updateYoutube() {
   };
 }
 export function updateYoutubeDay() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "youtubeDay",
-        BackendUtils.getYoutubeDay().then(response => {
+        BackendUtils.getYoutubeDay(candidate).then(response => {
           const youtube = response.data;
           dispatch({
             type: ActionTypes.UPDATE_YOUTUBE_DAY,
+            candidate,
             youtube
           });
           return youtube;
@@ -83,14 +119,16 @@ export function updateYoutubeDay() {
   };
 }
 export function updateYoutube3Days() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "youtube3Days",
-        BackendUtils.getYoutube3Days().then(response => {
+        BackendUtils.getYoutube3Days(candidate).then(response => {
           const youtube = response.data;
           dispatch({
             type: ActionTypes.UPDATE_YOUTUBE_3_DAYS,
+            candidate,
             youtube
           });
           return youtube;
@@ -100,14 +138,16 @@ export function updateYoutube3Days() {
   };
 }
 export function updateYoutubeAllTime() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "youtubeAllTime",
-        BackendUtils.getYoutubeAllTime().then(response => {
+        BackendUtils.getYoutubeAllTime(candidate).then(response => {
           const youtube = response.data;
           dispatch({
             type: ActionTypes.UPDATE_YOUTUBE_ALL_TIME,
+            candidate,
             youtube
           });
           return youtube;
@@ -117,11 +157,13 @@ export function updateYoutubeAllTime() {
   };
 }
 export function updateInstagram() {
-  return dispatch => {
+  Amplitude.logEvent(EVENT_FETCH_INSTAGRAM);
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "instagram",
-        BackendUtils.getInstagram().then(response => {
+        BackendUtils.getInstagram(candidate).then(response => {
           const data = response.data;
           const instagram = data.filter(i => {
             if (i.actual_url != null) {
@@ -131,6 +173,7 @@ export function updateInstagram() {
           });
           dispatch({
             type: ActionTypes.UPDATE_INSTAGRAM,
+            candidate,
             instagram
           });
           return instagram;
@@ -139,12 +182,15 @@ export function updateInstagram() {
     );
   };
 }
+
 export function updateNews() {
-  return dispatch => {
+  Amplitude.logEvent(EVENT_FETCH_NEWS);
+  return (dispatch, getState) => {
+    const { candidate } = getState().app;
     return dispatch(
       load(
         "news",
-        BackendUtils.getNews().then(response => {
+        BackendUtils.getNews(candidate).then(response => {
           const news = lodash.uniqBy(response.data.articles, "title");
           news.sort((a, b) => {
             return (
@@ -154,6 +200,7 @@ export function updateNews() {
           });
           dispatch({
             type: ActionTypes.UPDATE_NEWS,
+            candidate,
             news
           });
           return news;
@@ -169,7 +216,8 @@ export function updateShowMoneyModal(show) {
 
 export function updateExpoId(id) {
   return (dispatch, getState) => {
-    if (getState().settings.expoId) return new Promise(resolve => resolve());
+    if (getState().settings.expoId === id)
+      return new Promise(resolve => resolve());
     return BackendUtils.postNotifications(id)
       .then(() => {
         dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
@@ -183,5 +231,16 @@ export function updateExpoId(id) {
           }
         });
       });
+  };
+}
+
+export function getLastUpdate() {
+  return (dispatch, getState) => {
+    return getState().loading.tweets.lastUpdated;
+  };
+}
+export function updateCandidate(candidate) {
+  return (dispatch, getState) => {
+    return dispatch({ type: ActionTypes.UPDATE_CANDIDATE, candidate });
   };
 }

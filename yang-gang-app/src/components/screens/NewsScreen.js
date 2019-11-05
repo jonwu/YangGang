@@ -7,14 +7,12 @@ import { updateNews } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
-import * as Amplitude from "expo-analytics-amplitude";
-import { EVENT_FETCH_NEWS } from "utils/AnalyticsUtils";
 import { useDimensionStore } from "utils/DimensionUtils";
 
 const NewsScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const news = useSelector(state => state.app.news);
+  const news = useSelector(state => state.app.news[state.app.candidate]);
   const loadingNews = useSelector(state => state.loading.news);
   const { deviceWidth } = useDimensionStore();
   const renderItem = ({ item }) => {
@@ -37,14 +35,15 @@ const NewsScreen = React.memo(({ navigation }) => {
   };
 
   const fetch = () => {
-    Amplitude.logEvent(EVENT_FETCH_NEWS);
-    dispatch(updateNews());
+    if (!loadingNews.isRequesting) {
+      dispatch(updateNews());
+    }
   };
   const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
     .current;
-  React.useEffect(fetch, []);
+  // React.useEffect(fetch, []);
 
-  if (!loadingNews.isReceived)
+  if (!news)
     return (
       <Loading
         error={loadingNews.error}

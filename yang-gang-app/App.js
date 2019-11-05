@@ -108,7 +108,10 @@ export default function App() {
       require("assets/lobby.png"),
       require("assets/wall.png"),
       require("assets/treasure.png"),
-      require("assets/modalbg.jpg")
+      require("assets/modalbg.jpg"),
+      require("assets/icYang.jpg"),
+      require("assets/icBernie.png"),
+      require("assets/icTrump.jpg")
     ]);
 
     cacheImages([
@@ -116,7 +119,7 @@ export default function App() {
       require("assets/yanggangday.jpg"),
       require("assets/boba.png")
     ]);
-    await Promise.all([fontAssets, imageAssets]);
+    await Promise.all([fontAssets, ...imageAssets]);
   };
 
   if (!resourcesReady)

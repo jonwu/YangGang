@@ -6,7 +6,8 @@ import {
   SafeAreaView,
   Dimensions,
   Platform,
-  View
+  View,
+  Animated
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
@@ -32,6 +33,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import MoreModal from "./MoreModal";
+import { useCandidateResources } from "utils/Utils";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -71,9 +73,9 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
-  const dispatch = useDispatch();
+  const candidate = useSelector(state => state.app.candidate);
 
-  const routes = [
+  let routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
     {
       key: "reddit",
@@ -103,6 +105,10 @@ const TabScreen = ({ navigation }) => {
     //   color: theme.text()
     // }
   ];
+
+  if (candidate === "donald_trump") {
+    routes = routes.filter(route => route.key !== "reddit");
+  }
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -173,41 +179,83 @@ const TabScreen = ({ navigation }) => {
         onIndexChange={index => setIndex(index)}
         initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
-      <TouchableOpacity
-        onPress={() => {
-          Haptics.selectionAsync();
-          dispatch(updateShowMoneyModal(true));
-        }}
-        style={{
-          position: "absolute",
-          bottom: theme.spacing_2,
-          right: theme.spacing_2
-        }}
-      >
-        <SafeAreaView>
-          <View
-            style={{
-              height: 56,
-              width: 56,
-              borderRadius: 56,
-              backgroundColor: theme.fab,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.8,
-              shadowRadius: 2,
-              elevation: 1,
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <Octicons name="three-bars" color={theme.light()} size={24} />
-          </View>
-        </SafeAreaView>
-      </TouchableOpacity>
+
+      <MoreIcon />
     </React.Fragment>
   );
 };
 
+const MoreIcon = React.memo(() => {
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const dispatch = useDispatch();
+  const candidateResource = useCandidateResources();
+  const avatarTranslateY = React.useRef(new Animated.Value(-56));
+
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(avatarTranslateY.current, {
+          delay: 2000,
+          duration: 100,
+          toValue: 0,
+          useNativeDriver: true
+        }),
+        Animated.timing(avatarTranslateY.current, {
+          delay: 4000,
+          duration: 100,
+          toValue: -56,
+          useNativeDriver: true
+        }),
+        Animated.delay(60000)
+      ]),
+      { useNativeDriver: true }
+    ).start();
+  }, [candidateResource]);
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        Haptics.selectionAsync();
+        dispatch(updateShowMoneyModal(true));
+      }}
+      style={{
+        position: "absolute",
+        bottom: theme.spacing_2,
+        right: theme.spacing_2
+      }}
+    >
+      <SafeAreaView>
+        <View
+          style={{
+            height: 56,
+            width: 56,
+            borderRadius: 56,
+            backgroundColor: theme.fab,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden"
+          }}
+        >
+          <Octicons name="three-bars" color={theme.light()} size={24} />
+          <Animated.Image
+            source={candidateResource.avatar}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              transform: [{ translateY: avatarTranslateY.current }]
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    </TouchableOpacity>
+  );
+});
 const YangLogo = () => {
   const { styles } = useThemeKit(generateStyles);
   return <Image source={pngLogoYang} style={styles.logo} />;

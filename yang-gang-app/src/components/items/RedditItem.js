@@ -12,11 +12,10 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { Video } from "expo-av";
 import ActionBarView from "./ActionBarView";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { transformN } from "utils/Utils";
+import { transformN, openWebBrowser, useCandidateResources } from "utils/Utils";
 import moment from "moment";
 import { useDimensionStore } from "utils/DimensionUtils";
 import YoutubeIcon from "assets/youtube_icon.png";
-import * as WebBrowser from "expo-web-browser";
 
 const generateStyles = theme => ({
   body: {
@@ -39,7 +38,7 @@ const RedditItem = React.memo(({ item, navigation }) => {
   const isEnabled = preview != null && preview.enabled;
   const isRedditVideo = media && media.reddit_video != null;
   const isYoutube = media && media.type === "youtube.com";
-
+  const candidateResource = useCandidateResources();
   let content = null;
 
   if (isYoutube) {
@@ -58,7 +57,7 @@ const RedditItem = React.memo(({ item, navigation }) => {
     <ActionBarView
       openLabel={"Open in Reddit"}
       openIcon={"reddit-square"}
-      link={`https://reddit.com/r/YangForPresidentHQ/comments/${id}`}
+      link={`https://reddit.com/r/${candidateResource.reddit}/comments/${id}`}
       message={title}
       navigation={navigation}
     >
@@ -200,14 +199,14 @@ const RedditYoutube = ({ item, navigation }) => {
     <View>
       <TouchableOpacity
         activeOpacity={theme.activeOpacity}
-        onPress={() => WebBrowser.openBrowserAsync(url)}
+        onPress={() => openWebBrowser(url, theme)}
       >
         <RedditTitle title={title} />
       </TouchableOpacity>
 
       <TouchableOpacity
         activeOpacity={1.0}
-        onPress={() => WebBrowser.openBrowserAsync(url)}
+        onPress={() => openWebBrowser(url, theme)}
       >
         <View style={{ borderRadius: theme.borderRadius, overflow: "hidden" }}>
           <Image
@@ -288,7 +287,7 @@ const RedditThumbnail = ({ item, navigation }) => {
   return (
     <TouchableOpacity
       activeOpacity={theme.activeOpacity}
-      onPress={() => WebBrowser.openBrowserAsync(url)}
+      onPress={() => openWebBrowser(url, theme)}
     >
       <View>
         <View style={styles.thumbnailContainer}>
@@ -297,7 +296,7 @@ const RedditThumbnail = ({ item, navigation }) => {
           </Text>
           <TouchableOpacity
             activeOpacity={theme.activeOpacity}
-            onPress={() => WebBrowser.openBrowserAsync(url)}
+            onPress={() => openWebBrowser(url, theme)}
           >
             <View
               style={{

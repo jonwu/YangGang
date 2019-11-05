@@ -3,12 +3,11 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { XmlEntities as Entities } from "html-entities";
 import ActionBarView from "./ActionBarView";
-import { transformN } from "utils/Utils";
+import { transformN, openWebBrowser } from "utils/Utils";
 import moment from "moment";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
 import { useDimensionStore } from "utils/DimensionUtils";
-import * as WebBrowser from "expo-web-browser";
 
 const entities = new Entities();
 
@@ -45,7 +44,7 @@ const YoutubeItemContainer = React.memo(({ item, navigation }) => {
         activeOpacity={theme.activeOpacity}
         onPress={() => {
           Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
-          WebBrowser.openBrowserAsync(`https://youtube.com/watch?v=${id}`);
+          openWebBrowser(`https://youtube.com/watch?v=${id}`, theme);
           // navigation.navigate("Webview", {
           //   // uri: `https://youtube.com/embed/${id}?autoplay=1`,
           //   // uri: `https://youtube.com/embed/${id.videoId}`

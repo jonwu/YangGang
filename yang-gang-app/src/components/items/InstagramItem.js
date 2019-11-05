@@ -4,7 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import moment from "moment";
 import ActionBarView from "./ActionBarView";
 import { useDimensionStore } from "utils/DimensionUtils";
-import { transformN } from "utils/Utils";
+import { transformN, useCandidateResources } from "utils/Utils";
 import { Video } from "expo-av";
 
 const generateStyles = theme => ({});
@@ -26,16 +26,9 @@ const InstagramItemContainer = React.memo(({ item, navigation }) => {
 const InstagramItem = ({ item, navigation }) => {
   const { theme, gstyles } = useThemeKit(generateStyles);
   const deviceWidth = useDimensionStore(state => state.deviceWidth);
-  const { thumbnail_resources, dimensions } = item;
-  let prevWidth = 0;
+  const resource = useCandidateResources();
+  const { dimensions } = item;
   let imageSource = item.display_url;
-  // thumbnail_resources.forEach(resource => {
-  //   if (resource.config_width > prevWidth && prevWidth <= deviceWidth) {
-  //     imageSource = resource.src;
-  //     prevWidth = resource.config_width;
-  //   }
-  // });
-
   if (!imageSource) return null;
   const imageHeight = (deviceWidth * dimensions.height) / dimensions.width;
   const imageWidth = deviceWidth;
@@ -51,19 +44,18 @@ const InstagramItem = ({ item, navigation }) => {
       >
         <Image
           source={{
-            uri:
-              "https://instagram.fsac1-2.fna.fbcdn.net/vp/fb6fc134d1253d3360613dc9af6459bd/5E362130/t51.2885-19/s150x150/56262993_427967544632392_4799321311249694720_n.jpg?_nc_ht=instagram.fsac1-2.fna.fbcdn.net"
+            uri: resource.instagram_avatar
           }}
           style={{
             height: 36,
             width: 36,
-            borderRadius: 24,
+            borderRadius: 18,
             marginRight: theme.spacing_3,
             backgroundColor: theme.text(0.1)
           }}
         />
         <Text style={gstyles.p1_bold}>
-          andrewyang2020{" "}
+          {resource.instagram_name}{" "}
           <Text style={gstyles.p1_50}>
             - {moment(new Date(item.taken_at_timestamp * 1000)).fromNow()}
           </Text>
@@ -83,7 +75,7 @@ const InstagramItem = ({ item, navigation }) => {
       ) : (
         <VideoItem
           width={imageWidth}
-          height={imageWidth * 0.56}
+          height={imageHeight <= imageWidth ? imageHeight : imageWidth * 0.56}
           src={item.actual_url}
         />
       )}
@@ -93,8 +85,9 @@ const InstagramItem = ({ item, navigation }) => {
           {transformN(item.edge_media_preview_like.count)} likes
         </Text>
         <Text style={gstyles.p1}>
-          <Text style={gstyles.p1_bold}>andrewyang2020 </Text>
-          {item.edge_media_to_caption.edges[0].node.text}
+          <Text style={gstyles.p1_bold}>{resource.instagram_name} </Text>
+          {item.edge_media_to_caption.edges[0] &&
+            item.edge_media_to_caption.edges[0].node.text}
         </Text>
       </View>
     </View>

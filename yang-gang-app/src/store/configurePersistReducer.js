@@ -8,6 +8,12 @@ const transform = createTransform(
   },
   (outboundState, key) => {
     switch (key) {
+      case "settings":
+        delete outboundState.notifications;
+        console.log(outboundState);
+        return {
+          ...outboundState
+        };
       default:
         return outboundState;
     }

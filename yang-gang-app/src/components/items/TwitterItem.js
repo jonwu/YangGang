@@ -10,11 +10,10 @@ import { useThemeKit } from "utils/ThemeUtils";
 import ActionBarView from "./ActionBarView";
 import { Video } from "expo-av";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { transformN } from "utils/Utils";
+import { transformN, openWebBrowser, useCandidateResources } from "utils/Utils";
 import moment from "moment";
 import { XmlEntities as Entities } from "html-entities";
 import { useDimensionStore } from "utils/DimensionUtils";
-import * as WebBrowser from "expo-web-browser";
 
 const xmlEntities = new Entities();
 
@@ -46,6 +45,7 @@ function replaceIndices(str, indices, string) {
 
 const TwitterItem = ({ item, navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const resource = useCandidateResources();
   const { retweeted_status } = item;
   const status = retweeted_status || item;
   const {
@@ -119,7 +119,7 @@ const TwitterItem = ({ item, navigation }) => {
       replacement = (
         <Text
           onPress={
-            () => WebBrowser.openBrowserAsync(ent.expanded_url)
+            () => openWebBrowser(ent.expanded_url, theme)
             // navigation.navigate("Webview", {
             //   uri: ent.expanded_url
             // })
@@ -158,7 +158,9 @@ const TwitterItem = ({ item, navigation }) => {
             style={{ marginTop: 3, marginRight: theme.spacing_5 }}
             color={theme.text(0.5)}
           />
-          <Text style={[gstyles.caption_50]}>Andrew Yang Retweeted</Text>
+          <Text style={[gstyles.caption_50]}>
+            {resource.twitter_name} Retweeted
+          </Text>
         </View>
       )}
       <View style={styles.container}>

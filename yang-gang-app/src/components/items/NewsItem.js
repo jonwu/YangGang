@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import moment from "moment";
 import ActionBarView from "./ActionBarView";
-import * as WebBrowser from "expo-web-browser";
+import { openWebBrowser } from "utils/Utils";
 
 const generateStyles = theme => ({});
 
@@ -27,21 +27,11 @@ const NewsItem = ({ item, navigation }) => {
   return (
     <TouchableOpacity
       activeOpacity={theme.activeOpacity}
-      onPress={() => WebBrowser.openBrowserAsync(url)}
+      onPress={() => openWebBrowser(url, theme)}
     >
       <View style={{ padding: theme.spacing_2 }}>
-        <View
-          style={[
-            {
-              // shadowColor: theme.cardShadow,
-              // shadowOffset: { width: 2, height: 2 },
-              // shadowOpacity: 1,
-              // shadowRadius: 2
-            },
-            gstyles.bottom_2
-          ]}
-        >
-          {urlToImage && (
+        <View style={[gstyles.bottom_2]}>
+          {urlToImage != null && (
             <Image
               style={{
                 borderRadius: 8,
@@ -53,27 +43,10 @@ const NewsItem = ({ item, navigation }) => {
               resizeMode={"cover"}
             />
           )}
-          {/* <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              padding: theme.spacing_4,
-              backgroundColor: theme.dark(0.9),
-              borderTopLeftRadius: 8,
-              borderBottomRightRadius: 8
-            }}
-          >
-            <Text style={[gstyles.caption, { color: theme.light() }]}>
-              {author ? `${author} / ` : ""}
-              {source.name}
-            </Text>
-          </View> */}
         </View>
 
         <Text
           style={[gstyles.h4, gstyles.bottom_4, { fontFamily: "brandon-med" }]}
-          // style={[gstyles.h4_bold, gstyles.bottom_4]}
         >
           {title}
         </Text>

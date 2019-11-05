@@ -2,12 +2,11 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { XmlEntities as Entities } from "html-entities";
-import { transformN } from "utils/Utils";
+import { transformN, openWebBrowser } from "utils/Utils";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_WATCH_YOUTUBE } from "utils/AnalyticsUtils";
 import moment from "moment";
 import placeholder from "assets/news_placeholder.png";
-import * as WebBrowser from "expo-web-browser";
 
 const entities = new Entities();
 
@@ -21,7 +20,7 @@ const YoutubeTinyItem = ({ item, navigation }) => {
       activeOpacity={theme.activeOpacity}
       onPress={() => {
         Amplitude.logEvent(EVENT_WATCH_YOUTUBE);
-        WebBrowser.openBrowserAsync(url);
+        openWebBrowser(url, theme);
         // navigation.navigate("Webview", {
         //   uri: url,
         //   title: title

@@ -65,67 +65,75 @@ import {
 //   }
 // }
 
-function reddit(state = null, actions) {
+function candidate(state = "andrew_yang", actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_CANDIDATE:
+      return actions.candidate;
+    default:
+      return state;
+  }
+}
+function reddit(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_REDDIT:
-      return actions.reddit;
+      return { ...state, [actions.candidate]: actions.reddit };
     default:
       return state;
   }
 }
-function tweets(state = null, actions) {
+function tweets(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_TWEETS:
-      return actions.tweets;
+      return { ...state, [actions.candidate]: actions.tweets };
     default:
       return state;
   }
 }
-function youtube(state = null, actions) {
+function youtube(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE:
-      return actions.youtube;
+      return { ...state, [actions.candidate]: actions.youtube };
     default:
       return state;
   }
 }
-function youtubeDay(state = null, actions) {
+function youtubeDay(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_DAY:
-      return actions.youtube;
+      return { ...state, [actions.candidate]: actions.youtube };
     default:
       return state;
   }
 }
-function youtube3Days(state = null, actions) {
+function youtube3Days(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_3_DAYS:
-      return actions.youtube;
+      return { ...state, [actions.candidate]: actions.youtube };
     default:
       return state;
   }
 }
-function youtubeAllTime(state = null, actions) {
+function youtubeAllTime(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_YOUTUBE_ALL_TIME:
-      return actions.youtube;
+      return { ...state, [actions.candidate]: actions.youtube };
     default:
       return state;
   }
 }
 
-function news(state = null, actions) {
+function news(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_NEWS:
-      return actions.news;
+      return { ...state, [actions.candidate]: actions.news };
     default:
       return state;
   }
 }
-function instagram(state = null, actions) {
+function instagram(state = {}, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_INSTAGRAM:
-      return actions.instagram;
+      return { ...state, [actions.candidate]: actions.instagram };
     default:
       return state;
   }
@@ -148,5 +156,6 @@ export default combineReducers({
   youtubeAllTime,
   news,
   showMoneyModal,
-  instagram
+  instagram,
+  candidate
 });

@@ -4,20 +4,13 @@ import { useThemeKit } from "utils/ThemeUtils";
 import YoutubeItem from "components/items/YoutubeItem";
 import YoutubeTinyItem from "components/items/YoutubeTinyItem";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  updateYoutube,
-  updateYoutubeDay,
-  updateYoutube3Days,
-  updateYoutubeAllTime
-} from "modules/app/actions";
+import { updateAllYoutubes } from "modules/app/actions";
 import Separator from "components/items/TwitterSeparator";
 import { Ionicons } from "@expo/vector-icons";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Loading from "components/utils/Loading";
 import { load } from "modules/loading/actions";
 import lodash from "lodash";
-import * as Amplitude from "expo-analytics-amplitude";
-import { EVENT_FETCH_YOUTUBE } from "utils/AnalyticsUtils";
 import { useDimensionStore } from "utils/DimensionUtils";
 
 const styles = theme => {};
@@ -29,7 +22,9 @@ const options = [DAYS_3, DAYS_7, DAYS_ALL, "Cancel"];
 const Header = connectActionSheet(
   ({ navigation, showActionSheetWithOptions, setFilter, filter }) => {
     const { theme, gstyles, styles } = useThemeKit(styles);
-    const youtube_day = useSelector(state => state.app.youtubeDay);
+    const youtube_day = useSelector(
+      state => state.app.youtubeDay[state.app.candidate]
+    );
 
     const renderItemTiny = ({ item: youtube, showActionSheetWithOptions }) => {
       return <YoutubeTinyItem item={youtube} navigation={navigation} />;
@@ -96,9 +91,13 @@ const Header = connectActionSheet(
 const YoutubeScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const youtube = useSelector(state => state.app.youtube);
-  const youtubeAllTime = useSelector(state => state.app.youtubeAllTime);
-  const youtube3Days = useSelector(state => state.app.youtube3Days);
+  const youtube = useSelector(state => state.app.youtube[state.app.candidate]);
+  const youtubeAllTime = useSelector(
+    state => state.app.youtubeAllTime[state.app.candidate]
+  );
+  const youtube3Days = useSelector(
+    state => state.app.youtube3Days[state.app.candidate]
+  );
   const { deviceWidth } = useDimensionStore();
   const loadingFetchYoutube = useSelector(state => state.loading.fetchYoutube);
 
@@ -135,25 +134,16 @@ const YoutubeScreen = React.memo(({ navigation }) => {
   };
 
   const fetch = () => {
-    Amplitude.logEvent(EVENT_FETCH_YOUTUBE);
-    dispatch(
-      load(
-        "fetchYoutube",
-        Promise.all([
-          dispatch(updateYoutube()),
-          dispatch(updateYoutubeDay()),
-          dispatch(updateYoutube3Days()),
-          dispatch(updateYoutubeAllTime())
-        ])
-      )
-    );
+    if (!loadingFetchYoutube.isRequesting) {
+      dispatch(updateAllYoutubes());
+    }
   };
 
   const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
     .current;
-  React.useEffect(fetch, []);
+  // React.useEffect(fetch, []);
 
-  if (!loadingFetchYoutube.isReceived)
+  if (!youtube)
     return (
       <Loading
         error={loadingFetchYoutube.error}

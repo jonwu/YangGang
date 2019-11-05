@@ -7,8 +7,6 @@ import { updateReddit, updateNews } from "modules/app/actions";
 import TwitterSeparator from "components/items/TwitterSeparator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
-import * as Amplitude from "expo-analytics-amplitude";
-import { EVENT_FETCH_REDDIT } from "utils/AnalyticsUtils";
 import NewsTinyItem from "components/items/NewsTinyItem";
 
 const styles = theme => {};
@@ -39,23 +37,19 @@ export const NewsList = React.memo(({ navigation, news }) => {
 });
 
 const RedditScreen = React.memo(({ navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(styles);
+  const { styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const reddit = useSelector(state => state.app.reddit);
-  const news = useSelector(state => state.app.news);
+  const reddit = useSelector(state => state.app.reddit[state.app.candidate]);
   const loadingReddit = useSelector(state => state.loading.reddit);
   const renderItem = ({ item: reddit }) => {
     return <RedditItem item={reddit} navigation={navigation} />;
   };
   const fetch = () => {
-    Amplitude.logEvent(EVENT_FETCH_REDDIT);
-    dispatch(updateReddit());
-    // dispatch(updateNews());
+    if (!loadingReddit.isReceived) dispatch(updateReddit());
   };
   const throttledFetch = React.useRef(lodash.throttle(fetch, 60 * 1000))
     .current;
-  React.useEffect(fetch, []);
-  if (!loadingReddit.isReceived)
+  if (!reddit)
     return (
       <Loading
         error={loadingReddit.error}
@@ -65,14 +59,12 @@ const RedditScreen = React.memo(({ navigation }) => {
     );
   return (
     <FlatList
-      // ListHeaderComponent={<NewsList navigation={navigation} news={news} />}
       onRefresh={throttledFetch}
       refreshing={loadingReddit.isRequesting}
       data={reddit}
       renderItem={renderItem}
       ItemSeparatorComponent={TwitterSeparator}
       keyExtractor={item => item.id}
-      extraData={news}
       contentContainerStyle={{ paddingBottom: 88 }}
     />
   );

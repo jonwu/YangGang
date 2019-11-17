@@ -21,11 +21,15 @@ import warrenImg from "assets/warren.jpg";
 import buttigiegImg from "assets/buttigieg.jpg";
 import bidenImg from "assets/biden.jpg";
 import kamalaImg from "assets/kamala.jpg";
+import gabbardImg from "assets/gabbard.jpg";
+import trumpImg from "assets/trump.jpg";
 import { LinearGradient } from "expo-linear-gradient";
 import instagramIcon from "assets/instagram.png";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Loading from "components/utils/Loading";
 import { useDimensionStore } from "utils/DimensionUtils";
+import { EVENT_SWITCH_STATS } from "utils/AnalyticsUtils";
+import * as Amplitude from "expo-analytics-amplitude";
 
 const generateStyles = theme => ({});
 
@@ -35,7 +39,9 @@ const IMAGES = {
   warren: warrenImg,
   buttigieg: buttigiegImg,
   biden: bidenImg,
-  kamala: kamalaImg
+  kamala: kamalaImg,
+  gabbard: gabbardImg,
+  trump: trumpImg
 };
 const CompareText = ({ value1, value2, label }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
@@ -190,6 +196,12 @@ const generateDelta = data => {
     yang:
       Number(points.today.num_followers_yang) -
       Number(points.yesterday.num_followers_yang),
+    gabbard:
+      Number(points.today.num_followers_gabbard) -
+      Number(points.yesterday.num_followers_gabbard),
+    trump:
+      Number(points.today.num_followers_trump) -
+      Number(points.yesterday.num_followers_trump),
     ...points
   };
 };
@@ -203,10 +215,20 @@ const ConnectedHeader = connectActionSheet(
       "Elizabeth Warren",
       "Pete Buttigieg",
       "Kamala Harris",
+      "Tulsi Gabbard",
+      "Donald Trump",
       "Cancel"
     ];
-    const optionsKeys = ["sanders", "biden", "warren", "buttigieg", "kamala"];
-    const cancelButtonIndex = 5;
+    const optionsKeys = [
+      "sanders",
+      "biden",
+      "warren",
+      "buttigieg",
+      "kamala",
+      "gabbard",
+      "trump"
+    ];
+    const cancelButtonIndex = 7;
     return (
       <Header
         close
@@ -223,6 +245,9 @@ const ConnectedHeader = connectActionSheet(
                     LayoutAnimation.configureNext(
                       LayoutAnimation.Presets.easeInEaseOut
                     );
+                    Amplitude.logEventWithProperties(EVENT_SWITCH_STATS, {
+                      candidate: optionsKeys[buttonIndex]
+                    });
                     setCandidate(optionsKeys[buttonIndex]);
                   }
                 }

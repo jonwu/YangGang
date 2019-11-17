@@ -102,6 +102,8 @@ export default function App() {
       require("assets/buttigieg.jpg"),
       require("assets/biden.jpg"),
       require("assets/kamala.jpg"),
+      require("assets/gabbard.jpg"),
+      require("assets/trump.jpg"),
       require("assets/russia.png"),
       require("assets/bureaucracy.png"),
       require("assets/loan.png"),

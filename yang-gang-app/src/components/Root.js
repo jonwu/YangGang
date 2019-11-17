@@ -22,6 +22,7 @@ import {
 import moment from "moment";
 import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
 import * as Amplitude from "expo-analytics-amplitude";
+import SocketIOClient from "socket.io-client";
 
 const MainStack = createStackNavigator(
   {
@@ -79,6 +80,8 @@ const Root = React.memo(() => {
 
   React.useEffect(() => {
     dispatch(registerForPushNotificationsAsync());
+    const socket = SocketIOClient("http://localhost:3000");
+    console.log("----SOCKET", socket);
   }, []);
 
   React.useEffect(() => {

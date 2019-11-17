@@ -3,6 +3,7 @@ exponent_server_sdk
 flask
 flask-marshmallow
 flask-restplus
+flask-socketio
 Flask-SQLAlchemy
 gevent
 gunicorn

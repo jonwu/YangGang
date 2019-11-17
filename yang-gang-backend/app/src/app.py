@@ -119,6 +119,10 @@ message_json = api.model('Resource', {
     'data': fields.String
 })
 
+username_json = api.model('Resource', {
+    'username': fields.String,
+})
+
 
 @api.route("/getpush/")
 class SimpleGetPushApi(Resource):
@@ -143,6 +147,21 @@ class SimpleGetPushApi(Resource):
             return 'success, pushed a total of {} messages'.format(len(push_list)), 200
         except Exception as e:
             abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
+
+
+@api.route('/user/<int:device_token>')
+class UserApi(Resource):
+    def post(self, device_token):
+        # TODO: fill in this logic
+        pass
+
+
+@api.route('/modifyuser')
+class ModifyUserApi(Resource):
+    @api.expect(username_json)
+    def put(self, device_token):
+        # TODO: fill in this logic
+        pass
 
 
 @api.route("/simplepush/<string:expo_id>")
@@ -353,6 +372,15 @@ class RedditStatsApi(Resource):
         returns a twitter stats from the past two days for all candidates
         """
         return [x.as_dict() for x in get_recent_data(2, RedditStats)]
+
+
+class User(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "user"
+    id = db.Column(db.DateTime, primary_key=True, autoincrement=False)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    title = db.Column(db.String(128))
+    device_token = db.Column(db.String(100))
 
 
 class TwitterStats(db.Model):

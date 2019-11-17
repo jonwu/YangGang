@@ -9,7 +9,13 @@ services:
         volumes:
             - ./app/src:/src
         environment:
-            FLASK_DEBUG: 0
+            FLASK_DEBUG: 1
+    socket:
+        build: ./socket
+        links:
+            - db
+        ports:
+            - "5000:5000"
     redis:
         image: redis
     poller:

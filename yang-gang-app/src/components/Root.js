@@ -7,6 +7,7 @@ import PhotoScreen from "components/screens/PhotoScreen";
 import DescriptionScreen from "components/screens/DescriptionScreen";
 import ProgressScreen from "components/screens/ProgressScreen";
 import MerchScreen from "components/screens/MerchScreen";
+import ChatScreen from "components/screens/ChatScreen";
 import { useRefreshStats, useEventsStore } from "utils/StoreUtils";
 import PostEventsScreen from "./screens/PostEventsScreen";
 import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
@@ -48,6 +49,9 @@ const RootStack = createStackNavigator(
     Progress: {
       screen: ProgressScreen
     },
+    Chat: {
+      screen: ChatScreen
+    },
     Merch: {
       screen: MerchScreen
     },
@@ -80,8 +84,8 @@ const Root = React.memo(() => {
 
   React.useEffect(() => {
     dispatch(registerForPushNotificationsAsync());
-    const socket = SocketIOClient("http://localhost:3000");
-    console.log("----SOCKET", socket);
+    // const socket = SocketIOClient("http://localhost:3000");
+    // console.log("----SOCKET", socket);
   }, []);
 
   React.useEffect(() => {

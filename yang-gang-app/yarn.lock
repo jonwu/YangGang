@@ -4451,10 +4451,10 @@ react-native-gesture-handler@~1.3.0:
     invariant "^2.2.2"
     prop-types "^15.5.10"
 
-react-native-gifted-chat@^0.11.3:
-  version "0.11.3"
-  resolved "https://registry.yarnpkg.com/react-native-gifted-chat/-/react-native-gifted-chat-0.11.3.tgz#1b8e75d96bcbacda227e1c3cddcaa4d474dcdad3"
-  integrity sha512-khatLsCB+5JROA2kF8sV8bppmxPYIVdpm11LTO41yHD0BHPtN91U3aJlyCF2Il3+fV5rzJQcW8s3IwXgfv+VeA==
+react-native-gifted-chat@^0.12.0-beta-0:
+  version "0.12.0-beta-0"
+  resolved "https://registry.yarnpkg.com/react-native-gifted-chat/-/react-native-gifted-chat-0.12.0-beta-0.tgz#10a7705f9d5a8e73949ee848742842eedd391070"
+  integrity sha512-3O3XCpVTmMDaORM/DRZzb3ArueHfX0XB2Gt9GKSNzVtOHtLVK176GnmXA/UXg6+mGmYxthWj2e25+WtHCR8Mmg==
   dependencies:
     "@expo/react-native-action-sheet" "^3.1.0"
     moment "^2.19.0"

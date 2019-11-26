@@ -6,10 +6,16 @@ import { Ionicons } from "@expo/vector-icons";
 
 const generateStyles = theme => ({
   headerSafeArea: {
-    backgroundColor: theme.bgHeader()
+    backgroundColor: theme.bgHeader(),
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 1
   },
   header: {
-    height: 40,
+    minHeight: 40,
     paddingHorizontal: 8,
     backgroundColor: theme.bgHeader(),
     alignItems: "center",
@@ -17,7 +23,7 @@ const generateStyles = theme => ({
   }
 });
 
-const Back = ({ navigation }) => {
+const Back = ({ navigation, btnColor }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   if (navigation.isFirstRouteInParent()) return null;
 
@@ -28,22 +34,26 @@ const Back = ({ navigation }) => {
         navigation.goBack();
       }}
     >
-      <Ionicons name={"ios-arrow-back"} color={theme.light()} size={24} />
+      <Ionicons
+        name={"ios-arrow-back"}
+        color={btnColor || theme.light()}
+        size={24}
+      />
     </TouchableOpacity>
   );
 };
-const Close = ({ navigation }) => {
+const Close = ({ navigation, btnColor }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   if (navigation.isFirstRouteInParent()) return null;
 
   return (
     <TouchableOpacity
-      style={{ padding: 8 }}
+      style={{ padding: 8, height: 40, overflow: "hidden" }}
       onPress={() => navigation.goBack()}
     >
       <Ionicons
         name={"ios-close"}
-        color={theme.light()}
+        color={btnColor || theme.light()}
         size={36}
         style={{ marginTop: -6 }}
       />
@@ -58,7 +68,8 @@ const Header = ({
   renderRight,
   navigation,
   title,
-  close
+  close,
+  btnColor
 }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
@@ -67,8 +78,9 @@ const Header = ({
     >
       <View style={[styles.header, bgColor && { backgroundColor: bgColor }]}>
         <View style={gstyles.flex}>
-          {renderLeft || (!close && <Back navigation={navigation} />)}
-          {close && <Close navigation={navigation} />}
+          {renderLeft ||
+            (!close && <Back navigation={navigation} btnColor={btnColor} />)}
+          {close && <Close navigation={navigation} btnColor={btnColor} />}
         </View>
         {renderTitle ||
           (title && (
@@ -79,7 +91,11 @@ const Header = ({
                   numberOfLines={1}
                   style={[
                     gstyles.p1_bold,
-                    { color: theme.light(), width: 200, textAlign: "center" }
+                    {
+                      color: btnColor || theme.light(),
+                      width: 200,
+                      textAlign: "center"
+                    }
                   ]}
                 >
                   {title}

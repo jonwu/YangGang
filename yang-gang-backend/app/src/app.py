@@ -104,7 +104,7 @@ class AllNotificationsForUser(Resource):
         return notifications_schema.dump(notifications)
 
 
-event_json = api.model('Resource', {
+event_json = api.model('Event Model', {
     'title': fields.String,
     'image': fields.String,
     'event_type': fields.String,
@@ -114,13 +114,23 @@ event_json = api.model('Resource', {
     'link': fields.String,
 })
 
-message_json = api.model('Resource', {
+message_json = api.model('Push Message Model', {
     'body': fields.String,
     'data': fields.String
 })
 
-username_json = api.model('Resource', {
-    'username': fields.String,
+device_id_json = api.model('Create User Model', {
+    'device_token': fields.String,
+})
+
+room_json = api.model('Room Model', {
+    'owner_id': fields.Integer,
+    'title': fields.String
+})
+
+chat_message_json = api.model('Chat Model', {
+    'user_id': fields.Integer,
+    'message': fields.String
 })
 
 
@@ -149,19 +159,87 @@ class SimpleGetPushApi(Resource):
             abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
 
 
-@api.route('/user/<int:device_token>')
+@api.route('/user/<int:user_id>')
 class UserApi(Resource):
-    def post(self, device_token):
-        # TODO: fill in this logic
+    def get(self, user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+        user_schema = UserSchema()
+        return user_schema.dump(user)
+
+    def put(self, user_id):
+        # TODO: add username?
         pass
 
 
-@api.route('/modifyuser')
-class ModifyUserApi(Resource):
-    @api.expect(username_json)
-    def put(self, device_token):
-        # TODO: fill in this logic
+@api.route('/user')
+class PostUserApi(Resource):
+    @api.expect(device_id_json)
+    def post(self):
+        user_json = request.get_json()
+        user = User.query.filter(User.device_token == user_json['device_token']).one_or_none()
+        user_schema = UserSchema()
+        if user is not None:
+            print("found existing user")
+            return user_schema.dump(user)
+        try:
+            user = user_schema.load(user_json, session=db.session, partial=True)
+            db.session.add(user)
+            db.session.commit()
+            return user_schema.dump(user)
+        except Exception as e:
+            traceback.print_exc()
+            abort(404, str(e))
+
+
+@api.route('/rooms')
+class RoomApi(Resource):
+    def get(self):
+        rooms = Room.query.all()
+        room_schema = RoomSchema(many=True)
+        return room_schema.dump(rooms)
+
+    @api.expect(room_json)
+    def post(self):
+        try:
+            room = request.get_json()
+            room_schema = RoomSchema()
+            new_room = room_schema.load(room, session=db.session, partial=True)
+            db.session.add(new_room)
+            db.session.commit()
+            return room_schema.dump(new_room), 200
+        except Exception as e:
+            traceback.print_exc()
+            abort(404, 'internal server error: {}'.format(str(e)))
+
+    def delete(self):
+        # TODO: delete a room
         pass
+
+    def put(self):
+        # TODO: modify a room
+        pass
+
+
+@api.route('/rooms/<string:room_id>/messages')
+class MessageApi(Resource):
+    def get(self, room_id):
+        messages = Message.query.filter(Message.room_id == room_id).all()
+        message_schema = MessageSchema(many=True)
+        return message_schema.dump(messages)
+
+    @api.expect(chat_message_json)
+    def post(self, room_id):
+        try:
+            message = request.get_json()
+            message_schema = MessageSchema()
+            new_message = message_schema.load(message, session=db.session, partial=True)
+            new_message.room_id = room_id
+            db.session.add(new_message)
+            db.session.commit()
+            return message_schema.dump(new_message), 200
+        except Exception as e:
+            traceback.print_exc()
+            abort(404, 'internal server error: {}'.format(str(e)))
 
 
 @api.route("/simplepush/<string:expo_id>")
@@ -173,6 +251,7 @@ class SimplePushApi(Resource):
             db.session.commit()
             return 'added id {} to database'.format(expo_id), 200
         except Exception as e:
+            traceback.print_exc()
             abort(404, 'internal server error: {}'.format(str(e)))
 
 
@@ -198,7 +277,6 @@ class AllEventsApi(Resource):
 
             return schema.dump(new_event), 201
         except Exception as e:
-            import traceback
             traceback.print_exc()
             abort(404, 'internal server error: {}'.format(str(e)))
 
@@ -374,13 +452,50 @@ class RedditStatsApi(Resource):
         return [x.as_dict() for x in get_recent_data(2, RedditStats)]
 
 
+class Message(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "message"
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    user_id = db.Column(db.Integer)
+    room_id = db.Column(db.Integer)
+    message = db.Column(db.Text())
+
+
+class Room(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "room"
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    owner_id = db.Column(db.Integer)
+    title = db.Column(db.Text())
+
+
 class User(db.Model):
     """ User Model for storing user related details """
     __tablename__ = "user"
-    id = db.Column(db.DateTime, primary_key=True, autoincrement=False)
+    id = db.Column(db.Integer, primary_key=True)
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
-    title = db.Column(db.String(128))
+    username = db.Column(db.String(128))
     device_token = db.Column(db.String(100))
+
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+        sqla_session = db.session
+
+
+class RoomSchema(ma.ModelSchema):
+    class Meta:
+        model = Room
+        sqla_session = db.session
+
+
+class MessageSchema(ma.ModelSchema):
+    class Meta:
+        model = Message
+        sqla_session = db.session
 
 
 class TwitterStats(db.Model):

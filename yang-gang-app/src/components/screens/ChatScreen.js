@@ -5,35 +5,34 @@ import { useSelector, useDispatch } from "react-redux";
 import { GiftedChat } from "react-native-gifted-chat";
 import Header from "./Header";
 import OptionBars from "components/items/OptionsBar";
+import Loading from "components/utils/Loading";
+import { sendMessage, connectRoom } from "modules/chat/actions";
 
 const generateStyles = theme => ({});
-
-const ChatScreen = ({ navigation }) => {
+/**
+ * TODO:
+ * 1. Create Users
+ * 2. Hook up Rooms
+ * 3. Hook up Chat
+ * 4. Handle Errors
+ */
+const ChatScreen = ({ navigation, roomId }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const [messages, setMessages] = React.useState([]);
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.settings.user);
+  const messages = useSelector(state => state.chat.messages[roomId]);
   React.useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any"
-        },
-        image:
-          "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTY4NDE5Nzc2NjQzNzM3NTQ2/andrew-yang-gettyimages-1092084782-cropped.jpg"
-        // You can also add a video prop:
-        // video:
-        //   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-      }
-    ]);
+    connectRoom(roomId);
   }, []);
 
+  if (messages === null) return <Loading />;
+
   const onSend = (nextMessages = []) => {
-    const updatedMessages = GiftedChat.append(messages, nextMessages);
-    setMessages(updatedMessages);
+    if (user) {
+      sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
+    } else {
+      console.warn("user is null", user);
+    }
   };
 
   return (

@@ -8,6 +8,7 @@ import DescriptionScreen from "components/screens/DescriptionScreen";
 import ProgressScreen from "components/screens/ProgressScreen";
 import MerchScreen from "components/screens/MerchScreen";
 import ChatScreen from "components/screens/ChatScreen";
+import RoomScreen from "components/screens/RoomScreen";
 import { useRefreshStats, useEventsStore } from "utils/StoreUtils";
 import PostEventsScreen from "./screens/PostEventsScreen";
 import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
@@ -18,13 +19,14 @@ import {
   updateReddit,
   updateInstagram,
   updateAllYoutubes,
-  getLastUpdate
+  getLastUpdate,
+  updateUser
 } from "modules/app/actions";
 import moment from "moment";
 import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
 import * as Amplitude from "expo-analytics-amplitude";
-import SocketIOClient from "socket.io-client";
 import { connectSocket } from "modules/chat/actions";
+import Constants from "expo-constants";
 
 const MainStack = createStackNavigator(
   {
@@ -49,6 +51,9 @@ const RootStack = createStackNavigator(
     },
     Progress: {
       screen: ProgressScreen
+    },
+    Room: {
+      screen: RoomScreen
     },
     Chat: {
       screen: ChatScreen
@@ -85,7 +90,7 @@ const Root = React.memo(() => {
 
   React.useEffect(() => {
     dispatch(registerForPushNotificationsAsync());
-
+    dispatch(updateUser(Constants.installationId));
     connectSocket();
   }, []);
 

@@ -90,9 +90,14 @@ class BackendUtils {
   getNotifications(params) {
     return instance.get(`/getpush`, { params });
   }
-
   postMessage(params) {
     return instance.post(`/getpush`, params);
+  }
+  postUser(params) {
+    return instance.post(`/user`, params);
+  }
+  getUser(userId, params) {
+    return instance.get(`/user/${userId}`, params);
   }
 }
 export default new BackendUtils();

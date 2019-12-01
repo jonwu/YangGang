@@ -147,6 +147,7 @@ function showMoneyModal(state = false, actions) {
       return state;
   }
 }
+
 export default combineReducers({
   reddit,
   tweets,

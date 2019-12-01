@@ -180,12 +180,12 @@ const TabScreen = ({ navigation }) => {
         initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
 
-      <MoreIcon />
+      <MoreIcon navigation={navigation} />
     </React.Fragment>
   );
 };
 
-const MoreIcon = React.memo(() => {
+const MoreIcon = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
   const candidateResource = useCandidateResources();
@@ -216,7 +216,8 @@ const MoreIcon = React.memo(() => {
     <TouchableOpacity
       onPress={() => {
         Haptics.selectionAsync();
-        dispatch(updateShowMoneyModal(true));
+        navigation.navigate("Chat");
+        // dispatch(updateShowMoneyModal(true));
       }}
       style={{
         position: "absolute",

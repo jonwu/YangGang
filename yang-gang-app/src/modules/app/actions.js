@@ -244,3 +244,11 @@ export function updateCandidate(candidate) {
     return dispatch({ type: ActionTypes.UPDATE_CANDIDATE, candidate });
   };
 }
+
+export function updateUser(device_token) {
+  return (dispatch, getState) => {
+    BackendUtils.postUser({ device_token }).then(user => {
+      return dispatch({ type: ActionTypes.UPDATE_USER, user });
+    });
+  };
+}

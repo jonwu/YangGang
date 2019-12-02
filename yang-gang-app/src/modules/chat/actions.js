@@ -1,4 +1,5 @@
 import * as ActionTypes from "./actionTypes";
+import SocketIOClient from "socket.io-client";
 
 const socket = SocketIOClient("http://localhost:5000");
 
@@ -16,15 +17,15 @@ export const connectSocket = () => {
 
 export const initializeChatListeners = () => {
   return dispatch => {
-    socket.on("joined room", (roomId, messages) => {
+    socket.on("joined room", ({ room_id, messages }) => {
       dispatch({
         type: ActionTypes.ROOM_CONNECTED,
-        roomId,
+        roomId: room_id,
         messages
       });
     });
 
-    socket.on("broadcast message", message => {
+    socket.on("broadcast message", ({ message }) => {
       dispatch({
         type: ActionTypes.MESSAGE_RECEIVED,
         roomId: message.room_id,
@@ -34,10 +35,10 @@ export const initializeChatListeners = () => {
   };
 };
 
-export const connectRoom = (userId, roomId) => {
-  socket.emit("join", { userId, roomId });
+export const connectRoom = roomId => {
+  socket.emit("join", { room_id: roomId });
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {
-  socket.emit("send message", { userId, roomId, message });
+  socket.emit("send message", { user_id: userId, room_id: roomId, message });
 };

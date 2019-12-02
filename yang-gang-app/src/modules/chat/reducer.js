@@ -1,4 +1,5 @@
 import * as ActionTypes from "./actionTypes";
+import { combineReducers } from "redux";
 
 function isConnected(state = false, action) {
   switch (action.type) {

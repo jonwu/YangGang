@@ -91,7 +91,7 @@ const Root = React.memo(() => {
   React.useEffect(() => {
     dispatch(registerForPushNotificationsAsync());
     dispatch(updateUser(Constants.installationId));
-    connectSocket();
+    dispatch(connectSocket());
   }, []);
 
   React.useEffect(() => {

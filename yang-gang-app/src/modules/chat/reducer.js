@@ -42,6 +42,7 @@ function messages(state = {}, action) {
         [action.roomId]: action.messages
       };
     case ActionTypes.MESSAGE_RECEIVED:
+      console.log("-------", state)
       return {
         ...state,
         [action.roomId]: [...state[action.roomId], action.message]

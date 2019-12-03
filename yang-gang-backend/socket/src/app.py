@@ -21,6 +21,7 @@ def ping():
 @socketio.on('connect')
 def connect():
     try:
+        print("somebody is trying to connect")
         rooms = requests.get('http://web/rooms').json()
         emit('after connect',  rooms)
     except:
@@ -32,9 +33,9 @@ def connect():
 def send_message(data):
     try:
         room_id = data['room_id']
-        payload = {'user_id': data['user_id'], 'message': data['message']}
-        requests.post('http://web/rooms/{}/messages'.format(room_id), data=json.dumps(payload), headers=headers)
-        emit("broadcast message", data, broadcast=True, room=room_id)
+        rq = {'user_id': data['user_id'], 'message': data['message']}
+        payload = requests.post('http://web/rooms/{}/messages'.format(room_id), data=json.dumps(rq), headers=headers).json()
+        emit("broadcast message", payload, broadcast=True, room=room_id)
     except:
         traceback.print_exc()
 
@@ -42,6 +43,7 @@ def send_message(data):
 @socketio.on('join')
 def on_join(data):
     try:
+        print('received the following payload: {}'.format(data))
         room_id = data['room_id']
         messages = requests.get('http://web/rooms/{}/messages'.format(room_id)).json()
         payload = {'room_id': room_id, 'messages': messages}
@@ -58,6 +60,11 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send(username + ' has left the room.', room=room)
+
+
+@socketio.on('disconnect')
+def disconnect():
+    print('jon has disconnected')
 
 
 if __name__ == '__main__':

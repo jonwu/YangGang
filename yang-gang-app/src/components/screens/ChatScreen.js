@@ -16,19 +16,38 @@ const generateStyles = theme => ({});
  * 3. Hook up Chat
  * 4. Handle Errors
  */
-const ChatScreen = ({ navigation, roomId }) => {
+
+const convertMessageToGifted = (message) => {
+  return {
+    _id: message.id,
+    text: message.message,
+    createdAt: new Date(message.created_date),
+    user: {
+      _id: message.user_id,
+      name: null,
+      avatar: null
+    }
+  }
+}
+
+const ChatScreen = ({ navigation }) => {
+  const roomId = navigation.getParam("roomId");
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
   const user = useSelector(state => state.settings.user);
-  const messages = useSelector(state => state.chat.messages[roomId]);
+  let messages = useSelector(state => state.chat.messages[roomId])
+  console.log("============== these are my converted messages", messages)
+
   React.useEffect(() => {
     connectRoom(roomId);
   }, []);
 
-  if (messages === null) return <Loading />;
+  if (!messages) return <Loading />;
+  messages = messages.map(convertMessageToGifted);
 
   const onSend = (nextMessages = []) => {
     if (user) {
+      console.log({ userId: user.id, roomId, message: nextMessages[0].text })
       sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
     } else {
       console.warn("user is null", user);

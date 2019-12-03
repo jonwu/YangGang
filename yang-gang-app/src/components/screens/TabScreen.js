@@ -216,7 +216,7 @@ const MoreIcon = React.memo(({ navigation }) => {
     <TouchableOpacity
       onPress={() => {
         Haptics.selectionAsync();
-        navigation.navigate("Chat");
+        navigation.navigate("Room");
         // dispatch(updateShowMoneyModal(true));
       }}
       style={{

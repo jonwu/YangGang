@@ -1,9 +1,15 @@
 import React from "react";
-import { View, Text, Modal, Image, Platform } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  Image,
+  Platform
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import boba from "assets/boba.png";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { StoreReview } from "expo";
 
 const generateStyles = theme => ({});

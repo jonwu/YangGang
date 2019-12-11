@@ -17,7 +17,8 @@ import {
   updateReddit,
   updateInstagram,
   updateAllYoutubes,
-  getLastUpdate
+  getLastUpdate,
+  iterateCount
 } from "modules/app/actions";
 import moment from "moment";
 import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
@@ -78,6 +79,7 @@ const Root = React.memo(() => {
   };
 
   React.useEffect(() => {
+    dispatch(iterateCount());
     dispatch(registerForPushNotificationsAsync());
   }, []);
 

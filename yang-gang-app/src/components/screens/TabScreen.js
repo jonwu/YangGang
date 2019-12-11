@@ -33,6 +33,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import MoreModal from "./MoreModal";
+import RatingModal from "./RatingModal";
 import { useCandidateResources } from "utils/Utils";
 
 const generateStyles = theme => ({
@@ -150,6 +151,7 @@ const TabScreen = ({ navigation }) => {
   return (
     <React.Fragment>
       <MoreModal navigation={navigation} />
+      <RatingModal />
       {/* <MoneyDropModal /> */}
       {statusBar}
       {/* <Header

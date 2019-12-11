@@ -244,3 +244,9 @@ export function updateCandidate(candidate) {
     return dispatch({ type: ActionTypes.UPDATE_CANDIDATE, candidate });
   };
 }
+
+export function iterateCount() {
+  return {
+    type: ActionTypes.ITERATE_OPEN_COUNT
+  };
+}

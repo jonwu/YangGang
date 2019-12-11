@@ -5,7 +5,6 @@ import requests
 import tweepy
 import time
 import traceback
-from newsapi import NewsApiClient
 from constants import *
 import pymysql
 import confuse
@@ -124,13 +123,20 @@ def fetch_instagram_aggregate():
         fetch_instagram(r, candidate_name, env_configs[candidate_name]['instagram']['user_id'])
 
 
+# TODO: change to schema and make filling stats robust to one candidate breaking
 def fill_stats_reddit():
     try:
+        connection = pymysql.connect(host='db',
+                                     port=3306,
+                                     user='root',
+                                     password='root',
+                                     db='db',
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         num_followers_yang = reddit.subreddit('YangForPresidentHQ').subscribers
         num_followers_sanders = reddit.subreddit('SandersForPresident').subscribers
         num_followers_warren = reddit.subreddit('ElizabethWarren').subscribers
         num_followers_buttigieg = reddit.subreddit('Pete_buttigieg').subscribers
-        num_followers_kamala = reddit.subreddit('Kamala').subscribers
         # num_followers_trump = None  # can't reach the donald (because it's quarantined?)
         num_followers_gabbard = reddit.subreddit('tulsi').subscribers
         with connection.cursor() as cursor:
@@ -138,28 +144,33 @@ def fill_stats_reddit():
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
-                  "`num_followers_gabbard`, " \
-                  "`num_followers_kamala`) VALUES ({}, {}, {}, {}, {}, {})".format(num_followers_yang,
-                                                                                   num_followers_sanders,
-                                                                                   num_followers_warren,
-                                                                                   num_followers_buttigieg,
-                                                                                   num_followers_gabbard,
-                                                                                   num_followers_kamala)
+                  "`num_followers_gabbard`) VALUES ({}, {}, {}, {}, {})".format(num_followers_yang,
+                                                                               num_followers_sanders,
+                                                                               num_followers_warren,
+                                                                               num_followers_buttigieg,
+                                                                               num_followers_gabbard)
 
             print(sql)
             cursor.execute(sql)
             connection.commit()
+        connection.close()
     except:
         traceback.print_exc()
 
 
 def fill_stats_twitter():
     try:
+        connection = pymysql.connect(host='db',
+                                     port=3306,
+                                     user='root',
+                                     password='root',
+                                     db='db',
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         num_followers_yang = api.get_user('AndrewYang').followers_count
         num_followers_sanders = api.get_user('BernieSanders').followers_count
         num_followers_warren = api.get_user('ewarren').followers_count
         num_followers_buttigieg = api.get_user('PeteButtigieg').followers_count
-        num_followers_kamala = api.get_user('KamalaHarris').followers_count
         num_followers_biden = api.get_user('JoeBiden').followers_count
         num_followers_trump = api.get_user('realDonaldTrump').followers_count
         num_followers_gabbard = api.get_user('TulsiGabbard').followers_count
@@ -168,20 +179,19 @@ def fill_stats_twitter():
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
-                  "`num_followers_kamala`, " \
                   "`num_followers_gabbard`, " \
                   "`num_followers_trump`, " \
-                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {}, {})".format(num_followers_yang,
                                                                                           num_followers_sanders,
                                                                                           num_followers_warren,
                                                                                           num_followers_buttigieg,
-                                                                                          num_followers_kamala,
                                                                                           num_followers_gabbard,
                                                                                           num_followers_trump,
                                                                                           num_followers_biden)
             print(sql)
             cursor.execute(sql)
             connection.commit()
+        connection.close()
     except:
         traceback.print_exc()
 
@@ -200,11 +210,17 @@ def get_instagram_followers(user):
 
 def fill_stats_instagram():
     try:
+        connection = pymysql.connect(host='db',
+                                     port=3306,
+                                     user='root',
+                                     password='root',
+                                     db='db',
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         num_followers_yang = get_instagram_followers('andrewyang2020')
         num_followers_sanders = get_instagram_followers('berniesanders')
         num_followers_warren = get_instagram_followers('elizabethwarren')
         num_followers_buttigieg = get_instagram_followers('pete.buttigieg')
-        num_followers_kamala = get_instagram_followers('kamalaharris')
         num_followers_biden = get_instagram_followers('joebiden')
         num_followers_trump = get_instagram_followers('realdonaldtrump')
         num_followers_gabbard = get_instagram_followers('tulsigabbard')
@@ -213,20 +229,19 @@ def fill_stats_instagram():
                   "`num_followers_sanders`, " \
                   "`num_followers_warren`, " \
                   "`num_followers_buttigieg`, " \
-                  "`num_followers_kamala`, " \
                   "`num_followers_trump`, " \
                   "`num_followers_gabbard`, " \
-                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {}, {}, {})".format(num_followers_yang,
+                  "`num_followers_biden`) VALUES ({}, {}, {}, {}, {}, {}, {})".format(num_followers_yang,
                                                                                           num_followers_sanders,
                                                                                           num_followers_warren,
                                                                                           num_followers_buttigieg,
-                                                                                          num_followers_kamala,
                                                                                           num_followers_trump,
                                                                                           num_followers_gabbard,
                                                                                           num_followers_biden)
             print(sql)
             cursor.execute(sql)
             connection.commit()
+        connection.close()
     except:
         traceback.print_exc()
 
@@ -241,16 +256,17 @@ scheduler.add_job(fetch_twitter_aggregate, 'interval', seconds=20, id='fetch_twi
 scheduler.add_job(fetch_news_aggregate, 'interval', minutes=30, id='fetch_news')
 scheduler.add_job(fetch_youtube_aggregate, 'interval', minutes=60, id='fetch_youtube')
 
+# stats
+fill_stats_instagram()
+fill_stats_reddit()
+fill_stats_twitter()
+
 fetch_youtube_aggregate()
 fetch_news_aggregate()
 fetch_reddit_aggregate()
 fetch_twitter_aggregate()
 fetch_instagram_aggregate()
 
-# stats
-fill_stats_instagram()
-fill_stats_reddit()
-fill_stats_twitter()
 
 scheduler.start()
 

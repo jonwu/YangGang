@@ -4,7 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import NewsItem from "components/items/NewsItem";
 import { updateNews } from "modules/app/actions";
-import TwitterSeparator from "components/items/TwitterSeparator";
+import Separator from "components/items/Separator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
 import { useDimensionStore } from "utils/DimensionUtils";
@@ -71,7 +71,7 @@ const NewsScreen = React.memo(({ navigation }) => {
       data={news}
       contentContainerStyle={{ paddingBottom: 88 }}
       renderItem={renderItem}
-      // ItemSeparatorComponent={TwitterSeparator}
+      // ItemSeparatorComponent={Separator}
       keyExtractor={item => item.url}
     />
   );

@@ -4,7 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import InstagramItem from "components/items/InstagramItem";
 import { updateInstagram } from "modules/app/actions";
-import TwitterSeparator from "components/items/TwitterSeparator";
+import Separator from "components/items/Separator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
 import Constants from "expo-constants";
@@ -49,7 +49,7 @@ const InstagramScreen = React.memo(({ navigation }) => {
       refreshing={loadingInstagram.isRequesting}
       data={instagram}
       renderItem={renderItem}
-      ItemSeparatorComponent={TwitterSeparator}
+      ItemSeparatorComponent={Separator}
       keyExtractor={item => item.id}
       contentContainerStyle={{ paddingBottom: 88 }}
       ListFooterComponent={() => (

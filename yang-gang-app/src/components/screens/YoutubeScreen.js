@@ -5,7 +5,7 @@ import YoutubeItem from "components/items/YoutubeItem";
 import YoutubeTinyItem from "components/items/YoutubeTinyItem";
 import { useSelector, useDispatch } from "react-redux";
 import { updateAllYoutubes } from "modules/app/actions";
-import Separator from "components/items/TwitterSeparator";
+import Separator from "components/items/Separator";
 import { Ionicons } from "@expo/vector-icons";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import Loading from "components/utils/Loading";

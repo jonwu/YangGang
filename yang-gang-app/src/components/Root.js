@@ -27,6 +27,7 @@ import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
 import * as Amplitude from "expo-analytics-amplitude";
 import { connectSocket } from "modules/chat/actions";
 import Constants from "expo-constants";
+console.disableYellowBox = true;
 
 const MainStack = createStackNavigator(
   {

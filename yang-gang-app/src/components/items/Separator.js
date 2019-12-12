@@ -1,15 +1,16 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 
 const generateStyles = theme => ({
   separator: {
-    height: theme.spacing_2
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: theme.borderColor
   }
 });
 
 const Separator = () => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const { styles } = useThemeKit(generateStyles);
   return <View style={styles.separator} />;
 };
 

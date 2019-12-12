@@ -37,7 +37,8 @@ const OptionBars = connectActionSheet(
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "flex-end"
+          justifyContent: "flex-end",
+          backgroundColor: theme.bg2()
         }}
       >
         <Option

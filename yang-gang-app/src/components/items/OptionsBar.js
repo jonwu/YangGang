@@ -66,6 +66,16 @@ const OptionBars = connectActionSheet(
             />
           }
         />
+
+        {(Constants.installationId === "1EC08B77-806C-49A7-BDD6-7ED1C50F4446" ||
+          __DEV__) && (
+          <Option
+            onPress={() => {
+              navigation.navigate("PostEvent");
+            }}
+            icon={<MaterialIcons name="event" size={24} color={theme.text} />}
+          />
+        )}
         {/* <Option
           onPress={() => {
             StoreReview.requestReview();

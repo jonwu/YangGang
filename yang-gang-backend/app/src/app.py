@@ -26,10 +26,10 @@ def is_exponent_push_token(token):
 
 # Basic arguments. You should extend this function with the push features you
 # want to use, or simply pass in a `PushMessage` object.
-def send_push_message(tokens, message, extra=None):
+def send_push_message(tokens, message, data=None):
     try:
         print('sending message for tokens {}'.format(tokens))
-        message_list = [PushMessage(to=token, body=message, data=extra) for token in tokens]
+        message_list = [PushMessage(to=token, body=message, data=data) for token in tokens]
         responses = PushClient().publish_multiple(message_list)
         print('response: {}'.format(responses))
     except PushServerError:
@@ -116,8 +116,15 @@ event_json = api.model('Event Model', {
 
 message_json = api.model('Push Message Model', {
     'body': fields.String,
-    'data': fields.String
+    'data': fields.String,
 })
+
+# {
+#   tag: string,
+#   title: string,
+#   link: link,
+#   owner_id: owner_id,
+# }
 
 device_id_json = api.model('Create User Model', {
     'device_token': fields.String,
@@ -125,7 +132,9 @@ device_id_json = api.model('Create User Model', {
 
 room_json = api.model('Room Model', {
     'owner_id': fields.Integer,
-    'title': fields.String
+    'title': fields.String,
+    'tag': fields.String,
+    'link': fields.String,
 })
 
 chat_message_json = api.model('Chat Model', {
@@ -146,13 +155,21 @@ class SimpleGetPushApi(Resource):
     def post(self):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
+        room = json.loads(message['data'])
+        room_schema = RoomSchema()
+        new_room = room_schema.load(room, session=db.session, partial=True)
+        db.session.add(new_room)
+        db.session.commit()
+        rooms = Room.query.order_by(Room.created_date).limit(15).all()
+        # TODO: filtering logic to remove some of the fields, saves space to be less than 4 kib
+        room_schema = RoomSchema(many=True)
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         print('number of total push_ids: {}'.format(len(push_list)))
         increment = 100
         i = 0
         try:
             while i < len(push_list):
-                send_push_message(push_list[i: i + increment], message['body'])
+                send_push_message(push_list[i: i + increment], message['body'], data=room_schema.dumps(rooms))
                 i += increment
             return 'success, pushed a total of {} messages'.format(len(push_list)), 200
         except Exception as e:
@@ -191,10 +208,18 @@ class PostUserApi(Resource):
             abort(404, str(e))
 
 
+@api.route('/getroom/<string:room_id>')
+class GetRoomApi(Resource):
+    def get(self, room_id):
+        room = Room.query.filter(Room.id == room_id).one_or_none()
+        room_schema = RoomSchema()
+        return room_schema.dump(room)
+
+
 @api.route('/rooms')
 class RoomApi(Resource):
     def get(self):
-        rooms = Room.query.all()
+        rooms = Room.query.order_by(Room.created_date).limit(15).all()
         room_schema = RoomSchema(many=True)
         return room_schema.dump(rooms)
 
@@ -232,6 +257,8 @@ class MessageApi(Resource):
         try:
             message = request.get_json()
             message_schema = MessageSchema()
+            room = Room.query.order_by(Room.id == room_id).one_or_none()
+            room.message_count += 1
             new_message = message_schema.load(message, session=db.session, partial=True)
             new_message.room_id = room_id
             db.session.add(new_message)
@@ -469,6 +496,9 @@ class Room(db.Model):
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
     owner_id = db.Column(db.Integer)
     title = db.Column(db.Text())
+    link = db.Column(db.Text())
+    tag = db.Column(db.Text())
+    message_count = db.Column(db.Integer, default=0)
 
 
 class User(db.Model):

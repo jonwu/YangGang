@@ -156,7 +156,7 @@ const RoomScreen = ({ navigation }) => {
   const isConnected = useSelector(state => state.chat.isConnected);
   const rooms = useSelector(state => state.chat.rooms);
 
-  // if (!isConnected) return <Loading />;
+  if (!isConnected) return <Loading />;
 
   return (
     <>
@@ -165,7 +165,7 @@ const RoomScreen = ({ navigation }) => {
       <OptionBars navigation={navigation} />
       <FlatList
         style={{ backgroundColor: theme.bg2() }}
-        data={DummyRooms}
+        data={rooms}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item: room, i }) => {
           return <Room key={room.id} navigation={navigation} room={room} />;

@@ -43,14 +43,17 @@ def upgrade():
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('device_token', sa.String(100), unique=True),
         sa.Column('created_date', sa.DateTime, server_default=sa.func.current_timestamp()),
-        sa.Column('username', sa.String(128), unique=True, nullable=True)
+        sa.Column('username', sa.String(128), nullable=True)
     )
     op.create_table(
         'room',
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('owner_id', sa.Integer, sa.ForeignKey('user.id'), nullable=True),
         sa.Column('created_date', sa.DateTime, server_default=sa.func.current_timestamp()),
-        sa.Column('title', sa.Text())
+        sa.Column('link', sa.Text()),
+        sa.Column('tag', sa.Text()),
+        sa.Column('title', sa.Text()),
+        sa.Column('message_count', sa.Integer, default=0)
     )
     op.create_table(
         'message',

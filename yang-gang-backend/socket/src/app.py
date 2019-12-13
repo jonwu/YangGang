@@ -35,7 +35,9 @@ def send_message(data):
         room_id = data['room_id']
         rq = {'user_id': data['user_id'], 'message': data['message']}
         payload = requests.post('http://web/rooms/{}/messages'.format(room_id), data=json.dumps(rq), headers=headers).json()
+        room = requests.get('http://web/getroom/{}'.format(room_id)).json()
         emit("broadcast message", payload, broadcast=True, room=room_id)
+        emit("update room", room, broadcast=True)
     except:
         traceback.print_exc()
 

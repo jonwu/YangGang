@@ -17,7 +17,7 @@ function rooms(state = [], action) {
     case ActionTypes.CONNECTED:
       return action.rooms;
     case ActionTypes.UPDATE_ROOM:
-      return actions.rooms.map(room => {
+      return state.map(room => {
         return room.id === action.room.id ? action.room : room;
       });
     case ActionTypes.DISCONNECTED:

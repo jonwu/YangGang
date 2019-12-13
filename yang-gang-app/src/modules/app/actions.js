@@ -247,9 +247,15 @@ export function updateCandidate(candidate) {
 
 export function updateUser(device_token) {
   return (dispatch, getState) => {
-    BackendUtils.postUser({ device_token }).then(response => {
-      const user = response.data;
-      return dispatch({ type: ActionTypes.UPDATE_USER, user });
-    }).catch((error) => { console.log(error) });
+    BackendUtils.postUser({ device_token })
+      .then(response => {
+        const user = response.data;
+        console.log("User---", user);
+        return dispatch({ type: ActionTypes.UPDATE_USER, user });
+      })
+      .catch(error => {
+        console.log("ERROR---", error);
+        console.log(error);
+      });
   };
 }

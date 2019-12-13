@@ -1,7 +1,7 @@
 import * as ActionTypes from "./actionTypes";
 import SocketIOClient from "socket.io-client";
 
-const socket = SocketIOClient("http://localhost:5000", {
+const socket = SocketIOClient("http://192.168.2.11:5000", {
   transports: ["websocket"]
 });
 

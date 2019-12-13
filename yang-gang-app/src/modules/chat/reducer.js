@@ -16,6 +16,10 @@ function rooms(state = [], action) {
   switch (action.type) {
     case ActionTypes.CONNECTED:
       return action.rooms;
+    case ActionTypes.UPDATE_ROOM:
+      return actions.rooms.map(room => {
+        return room.id === action.room.id ? action.room : room;
+      });
     case ActionTypes.DISCONNECTED:
       return [];
     default:
@@ -42,7 +46,6 @@ function messages(state = {}, action) {
         [action.roomId]: action.messages
       };
     case ActionTypes.MESSAGE_RECEIVED:
-      console.log("-------", state)
       return {
         ...state,
         [action.roomId]: [...state[action.roomId], action.message]

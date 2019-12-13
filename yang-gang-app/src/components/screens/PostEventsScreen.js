@@ -15,6 +15,7 @@ import { EventList } from "./TwitterScreen";
 import Header from "./Header";
 import EventItem from "components/items/EventItem";
 import { useEventsStore } from "utils/StoreUtils";
+import { useSelector, useDispatch } from "react-redux";
 
 const generateStyles = theme => ({});
 
@@ -79,9 +80,16 @@ const PostEventsScreen = ({ navigation }) => {
   const [minute, setMinute] = React.useState("0");
   const [event_date, setEventDate] = React.useState("");
   const [body, setBody] = React.useState("");
+  const [ownerId, setOwnerId] = React.useState(null);
+  const [tag, setTag] = React.useState("");
+  const [pnLink, setPnLink] = React.useState("");
   const events = useEventsStore(state => state.events);
   const fetchEvents = useEventsStore(state => state.fetchEvents);
+  const user = useSelector(state => state.settings.user);
 
+  React.useEffect(() => {
+    if (user) setOwnerId(user.id);
+  }, [user]);
   React.useEffect(() => {
     fetchEvents();
   }, []);
@@ -213,21 +221,44 @@ const PostEventsScreen = ({ navigation }) => {
         </View>
         <View style={gstyles.top_2}>
           <BasicForm title={"body"} value={body} setValue={setBody} />
+          <BasicForm title={"owner_id"} value={ownerId} setValue={setOwnerId} />
+          <BasicForm title={"tag"} value={tag} setValue={setTag} />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: theme.spacing_2
+            }}
+          >
+            <Tag setTag={setTag} tag="breaking" />
+            <Tag setTag={setTag} tag="hype" />
+            <Tag setTag={setTag} tag="minor" />
+          </View>
+          <BasicForm title={"link"} value={pnLink} setValue={setPnLink} />
           <View style={{ padding: theme.spacing_2 }}>
             <Button
               text="Post Message"
               style={[{ backgroundColor: theme.red() }]}
-              onPress={() =>
+              onPress={() => {
+                const data = {
+                  owner_id: ownerId,
+                  tag,
+                  link: pnLink,
+                  title: body
+                };
+
                 BackendUtils.postMessage({
-                  body
+                  body,
+                  data
                 })
                   .then(() => {
                     alert("Success!");
                   })
                   .catch(() => {
                     alert("Error");
-                  })
-              }
+                  });
+              }}
             />
           </View>
         </View>
@@ -236,4 +267,20 @@ const PostEventsScreen = ({ navigation }) => {
   );
 };
 
+const Tag = ({ tag, setTag }) => {
+  const { theme, gstyles } = useThemeKit(generateStyles);
+  const COLORS = {
+    breaking: theme.red(),
+    hype: theme.yangGold(),
+    minor: theme.text(0.4)
+  };
+  return (
+    <Text
+      onPress={() => setTag(tag)}
+      style={[gstyles.caption_bold, { color: COLORS[tag] }]}
+    >
+      {tag.toUpperCase()}
+    </Text>
+  );
+};
 export default PostEventsScreen;

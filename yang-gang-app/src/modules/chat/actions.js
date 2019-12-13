@@ -2,7 +2,7 @@ import * as ActionTypes from "./actionTypes";
 import SocketIOClient from "socket.io-client";
 
 const socket = SocketIOClient("http://localhost:5000", {
-  transports: ['websocket']
+  transports: ["websocket"]
 });
 
 export const connectSocket = () => {
@@ -33,8 +33,15 @@ export const initializeChatListeners = () => {
       });
     });
 
-    socket.on("broadcast message", (message) => {
-      console.log('recieved the following message:', message)
+    socket.on("update room", room => {
+      dispatch({
+        type: ActionTypes.UPDATE_ROOM,
+        room
+      });
+    });
+
+    socket.on("broadcast message", message => {
+      console.log("recieved the following message:", message);
       dispatch({
         type: ActionTypes.MESSAGE_RECEIVED,
         roomId: message.room_id,
@@ -45,7 +52,7 @@ export const initializeChatListeners = () => {
 };
 
 export const connectRoom = roomId => {
-  console.log('emitting the following payload:', { room_id: roomId })
+  console.log("emitting the following payload:", { room_id: roomId });
   socket.emit("join", { room_id: roomId });
 };
 

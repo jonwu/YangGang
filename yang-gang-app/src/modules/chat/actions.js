@@ -1,7 +1,8 @@
 import * as ActionTypes from "./actionTypes";
 import SocketIOClient from "socket.io-client";
+import { ROOT_URL } from "utils/BackendUtils";
 
-const socket = SocketIOClient("http://localhost:5000", {
+const socket = SocketIOClient(`${ROOT_URL}:5000`, {
   transports: ["websocket"]
 });
 
@@ -21,7 +22,7 @@ export const initializeChatListeners = () => {
       console.log("we have connected to the socket", rooms);
       dispatch({
         type: ActionTypes.CONNECTED,
-        rooms: rooms.reverse(),
+        rooms: rooms.reverse()
       });
     });
 

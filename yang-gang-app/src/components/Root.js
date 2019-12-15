@@ -50,11 +50,11 @@ const ChatroomStack = createStackNavigator(
 );
 const RootStack = createStackNavigator(
   {
-    Room: {
-      screen: ChatroomStack
-    },
     Main: {
       screen: MainStack
+    },
+    Room: {
+      screen: ChatroomStack
     },
     Photo: {
       screen: PhotoScreen

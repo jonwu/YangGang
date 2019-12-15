@@ -1,9 +1,13 @@
 import axios from "axios";
+export const ROOT_URL = "http://172.16.42.164";
+const PORT = "80";
+
+const URL = `${ROOT_URL}:${PORT}`;
 // const URL = "http://localhost:80";
 // const URL = "http://192.168.2.11:80";
 
 // const URL = "http://34.217.208.191:80"; //dev
-const URL = "http://54.185.34.163:80";
+// const URL = "http://54.185.34.163:80";
 
 const instance = axios.create({ timeout: 10000, baseURL: URL });
 
@@ -12,9 +16,9 @@ instance.interceptors.request.use(
     if (process.env.NODE_ENV !== "production") {
       console.log(
         `\n(${i_config.method.toUpperCase()}) ${i_config.url} ${
-        i_config.params
-          ? JSON.stringify(i_config.params)
-          : JSON.stringify(i_config.data)
+          i_config.params
+            ? JSON.stringify(i_config.params)
+            : JSON.stringify(i_config.data)
         }`
       );
     }

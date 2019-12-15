@@ -102,7 +102,7 @@ const RoomScreen = ({ navigation }) => {
   // if (!isConnected) return <Loading />;
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       {/* <StatusBar barStyle="light-content" /> */}
       <Header
         title={"The YG Club"}
@@ -113,7 +113,7 @@ const RoomScreen = ({ navigation }) => {
       />
       {/* <OptionBars navigation={navigation} /> */}
       <FlatList
-        style={{ backgroundColor: theme.bg2() }}
+        style={{ backgroundColor: theme.bg2(), flex: 1 }}
         data={DummyRooms}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item: room, i }) => {
@@ -121,7 +121,7 @@ const RoomScreen = ({ navigation }) => {
         }}
         ItemSeparatorComponent={Separator}
       />
-    </>
+    </View>
   );
 };
 

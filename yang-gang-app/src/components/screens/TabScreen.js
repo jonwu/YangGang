@@ -25,7 +25,8 @@ import {
   FontAwesome,
   Entypo,
   MaterialCommunityIcons,
-  Octicons
+  Octicons,
+  Feather
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
@@ -250,7 +251,7 @@ const MoreIcon = React.memo(({ navigation }) => {
             overflow: "hidden"
           }}
         >
-          <Octicons name="three-bars" color={theme.light()} size={24} />
+          <Ionicons name="ios-chatbubbles" color={theme.light()} size={36} />
           <Animated.Image
             source={candidateResource.avatar}
             style={{

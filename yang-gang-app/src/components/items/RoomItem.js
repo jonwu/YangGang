@@ -134,7 +134,7 @@ const RoomItem = React.memo(({ room, navigation, style }) => {
             }}
           />
           <Text style={[gstyles.caption_50]}>
-            {moment(created_date).fromNow(true)}
+            {moment.utc(created_date).fromNow(true)}
           </Text>
         </View>
         <Text style={gstyles.p1}>{title}</Text>

@@ -247,25 +247,25 @@ def fill_stats_instagram():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(fill_stats_twitter, 'interval', minutes=60, id='fill_stats_twitter')
-scheduler.add_job(fill_stats_reddit, 'interval', minutes=60, id='fill_stats_reddit')
-scheduler.add_job(fill_stats_instagram, 'interval', minutes=60, id='fill_stats_instagram')
-scheduler.add_job(fetch_reddit_aggregate, 'interval', seconds=20, id='fetch_reddit')
-scheduler.add_job(fetch_instagram_aggregate, 'interval', minutes=4, id='fetch_instagram')
-scheduler.add_job(fetch_twitter_aggregate, 'interval', seconds=20, id='fetch_twitter')
-scheduler.add_job(fetch_news_aggregate, 'interval', minutes=30, id='fetch_news')
-scheduler.add_job(fetch_youtube_aggregate, 'interval', minutes=60, id='fetch_youtube')
-
-# stats
-fill_stats_instagram()
-fill_stats_reddit()
-fill_stats_twitter()
-
-fetch_youtube_aggregate()
-fetch_news_aggregate()
-fetch_reddit_aggregate()
-fetch_twitter_aggregate()
-fetch_instagram_aggregate()
+# scheduler.add_job(fill_stats_twitter, 'interval', minutes=60, id='fill_stats_twitter')
+# scheduler.add_job(fill_stats_reddit, 'interval', minutes=60, id='fill_stats_reddit')
+# scheduler.add_job(fill_stats_instagram, 'interval', minutes=60, id='fill_stats_instagram')
+# scheduler.add_job(fetch_reddit_aggregate, 'interval', seconds=20, id='fetch_reddit')
+# scheduler.add_job(fetch_instagram_aggregate, 'interval', minutes=4, id='fetch_instagram')
+# scheduler.add_job(fetch_twitter_aggregate, 'interval', seconds=20, id='fetch_twitter')
+# scheduler.add_job(fetch_news_aggregate, 'interval', minutes=30, id='fetch_news')
+# scheduler.add_job(fetch_youtube_aggregate, 'interval', minutes=60, id='fetch_youtube')
+#
+# # stats
+# fill_stats_instagram()
+# fill_stats_reddit()
+# fill_stats_twitter()
+#
+# fetch_youtube_aggregate()
+# fetch_news_aggregate()
+# fetch_reddit_aggregate()
+# fetch_twitter_aggregate()
+# fetch_instagram_aggregate()
 
 
 scheduler.start()

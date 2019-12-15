@@ -4,6 +4,7 @@ services:
         build: ./app
         links:
             - db
+            - socket
         ports:
             - "80:80"
         volumes:

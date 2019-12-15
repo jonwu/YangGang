@@ -75,6 +75,9 @@ const ChatScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
   const user = useSelector(state => state.settings.user);
+  // const rooms = useSelector(state => state.chat.rooms);
+  // console.log("-----ROOMS-----", roomId, rooms)
+  const room = useSelector(state => state.chat.rooms.find(room => room.id === roomId));
   let messages = useSelector(state => state.chat.messages[roomId]);
   console.log("============== these are my converted messages", messages);
 
@@ -82,8 +85,8 @@ const ChatScreen = ({ navigation }) => {
     connectRoom(roomId);
   }, []);
 
-  // if (!messages) return <Loading />;
-  // messages = messages.map(convertMessageToGifted);
+  if (!messages) return <Loading />;
+  messages = messages.map(convertMessageToGifted);
 
   const onSend = (nextMessages = []) => {
     if (user) {
@@ -168,7 +171,7 @@ const ChatScreen = ({ navigation }) => {
               <Back navigation={navigation} btnColor={theme.text()} />
             </View>
             <View style={{ flex: 1 }}>
-              <RoomItem room={dummyRoom} style={{ padding: theme.spacing_4 }} />
+              <RoomItem active room={room} style={{ padding: theme.spacing_4 }} />
             </View>
           </View>
         }
@@ -176,12 +179,13 @@ const ChatScreen = ({ navigation }) => {
       />
 
       <GiftedChat
-        messages={dummy}
+        messages={messages}
         onSend={onSend}
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar}
         renderComposer={renderComposer}
         renderSend={renderSend}
+        inverted={false}
         showUserAvatar
         user={{
           _id: 1

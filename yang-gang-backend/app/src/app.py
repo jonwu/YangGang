@@ -13,6 +13,7 @@ from exponent_server_sdk import PushServerError
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import traceback
+import socketio
 
 
 def is_exponent_push_token(token):
@@ -63,6 +64,10 @@ r = Redis(host='redis', port=6379)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+
+sio = socketio.Client(logger=True, engineio_logger=True)
+sio.connect('http://socket:5000', transports='websocket')
+print('my socketio sid is', sio.sid)
 
 
 @api.route('/notifications/<int:event_id>/<string:expo_id>')
@@ -155,7 +160,7 @@ class SimpleGetPushApi(Resource):
     def post(self):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
-        room = json.loads(message['data'])
+        room = message['data']
         room_schema = RoomSchema()
         new_room = room_schema.load(room, session=db.session, partial=True)
         db.session.add(new_room)
@@ -231,6 +236,7 @@ class RoomApi(Resource):
             new_room = room_schema.load(room, session=db.session, partial=True)
             db.session.add(new_room)
             db.session.commit()
+            sio.emit('update room', room_schema.dump(new_room))
             return room_schema.dump(new_room), 200
         except Exception as e:
             traceback.print_exc()
@@ -257,8 +263,10 @@ class MessageApi(Resource):
         try:
             message = request.get_json()
             message_schema = MessageSchema()
+            room_schema = RoomSchema()
             room = Room.query.order_by(Room.id == room_id).one_or_none()
             room.message_count += 1
+            sio.emit('update room', room_schema.dump(room))
             new_message = message_schema.load(message, session=db.session, partial=True)
             new_message.room_id = room_id
             db.session.add(new_message)

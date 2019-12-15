@@ -4,6 +4,7 @@ flask
 flask-marshmallow
 flask-restplus
 flask-socketio
+python-socketio[client]
 Flask-SQLAlchemy
 gevent
 gunicorn

@@ -18,7 +18,7 @@ function rooms(state = [], action) {
       return action.rooms;
     case ActionTypes.UPDATE_ROOM:
       if (!state.find(room => room.id === action.room.id)) {
-        return [room, ...state];
+        return [action.room, ...state];
       }
       return state.map(room => {
         return room.id === action.room.id ? action.room : room;

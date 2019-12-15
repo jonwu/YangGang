@@ -12,9 +12,9 @@ instance.interceptors.request.use(
     if (process.env.NODE_ENV !== "production") {
       console.log(
         `\n(${i_config.method.toUpperCase()}) ${i_config.url} ${
-          i_config.params
-            ? JSON.stringify(i_config.params)
-            : JSON.stringify(i_config.data)
+        i_config.params
+          ? JSON.stringify(i_config.params)
+          : JSON.stringify(i_config.data)
         }`
       );
     }

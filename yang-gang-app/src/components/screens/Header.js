@@ -3,6 +3,7 @@ import { View, SafeAreaView, TouchableOpacity, Text } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import { NavigationActions } from "react-navigation";
 
 const generateStyles = theme => ({
   headerSafeArea: {
@@ -23,7 +24,7 @@ const generateStyles = theme => ({
   }
 });
 
-const Back = ({ navigation, btnColor }) => {
+export const Back = ({ navigation, btnColor }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   if (navigation.isFirstRouteInParent()) return null;
 
@@ -42,14 +43,14 @@ const Back = ({ navigation, btnColor }) => {
     </TouchableOpacity>
   );
 };
-const Close = ({ navigation, btnColor }) => {
+export const Close = ({ navigation, btnColor }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  if (navigation.isFirstRouteInParent()) return null;
+  // if (navigation.isFirstRouteInParent()) return null;
 
   return (
     <TouchableOpacity
       style={{ padding: 8, height: 40, overflow: "hidden" }}
-      onPress={() => navigation.goBack()}
+      onPress={() => navigation.dispatch(NavigationActions.back())}
     >
       <Ionicons
         name={"ios-close"}

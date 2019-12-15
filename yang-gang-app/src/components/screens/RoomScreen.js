@@ -4,7 +4,9 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StatusBar
+  StatusBar,
+  Animated,
+  Easing
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,27 +14,32 @@ import Loading from "components/utils/Loading";
 import Separator from "components/items/Separator";
 import Header from "./Header";
 import OptionBars from "components/items/OptionsBar";
+import moment from "moment";
+import { FontAwesome } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
+import RoomItem from "components/items/RoomItem";
 
 const generateStyles = theme => ({});
 
 const DummyRooms = [
   {
     id: 0,
-    messageCount: 45,
+    message_count: 45,
     title: "Yang @ 5% in New Hampshire MassINC/WBUR poll",
     link: "https://twitter.com/Politics_Polls/status/1204716978499289089",
-    tag: "breaking"
+    tag: "breaking",
+    active: true
   },
   {
     id: 1,
-    messageCount: 15,
+    message_count: 15,
     title: "Yang @ 5% in New Hampshire MassINC/WBUR poll",
     link: "https://twitter.com/Politics_Polls/status/1204716978499289089",
     tag: "hype"
   },
   {
     id: 2,
-    messageCount: 11,
+    message_count: 11,
     tag: "minor",
     title:
       "USA Today Article Includes Yang Among Three Candidates Most Likely to Win General Election",
@@ -41,7 +48,7 @@ const DummyRooms = [
   },
   {
     id: 3,
-    messageCount: 17,
+    message_count: 17,
     tag: "minor",
     title:
       "USA Today Article Includes Yang Among Three Candidates Most Likely to Win General Election",
@@ -50,7 +57,7 @@ const DummyRooms = [
   },
   {
     id: 4,
-    messageCount: 8,
+    message_count: 8,
     tag: "minor",
     title:
       "USA Today Article Includes Yang Among Three Candidates Most Likely to Win General Election",
@@ -59,7 +66,7 @@ const DummyRooms = [
   },
   {
     id: 5,
-    messageCount: 2,
+    message_count: 2,
     tag: "minor",
     title:
       "USA Today Article Includes Yang Among Three Candidates Most Likely to Win General Election",
@@ -68,7 +75,7 @@ const DummyRooms = [
   },
   {
     id: 6,
-    messageCount: 10,
+    message_count: 10,
     tag: "minor",
     title:
       "USA Today Article Includes Yang Among Three Candidates Most Likely to Win General Election",
@@ -77,7 +84,7 @@ const DummyRooms = [
   },
   {
     id: 7,
-    messageCount: 10,
+    message_count: 10,
     tag: "minor",
     title:
       "USA Today Article Includes Yang Among Three Candidates Most Likely to Win General Election",
@@ -86,89 +93,31 @@ const DummyRooms = [
   }
 ];
 
-const Room = React.memo(({ room, navigation }) => {
-  const { id, title, owner_id, created_date, tag, messageCount } = room;
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  console.log("id in room is:", id);
-
-  const COLORS = {
-    breaking: theme.red(),
-    hype: theme.yangGold(),
-    minor: theme.text(0.4)
-  };
-
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate("Chat", { roomId: id })}
-    >
-      <View style={[{ padding: theme.spacing_2 }]}>
-        <View
-          style={[
-            {
-              flexDirection: "row",
-              alignItems: "center"
-              // borderRadius: theme.borderRadius,
-              // padding: theme.spacing_5,
-              // backgroundColor: COLORS[tag],
-              // alignSelf: "flex-start"
-            },
-            gstyles.bottom_4
-          ]}
-        >
-          <View
-            style={{
-              height: 6,
-              width: 6,
-              borderRadius: 3,
-              backgroundColor: COLORS[tag],
-              marginRight: theme.spacing_4
-            }}
-          ></View>
-          <Text style={[gstyles.caption_bold, { color: COLORS[tag] }]}>
-            {tag.toUpperCase()}
-          </Text>
-        </View>
-        <Text style={gstyles.h5_bold}>{title}</Text>
-        <View
-          style={[
-            { flexDirection: "row", justifyContent: "space-between" },
-            gstyles.top_4
-          ]}
-        >
-          <Text
-            style={[
-              gstyles.p1_bold_50,
-              { color: theme.green(), alignItems: "center" }
-            ]}
-          >
-            {messageCount} messages
-          </Text>
-          <Text style={[gstyles.p1_50]}>5 hours ago</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-});
-
 const RoomScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
   const isConnected = useSelector(state => state.chat.isConnected);
   const rooms = useSelector(state => state.chat.rooms);
 
-  if (!isConnected) return <Loading />;
+  // if (!isConnected) return <Loading />;
 
   return (
     <>
-      <StatusBar barStyle="light-content" />
-      <Header title={"The YG Club"} navigation={navigation} close />
-      <OptionBars navigation={navigation} />
+      {/* <StatusBar barStyle="light-content" /> */}
+      <Header
+        title={"The YG Club"}
+        navigation={navigation}
+        close
+        btnColor={theme.text()}
+        bgColor={theme.bg2()}
+      />
+      {/* <OptionBars navigation={navigation} /> */}
       <FlatList
         style={{ backgroundColor: theme.bg2() }}
-        data={rooms}
+        data={DummyRooms}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item: room, i }) => {
-          return <Room key={room.id} navigation={navigation} room={room} />;
+          return <RoomItem key={room.id} navigation={navigation} room={room} />;
         }}
         ItemSeparatorComponent={Separator}
       />

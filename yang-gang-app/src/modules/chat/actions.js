@@ -17,6 +17,7 @@ export const connectSocket = () => {
 export const initializeChatListeners = () => {
   return dispatch => {
     socket.on("after connect", rooms => {
+      console.log("after connect", rooms);
       console.log("we have connected to the socket", rooms);
       dispatch({
         type: ActionTypes.CONNECTED,
@@ -25,6 +26,7 @@ export const initializeChatListeners = () => {
     });
 
     socket.on("joined room", ({ room_id, messages }) => {
+      console.log("joined room");
       console.log("Messages", messages, room_id);
       dispatch({
         type: ActionTypes.ROOM_CONNECTED,
@@ -34,6 +36,7 @@ export const initializeChatListeners = () => {
     });
 
     socket.on("update room", room => {
+      console.log("update room", room);
       dispatch({
         type: ActionTypes.UPDATE_ROOM,
         room
@@ -41,6 +44,7 @@ export const initializeChatListeners = () => {
     });
 
     socket.on("broadcast message", message => {
+      console.log("broadcast message", message);
       console.log("recieved the following message:", message);
       dispatch({
         type: ActionTypes.MESSAGE_RECEIVED,

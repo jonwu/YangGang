@@ -39,6 +39,15 @@ const MainStack = createStackNavigator(
   }
 );
 
+const ChatroomStack = createStackNavigator(
+  {
+    Room: RoomScreen,
+    Chat: ChatScreen
+  },
+  {
+    headerMode: "none"
+  }
+);
 const RootStack = createStackNavigator(
   {
     Main: {
@@ -54,10 +63,7 @@ const RootStack = createStackNavigator(
       screen: ProgressScreen
     },
     Room: {
-      screen: RoomScreen
-    },
-    Chat: {
-      screen: ChatScreen
+      screen: ChatroomStack
     },
     Merch: {
       screen: MerchScreen

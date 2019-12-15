@@ -86,9 +86,9 @@ const PostEventsScreen = ({ navigation }) => {
   const events = useEventsStore(state => state.events);
   const fetchEvents = useEventsStore(state => state.fetchEvents);
   const user = useSelector(state => state.settings.user);
-
+  // console.log(user);
   React.useEffect(() => {
-    if (user) setOwnerId(user.id);
+    if (user) setOwnerId(user.id.toString());
   }, [user]);
   React.useEffect(() => {
     fetchEvents();

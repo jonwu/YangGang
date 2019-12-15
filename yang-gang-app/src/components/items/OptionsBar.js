@@ -37,7 +37,7 @@ const OptionBars = connectActionSheet(
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "flex-end",
+          // justifyContent: "center",
           backgroundColor: theme.bg2()
         }}
       >
@@ -67,49 +67,13 @@ const OptionBars = connectActionSheet(
           }
         />
 
-        {(Constants.installationId === "1EC08B77-806C-49A7-BDD6-7ED1C50F4446" ||
-          __DEV__) && (
-          <Option
-            onPress={() => {
-              navigation.navigate("PostEvent");
-            }}
-            icon={<MaterialIcons name="event" size={24} color={theme.text} />}
-          />
-        )}
         {/* <Option
           onPress={() => {
             StoreReview.requestReview();
           }}
           icon={<FontAwesome name="star" size={24} color={theme.text()} />}
         /> */}
-        {/* <Option
-          onPress={() => {
-            MailComposer.composeAsync({
-              recipients: ["theyangapp@gmail.com"],
-              subject: "My thoughts on Yang: Humanity First app..."
-            }).catch(() => {
-              Alert.alert(
-                "Mail Error",
-                `The mail composer cannot be opened. You likely have not configured your email account on your device yet.${"\n\n"}Please don't hesitate to say hi to me at theyangapp@gmail.com!`,
-                [
-                  {
-                    text: "OK",
-                    onPress: () => console.log("Ask me later pressed"),
-                    style: "cancel"
-                  }
-                ],
-                { cancelable: false }
-              );
-            });
-          }}
-          icon={
-            <MaterialCommunityIcons
-              name="email"
-              size={24}
-              color={theme.text()}
-            />
-          }
-        /> */}
+
         {/* {(Constants.installationId === "1EC08B77-806C-49A7-BDD6-7ED1C50F4446" ||
           __DEV__) && (
           <Option
@@ -122,7 +86,7 @@ const OptionBars = connectActionSheet(
           />
         )} */}
 
-        {/* <Option
+        <Option
           onPress={() => {
             const cancelButtonIndex = 3;
             const options = [
@@ -149,12 +113,52 @@ const OptionBars = connectActionSheet(
             );
           }}
           icon={
-            <Image
-              source={resource.avatar}
-              style={{ width: 48, height: 48, borderRadius: 24 }}
+            <MaterialIcons name="swap-horiz" size={30} color={theme.text()} />
+          }
+          // icon={
+          //   <Image
+          //     source={resource.avatar}
+          //     style={{ width: 48, height: 48, borderRadius: 24 }}
+          //   />
+          // }
+        />
+        <Option
+          onPress={() => {
+            MailComposer.composeAsync({
+              recipients: ["theyangapp@gmail.com"],
+              subject: "My thoughts on Yang: Humanity First app..."
+            }).catch(() => {
+              Alert.alert(
+                "Mail Error",
+                `The mail composer cannot be opened. You likely have not configured your email account on your device yet.${"\n\n"}Please don't hesitate to say hi to me at theyangapp@gmail.com!`,
+                [
+                  {
+                    text: "OK",
+                    onPress: () => console.log("Ask me later pressed"),
+                    style: "cancel"
+                  }
+                ],
+                { cancelable: false }
+              );
+            });
+          }}
+          icon={
+            <MaterialCommunityIcons
+              name="email"
+              size={24}
+              color={theme.text()}
             />
           }
-        /> */}
+        />
+        {(Constants.installationId === "1EC08B77-806C-49A7-BDD6-7ED1C50F4446" ||
+          __DEV__) && (
+          <Option
+            onPress={() => {
+              navigation.navigate("PostEvent");
+            }}
+            icon={<MaterialIcons name="event" size={24} color={theme.text()} />}
+          />
+        )}
       </View>
     );
   }

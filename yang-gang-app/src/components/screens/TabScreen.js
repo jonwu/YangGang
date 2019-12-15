@@ -62,11 +62,13 @@ const renderIcon = ({ route }) => {
   if (route.image) return route.image;
   switch (route.iconType) {
     case "Entypo":
-      return <Entypo name={route.icon} size={24} color={route.color} />;
+      return <Entypo name={route.icon} size={20} color={route.color} />;
     case "FontAwesome":
-      return <FontAwesome name={route.icon} size={24} color={route.color} />;
+      return <FontAwesome name={route.icon} size={20} color={route.color} />;
+    case "Octicons":
+      return <Octicons name={route.icon} size={20} color={route.color} />;
     default:
-      return <Ionicons name={route.icon} size={24} color={route.color} />;
+      return <Ionicons name={route.icon} size={20} color={route.color} />;
   }
 };
 
@@ -95,15 +97,21 @@ const TabScreen = ({ navigation }) => {
     {
       key: "instagram",
       icon: "instagram",
-      image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
+      image: <Image source={instagramIcon} style={{ width: 20, height: 20 }} />,
       iconType: "FontAwesome"
-    }
+    },
     // {
     //   key: "settings",
     //   icon: "md-settings",
     //   // iconType: "FontAwesome",
     //   color: theme.text()
-    // }
+    // },
+    {
+      key: "settings",
+      icon: "three-bars",
+      iconType: "Octicons",
+      color: theme.text()
+    }
   ];
 
   if (candidate === "donald_trump") {

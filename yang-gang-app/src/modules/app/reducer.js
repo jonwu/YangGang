@@ -148,6 +148,17 @@ function showMoneyModal(state = false, actions) {
   }
 }
 
+function modals(state = { username: false }, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_MODAL:
+      return { ...state, [actions.key]: actions.show };
+    default:
+      return state;
+  }
+}
+
+function showUsernameModal(state = false, actions) {}
+
 export default combineReducers({
   reddit,
   tweets,
@@ -158,5 +169,6 @@ export default combineReducers({
   news,
   showMoneyModal,
   instagram,
-  candidate
+  candidate,
+  modals
 });

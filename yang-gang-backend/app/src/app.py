@@ -34,7 +34,7 @@ def send_push_message(tokens, message, data=None):
         responses = PushClient().publish_multiple(message_list)
         print('response: {}'.format(responses))
     except PushServerError as e:
-        print('the formatting errors: {}'.format(e.errors))
+        print('PushServerError detailed message: {}'.format(e.errors))
         # Encountered some likely formatting/validation error.
         traceback.print_exc()
         return
@@ -148,6 +148,10 @@ chat_message_json = api.model('Chat Model', {
     'message': fields.String
 })
 
+user_json = api.model('Modify User Model', {
+    'username': fields.String
+})
+
 
 @api.route("/getpush/")
 class SimpleGetPushApi(Resource):
@@ -166,7 +170,6 @@ class SimpleGetPushApi(Resource):
         new_room = room_schema.load(room, session=db.session, partial=True)
         db.session.add(new_room)
         db.session.commit()
-        # TODO: filtering logic to remove some of the fields, saves space to be less than 4 kib
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         print('number of total push_ids: {}'.format(len(push_list)))
         increment = 100
@@ -184,13 +187,24 @@ class SimpleGetPushApi(Resource):
 @api.route('/user/<int:user_id>')
 class UserApi(Resource):
     def get(self, user_id):
-        user = User.query.filter(User.id == user_id).one_or_none()
-        user_schema = UserSchema()
-        return user_schema.dump(user)
+        try:
+            user = User.query.filter(User.id == user_id).one_or_none()
+            user_schema = UserSchema()
+            return user_schema.dump(user)
+        except:
+            traceback.print_exc()
 
+    @api.expect(user_json)
     def put(self, user_id):
-        # TODO: add username?
-        pass
+        try:
+            user = User.query.filter(User.id == user_id).one_or_none()
+            user_info = request.get_json()
+            user.username = user_info['username']
+            db.session.commit()
+            user_schema = UserSchema()
+            return user_schema.dump(user)
+        except:
+            traceback.print_exc()
 
 
 @api.route('/user')

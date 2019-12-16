@@ -33,7 +33,8 @@ def send_push_message(tokens, message, data=None):
         message_list = [PushMessage(to=token, body=message, data=data) for token in tokens]
         responses = PushClient().publish_multiple(message_list)
         print('response: {}'.format(responses))
-    except PushServerError:
+    except PushServerError as e:
+        print('the formatting errors: {}'.format(e.errors))
         # Encountered some likely formatting/validation error.
         traceback.print_exc()
         return
@@ -165,19 +166,18 @@ class SimpleGetPushApi(Resource):
         new_room = room_schema.load(room, session=db.session, partial=True)
         db.session.add(new_room)
         db.session.commit()
-        rooms = Room.query.order_by(Room.created_date).limit(15).all()
         # TODO: filtering logic to remove some of the fields, saves space to be less than 4 kib
-        room_schema = RoomSchema(many=True)
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         print('number of total push_ids: {}'.format(len(push_list)))
         increment = 100
         i = 0
         try:
             while i < len(push_list):
-                send_push_message(push_list[i: i + increment], message['body'], data=room_schema.dumps(rooms))
+                send_push_message(push_list[i: i + increment], message['body'], room_schema.dump(new_room))
                 i += increment
             return 'success, pushed a total of {} messages'.format(len(push_list)), 200
         except Exception as e:
+            traceback.print_exc()
             abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
 
 

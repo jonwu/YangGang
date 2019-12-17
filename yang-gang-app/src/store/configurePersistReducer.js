@@ -10,7 +10,6 @@ const transform = createTransform(
     switch (key) {
       case "settings":
         delete outboundState.notifications;
-        console.log(outboundState);
         return {
           ...outboundState
         };

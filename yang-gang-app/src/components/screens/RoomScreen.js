@@ -109,11 +109,11 @@ const RoomScreen = ({ navigation }) => {
         navigation={navigation}
         close
         btnColor={theme.text()}
-        bgColor={theme.bg2()}
+        bgColor={theme.bg3()}
       />
       {/* <OptionBars navigation={navigation} /> */}
       <FlatList
-        style={{ backgroundColor: theme.bg2(), flex: 1 }}
+        style={{ backgroundColor: theme.bg3(), flex: 1 }}
         data={rooms}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item: room, i }) => {

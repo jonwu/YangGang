@@ -11,10 +11,15 @@ import {
   Send,
   Actions
 } from "react-native-gifted-chat";
+import {
+  MaterialIcons
+} from "@expo/vector-icons";
 import Header, { Back } from "./Header";
 import Loading from "components/utils/Loading";
 import { sendMessage, connectRoom } from "modules/chat/actions";
 import RoomItem from "components/items/RoomItem";
+import UsernameModal from "./UsernameModal";
+import { updateModal } from "modules/app/actions";
 
 const dummy = [
   {
@@ -96,13 +101,11 @@ const ChatScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
   const user = useSelector(state => state.settings.user);
-  // const rooms = useSelector(state => state.chat.rooms);
-  // console.log("-----ROOMS-----", roomId, rooms)
+
   const room = useSelector(state =>
     state.chat.rooms.find(room => room.id === roomId)
   );
   let messages = useSelector(state => state.chat.messages[roomId]);
-  console.log("============== these are my converted messages", messages);
 
   React.useEffect(() => {
     connectRoom(roomId);
@@ -112,12 +115,14 @@ const ChatScreen = ({ navigation }) => {
   messages = messages.map(convertMessageToGifted);
 
   const onSend = (nextMessages = []) => {
-    if (user) {
-      console.log({ userId: user.id, roomId, message: nextMessages[0].text });
-      sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
-    } else {
-      console.warn("user is null", user);
-    }
+    if (!user) return
+
+    if (!user.username) {
+      dispatch(updateModal("username", true))
+      return;
+    };
+
+    sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
   };
   /** render the chat bubble */
   const renderBubble = props => {
@@ -163,7 +168,10 @@ const ChatScreen = ({ navigation }) => {
   };
 
   const renderActions = props => {
-    return <Actions {...props} onPressActionButton={() => alert(1)} />;
+
+    return <Actions icon={() => <MaterialIcons name={"person"} color={theme.text(0.5)} size={24} />} {...props} onPressActionButton={() => {
+      dispatch(updateModal("username", true));
+    }} />;
   };
 
   // /** render the time labels in the bubble */
@@ -185,9 +193,9 @@ const ChatScreen = ({ navigation }) => {
   //     />
   //   );
   // };
-
   return (
     <View style={{ flex: 1, backgroundColor: theme.bg3() }}>
+      <UsernameModal />
       <Header
         btnColor={theme.text()}
         bgColor={theme.bg3()}
@@ -210,7 +218,7 @@ const ChatScreen = ({ navigation }) => {
       />
 
       <GiftedChat
-        messages={dummy}
+        messages={messages}
         onSend={onSend}
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar}
@@ -221,7 +229,7 @@ const ChatScreen = ({ navigation }) => {
         showUserAvatar
         renderUsernameOnMessage
         user={{
-          _id: user._id
+          _id: user.id
         }}
       />
     </View>

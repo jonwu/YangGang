@@ -91,7 +91,6 @@ const RoomItem = React.memo(({ room, navigation, style }) => {
     active
   } = room;
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  console.log("id in room is:", id);
 
   const COLORS = {
     breaking: theme.red(),

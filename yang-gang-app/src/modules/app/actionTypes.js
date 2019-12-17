@@ -11,3 +11,4 @@ export const UPDATE_EXPO_ID = "app/UPDATE_EXPO_ID";
 export const UPDATE_INSTAGRAM = "app/UPDATE_INSTAGRAM";
 export const UPDATE_CANDIDATE = "app/UPDATE_CANDIDATE";
 export const UPDATE_USER = "app/UPDATE_USER";
+export const UPDATE_MODAL = "chat/UPDATE_MODAL";

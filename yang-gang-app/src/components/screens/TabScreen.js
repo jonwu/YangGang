@@ -29,12 +29,17 @@ import {
   Feather
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
-import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
+import {
+  updateTheme,
+  updateShowMoneyModal,
+  updateModal
+} from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import MoreModal from "./MoreModal";
 import { useCandidateResources } from "utils/Utils";
+import UsernameModal from "./UsernameModal";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -158,6 +163,7 @@ const TabScreen = ({ navigation }) => {
 
   return (
     <React.Fragment>
+      <UsernameModal />
       <MoreModal navigation={navigation} />
       {/* <MoneyDropModal /> */}
       {statusBar}
@@ -225,8 +231,9 @@ const MoreIcon = React.memo(({ navigation }) => {
     <TouchableOpacity
       onPress={() => {
         Haptics.selectionAsync();
-        navigation.navigate("Room");
+        // navigation.navigate("Room");
         // dispatch(updateShowMoneyModal(true));
+        dispatch(updateModal("username", true));
       }}
       style={{
         position: "absolute",

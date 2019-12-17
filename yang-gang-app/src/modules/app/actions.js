@@ -263,3 +263,7 @@ export function updateUser(device_token) {
       });
   };
 }
+
+export function updateModal(key, show) {
+  return { type: ActionTypes.UPDATE_MODAL, key, show };
+}

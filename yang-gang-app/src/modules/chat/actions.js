@@ -22,7 +22,7 @@ export const initializeChatListeners = () => {
       console.log("we have connected to the socket", rooms);
       dispatch({
         type: ActionTypes.CONNECTED,
-        rooms: rooms.reverse()
+        rooms: rooms
       });
     });
 

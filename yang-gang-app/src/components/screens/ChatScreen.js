@@ -8,7 +8,8 @@ import {
   Time,
   InputToolbar,
   Composer,
-  Send
+  Send,
+  Actions
 } from "react-native-gifted-chat";
 import Header, { Back } from "./Header";
 import Loading from "components/utils/Loading";
@@ -22,6 +23,26 @@ const dummy = [
     createdAt: new Date(),
     user: {
       _id: 1,
+      name: "React Native",
+      avatar: "https://placeimg.com/140/140/any"
+    }
+  },
+  {
+    _id: 2,
+    text: "Hello developer",
+    createdAt: new Date(),
+    user: {
+      _id: 1,
+      name: "React Native",
+      avatar: "https://placeimg.com/140/140/any"
+    }
+  },
+  {
+    _id: 1,
+    text: "Hello developer",
+    createdAt: new Date(),
+    user: {
+      _id: 2,
       name: "React Native",
       avatar: "https://placeimg.com/140/140/any"
     }
@@ -77,7 +98,9 @@ const ChatScreen = ({ navigation }) => {
   const user = useSelector(state => state.settings.user);
   // const rooms = useSelector(state => state.chat.rooms);
   // console.log("-----ROOMS-----", roomId, rooms)
-  const room = useSelector(state => state.chat.rooms.find(room => room.id === roomId));
+  const room = useSelector(state =>
+    state.chat.rooms.find(room => room.id === roomId)
+  );
   let messages = useSelector(state => state.chat.messages[roomId]);
   console.log("============== these are my converted messages", messages);
 
@@ -139,6 +162,10 @@ const ChatScreen = ({ navigation }) => {
     return <Send {...props} textStyle={{ fontFamily: "brandon-semibold" }} />;
   };
 
+  const renderActions = props => {
+    return <Actions {...props} onPressActionButton={() => alert(1)} />;
+  };
+
   // /** render the time labels in the bubble */
   // const renderTime = () => {
   //   return (
@@ -171,7 +198,11 @@ const ChatScreen = ({ navigation }) => {
               <Back navigation={navigation} btnColor={theme.text()} />
             </View>
             <View style={{ flex: 1 }}>
-              <RoomItem active room={room} style={{ padding: theme.spacing_4 }} />
+              <RoomItem
+                active
+                room={room}
+                style={{ padding: theme.spacing_4 }}
+              />
             </View>
           </View>
         }
@@ -179,16 +210,18 @@ const ChatScreen = ({ navigation }) => {
       />
 
       <GiftedChat
-        messages={messages}
+        messages={dummy}
         onSend={onSend}
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar}
         renderComposer={renderComposer}
         renderSend={renderSend}
+        renderActions={renderActions}
         inverted={false}
         showUserAvatar
+        renderUsernameOnMessage
         user={{
-          _id: 1
+          _id: user._id
         }}
       />
     </View>

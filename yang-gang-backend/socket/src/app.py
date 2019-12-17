@@ -25,7 +25,7 @@ def ping():
 def connect():
     try:
         print("somebody is trying to connect")
-        rooms = Room.query.order_by(Room.created_date).limit(15).all()
+        rooms = Room.query.order_by(Room.created_date.desc()).limit(15).all()
         room_schema = RoomSchema(many=True)
         emit('after connect',  room_schema.dump(rooms))
     except:

@@ -149,7 +149,9 @@ chat_message_json = api.model('Chat Model', {
 })
 
 user_json = api.model('Modify User Model', {
-    'username': fields.String
+    'device_token': fields.String,
+    'username': fields.String,
+    'avatar_color': fields.String
 })
 
 
@@ -198,11 +200,22 @@ class UserApi(Resource):
     def put(self, user_id):
         try:
             user = User.query.filter(User.id == user_id).one_or_none()
-            user_info = request.get_json()
-            user.username = user_info['username']
-            db.session.commit()
+            if user is None:
+                abort(
+                    404,
+                    "user not found for id: {user_id}".format(user_id=user_id),
+                )
+
+            new_fields = request.get_json()
             user_schema = UserSchema()
-            return user_schema.dump(user)
+            update = user_schema.load(new_fields, instance=User().query.get(user_id), partial=True)
+
+            # merge the new object into the old and commit it to the db
+            db.session.merge(update)
+            db.session.commit()
+            data = user_schema.dump(update)
+
+            return data, 200
         except:
             traceback.print_exc()
 
@@ -238,7 +251,7 @@ class GetRoomApi(Resource):
 @api.route('/rooms')
 class RoomApi(Resource):
     def get(self):
-        rooms = Room.query.order_by(Room.created_date).limit(15).all()
+        rooms = Room.query.order_by(Room.created_date.desc()).limit(15).all()
         room_schema = RoomSchema(many=True)
         return room_schema.dump(rooms)
 
@@ -256,13 +269,45 @@ class RoomApi(Resource):
             traceback.print_exc()
             abort(404, 'internal server error: {}'.format(str(e)))
 
-    def delete(self):
-        # TODO: delete a room
-        pass
 
-    def put(self):
-        # TODO: modify a room
-        pass
+@api.route('/rooms/<string:room_id>')
+class RoomApi(Resource):
+    def delete(self, room_id):
+        room = Room.query.filter(Room.id == room_id).one_or_none()
+
+        # Did we find a room?
+        if room is not None:
+            db.session.delete(room)
+            db.session.commit()
+            return make_response(
+                "room {room_id} deleted".format(room_id=room_id), 200
+            )
+        else:
+            abort(
+                404,
+                "room not found for id: {room_id}".format(room_id=room_id),
+            )
+
+    @api.expect(room_json)
+    def put(self, room_id):
+        new_fields = request.get_json()
+        room = Room.query.filter(Room.id == room_id).one_or_none()
+
+        if room is None:
+            abort(
+                404,
+                "room not found for id: {room_id}".format(room_id=room_id),
+            )
+
+        room_schema = RoomSchema()
+        update = room_schema.load(new_fields, instance=Room().query.get(room_id), partial=True)
+
+        # merge the new object into the old and commit it to the db
+        db.session.merge(update)
+        db.session.commit()
+        data = room_schema.dump(update)
+
+        return data, 200
 
 
 @api.route('/rooms/<string:room_id>/messages')
@@ -530,6 +575,7 @@ class User(db.Model):
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
     username = db.Column(db.String(128))
     device_token = db.Column(db.String(100))
+    avatar_color = db.Column(db.Text())
 
 
 class UserSchema(ma.ModelSchema):

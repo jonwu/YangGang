@@ -32,14 +32,13 @@ import pngLogoYang from "assets/logo-yang.png";
 import {
   updateTheme,
   updateShowMoneyModal,
-  updateModal
 } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import MoreModal from "./MoreModal";
 import { useCandidateResources } from "utils/Utils";
-import UsernameModal from "./UsernameModal";
+import { Notifications } from "expo";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -83,6 +82,18 @@ const TabScreen = ({ navigation }) => {
   const [index, setIndex] = React.useState(0);
   const candidate = useSelector(state => state.app.candidate);
 
+  React.useEffect(() => {
+    Notifications.addListener((notification) => {
+      const room = notification.data;
+      if (room && room.id) {
+        navigation.navigate("Chat", { roomId: room.id });
+      }
+    })
+    // const room = {id: 1}
+    // if (room && room.id) {
+    //   navigation.navigate("Chat", { roomId: room.id });
+    // }
+  }, [])
   let routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
     {
@@ -163,7 +174,6 @@ const TabScreen = ({ navigation }) => {
 
   return (
     <React.Fragment>
-      <UsernameModal />
       <MoreModal navigation={navigation} />
       {/* <MoneyDropModal /> */}
       {statusBar}
@@ -231,9 +241,8 @@ const MoreIcon = React.memo(({ navigation }) => {
     <TouchableOpacity
       onPress={() => {
         Haptics.selectionAsync();
-        // navigation.navigate("Room");
+        navigation.navigate("Room");
         // dispatch(updateShowMoneyModal(true));
-        dispatch(updateModal("username", true));
       }}
       style={{
         position: "absolute",

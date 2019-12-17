@@ -20,7 +20,7 @@ import {
   updateInstagram,
   updateAllYoutubes,
   getLastUpdate,
-  updateUser
+  postUser
 } from "modules/app/actions";
 import moment from "moment";
 import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
@@ -97,7 +97,7 @@ const Root = React.memo(() => {
 
   React.useEffect(() => {
     dispatch(registerForPushNotificationsAsync());
-    dispatch(updateUser(Constants.installationId));
+    dispatch(postUser(Constants.installationId));
     dispatch(connectSocket());
   }, []);
 

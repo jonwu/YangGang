@@ -101,6 +101,9 @@ class BackendUtils {
   postUser(params) {
     return instance.post(`/user`, params);
   }
+  putUser(userId, params) {
+    return instance.put(`/user/${userId}`, params);
+  }
   getUser(userId, params) {
     return instance.get(`/user/${userId}`, params);
   }

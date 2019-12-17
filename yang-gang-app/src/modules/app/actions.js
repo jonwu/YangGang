@@ -249,16 +249,14 @@ export function updateCandidate(candidate) {
   };
 }
 
-export function updateUser(device_token) {
+export function postUser(device_token) {
   return (dispatch, getState) => {
     BackendUtils.postUser({ device_token })
       .then(response => {
         const user = response.data;
-        console.log("User---", user);
         return dispatch({ type: ActionTypes.UPDATE_USER, user });
       })
       .catch(error => {
-        console.log("ERROR---", error);
         console.log(error);
       });
   };
@@ -266,4 +264,21 @@ export function updateUser(device_token) {
 
 export function updateModal(key, show) {
   return { type: ActionTypes.UPDATE_MODAL, key, show };
+}
+
+export function updateUser(params) {
+  return (dispatch, getState) => {
+    const user = getState().settings.user
+    if (!user) return;
+    BackendUtils.putUser(user.id, params)
+      .then(response => {
+        const user = response.data;
+        console.log("PUT USER", user)
+        return dispatch({ type: ActionTypes.UPDATE_USER, user });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
 }

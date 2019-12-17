@@ -51,7 +51,7 @@ function messages(state = {}, action) {
     case ActionTypes.MESSAGE_RECEIVED:
       return {
         ...state,
-        [action.roomId]: [...state[action.roomId], action.message]
+        [action.roomId]: [action.message, ...state[action.roomId]]
       };
     case ActionTypes.DISCONNECTED:
       return {};

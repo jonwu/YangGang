@@ -172,6 +172,7 @@ class SimpleGetPushApi(Resource):
         new_room = room_schema.load(room, session=db.session, partial=True)
         db.session.add(new_room)
         db.session.commit()
+        sio.emit('update room', room_schema.dump(new_room))
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         print('number of total push_ids: {}'.format(len(push_list)))
         increment = 100
@@ -315,6 +316,7 @@ class MessageApi(Resource):
     def get(self, room_id):
         messages = Message.query.filter(Message.room_id == room_id).all()
         message_schema = MessageSchema(many=True)
+
         return message_schema.dump(messages)
 
     @api.expect(chat_message_json)
@@ -551,7 +553,8 @@ class Message(db.Model):
     __tablename__ = "message"
     id = db.Column(db.Integer, primary_key=True)
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User')
     room_id = db.Column(db.Integer)
     message = db.Column(db.Text())
 
@@ -594,6 +597,8 @@ class MessageSchema(ma.ModelSchema):
     class Meta:
         model = Message
         sqla_session = db.session
+
+    user = ma.Nested(UserSchema(only=("username", "avatar_color")))
 
 
 class TwitterStats(db.Model):

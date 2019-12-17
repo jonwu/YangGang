@@ -95,7 +95,8 @@ class Message(db.Model):
     __tablename__ = "message"
     id = db.Column(db.Integer, primary_key=True)
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User')
     room_id = db.Column(db.Integer)
     message = db.Column(db.Text())
 
@@ -137,6 +138,8 @@ class MessageSchema(ma.ModelSchema):
     class Meta:
         model = Message
         sqla_session = db.session
+
+    user = ma.Nested(UserSchema(only=("username", "avatar_color")))
 
 
 if __name__ == '__main__':

@@ -74,7 +74,7 @@ const Navigator = ({
           <Text
             numberOfLines={1}
             style={[
-              gstyles.p1_bold,
+              gstyles.h5_bold,
               {
                 color: btnColor || theme.light(),
                 width: 200,

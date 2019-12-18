@@ -75,7 +75,7 @@ const UsernameModal = () => {
                   <TextInput
                     autoFocus
                     value={username}
-                    autoCapitalize={false}
+                    autoCapitalize={"none"}
                     autoCorrect={false}
                     onChangeText={setUsername}
                     returnKeyType={"done"}

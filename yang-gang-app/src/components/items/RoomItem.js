@@ -74,7 +74,7 @@ const MessageStatus = ({ active }) => {
           height: 8,
           width: 8,
           borderRadius: 4,
-          backgroundColor: theme.blue()
+          backgroundColor: theme.blue(0.7)
         }}
       />
     </View>
@@ -117,7 +117,7 @@ const RoomItem = React.memo(
           >
             <FontAwesome
               name="bell"
-              color={COLORS[tag]}
+              color={COLORS[tag] || theme.text(0.3)}
               size={12}
               style={gstyles.right_5}
             />
@@ -137,21 +137,23 @@ const RoomItem = React.memo(
               {moment.utc(created_date).fromNow(true)}
             </Text>
             <View style={{ flex: 1 }} />
-            {showSource && link && (
+            {showSource && link != "" && (
               <TouchableOpacity
                 style={{ alignItems: "center", flexDirection: "row" }}
                 onPress={() => openWebBrowser(link, theme)}
               >
                 <Octicons
                   name="link-external"
-                  color={theme.text(0.5)}
+                  color={theme.text(0.6)}
                   style={gstyles.right_5}
                 />
                 <Text style={gstyles.footnote_bold_50}>SOURCE</Text>
               </TouchableOpacity>
             )}
           </View>
-          <Text style={gstyles.p1}>{title}</Text>
+          <Text style={[gstyles.h5_bold, { fontFamily: "brandon-med" }]}>
+            {title}
+          </Text>
           <View
             style={[
               { flexDirection: "row", justifyContent: "space-between" },
@@ -163,28 +165,18 @@ const RoomItem = React.memo(
               <Text
                 style={[
                   gstyles.p1,
-                  { color: theme.blue(), alignItems: "center" }
+                  {
+                    color: theme.blue(0.7),
+                    alignItems: "center",
+                    fontFamily: "brandon-med"
+                  }
                 ]}
               >
-                {message_count} messages
+                {message_count > 0
+                  ? `${message_count} messages`
+                  : "No messages"}
               </Text>
             </View>
-            {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <EvilIcons
-              color={theme.blue()}
-              name="external-link"
-              size={20}
-              style={{ marginTop: 2 }}
-            />
-            <Text
-              style={[
-                gstyles.caption,
-                { color: theme.blue(), alignItems: "center" }
-              ]}
-            >
-              LINK
-            </Text>
-          </View> */}
           </View>
         </View>
       </TouchableOpacity>

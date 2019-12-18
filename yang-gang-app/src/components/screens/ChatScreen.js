@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, SafeAreaView, Keyboard } from "react-native";
+import { View, Text, SafeAreaView, Keyboard, ScrollView } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -19,6 +19,7 @@ import RoomItem from "components/items/RoomItem";
 import UsernameModal from "./UsernameModal";
 import { updateModal } from "modules/app/actions";
 import ChatLoading from "components/utils/ChatLoading";
+import * as Haptics from "expo-haptics";
 
 const dummy = [
   {
@@ -98,14 +99,14 @@ const convertMessageToGifted = message => {
 const ChatScreen = ({ navigation }) => {
   const roomId = navigation.getParam("roomId");
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-
+  const dispatch = useDispatch();
   const room = useSelector(state =>
     state.chat.rooms.find(room => room.id === roomId)
   );
   let messages = useSelector(state => state.chat.messages[roomId]);
 
   React.useEffect(() => {
-    connectRoom(roomId);
+    dispatch(connectRoom(roomId));
   }, []);
 
   const renderHeader = (
@@ -163,6 +164,7 @@ const Chat = React.memo(({ messages, roomId }) => {
       return;
     }
 
+    Haptics.selectionAsync();
     sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
   };
   /** render the chat bubble */
@@ -198,7 +200,7 @@ const Chat = React.memo(({ messages, roomId }) => {
     return (
       <Composer
         {...props}
-        textInputStyle={gstyles.h5}
+        textInputStyle={[gstyles.h5]}
         placeholderTextColor={theme.text(0.5)}
       />
     );
@@ -232,8 +234,8 @@ const Chat = React.memo(({ messages, roomId }) => {
       renderComposer={renderComposer}
       renderSend={renderSend}
       renderActions={renderActions}
-      // showUserAvatar
       renderUsernameOnMessage
+      renderChatEmpty={() => <ScrollView style={{ flex: 1 }} />}
       user={{
         _id: user.id
       }}

@@ -21,6 +21,9 @@ def ping():
     return 'hello', 200
 
 
+# todo: add graceful failure when adding to push_ids table
+# todo: return error code on error when sending push note
+
 @socketio.on('connect')
 def connect():
     try:

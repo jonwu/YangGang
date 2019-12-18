@@ -268,17 +268,21 @@ export function updateModal(key, show) {
 
 export function updateUser(params) {
   return (dispatch, getState) => {
-    const user = getState().settings.user
+    const user = getState().settings.user;
     if (!user) return;
     BackendUtils.putUser(user.id, params)
       .then(response => {
         const user = response.data;
-        console.log("PUT USER", user)
+        console.log("PUT USER", user);
         return dispatch({ type: ActionTypes.UPDATE_USER, user });
       })
       .catch(error => {
         console.log(error);
       });
   };
-
+}
+export function iterateCount() {
+  return {
+    type: ActionTypes.ITERATE_OPEN_COUNT
+  };
 }

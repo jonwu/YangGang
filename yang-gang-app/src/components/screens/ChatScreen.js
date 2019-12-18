@@ -83,13 +83,12 @@ const generateStyles = theme => ({});
  */
 
 const convertMessageToGifted = message => {
-  console.log(message);
   return {
     _id: message.id,
     text: message.message,
     createdAt: new Date(message.created_date),
     user: {
-      _id: message.user.id,
+      _id: message.user_id,
       name: message.user.username
       // avatar: null
     }
@@ -122,7 +121,6 @@ const ChatScreen = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <RoomItem
               showSource
-              active
               room={room}
               style={{ padding: theme.spacing_4 }}
             />
@@ -145,7 +143,6 @@ const ChatScreen = ({ navigation }) => {
 };
 
 const Chat = React.memo(({ messages, roomId }) => {
-  console.log("RENDERING CHAT  ========= ");
   const dispatch = useDispatch();
   const user = useSelector(state => state.settings.user);
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
@@ -155,7 +152,7 @@ const Chat = React.memo(({ messages, roomId }) => {
   const onSend = (nextMessages = []) => {
     if (!user) {
       Keyboard.dismiss();
-      setTimeout(() => setText(nextMessages[0].text), 50);
+      // setTimeout(() => setText(nextMessages[0].text), 50);
       return;
     }
 

@@ -161,7 +161,7 @@ const MoreModal = connectActionSheet(
                     }
                   />
                   {(Constants.installationId ===
-                    "1EC08B77-806C-49A7-BDD6-7ED1C50F4446" ||
+                    "E9E10F2E-E0CF-4C13-B193-FC6FC7959676" ||
                     __DEV__) && (
                     <Option
                       onPress={() => {

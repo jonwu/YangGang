@@ -21,9 +21,15 @@ const UsernameModal = () => {
   const [username, setUsername] = React.useState(user.username);
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    if (isVisible) {
+      setUsername(user.username);
+    }
+  }, [isVisible]);
+
   const onClose = () => {
     Keyboard.dismiss();
-    dispatch(updateUser({ username }));
+    if (username.trim() != "") dispatch(updateUser({ username }));
     dispatch(updateModal("username", false));
   };
   return (
@@ -59,24 +65,32 @@ const UsernameModal = () => {
                 <Text style={[gstyles.h3_bold, gstyles.bottom_2]}>
                   Change Username
                 </Text>
-                <TextInput
-                  autoFocus
-                  value={username}
-                  onChangeText={setUsername}
-                  returnKeyType={"done"}
-                  onSubmitEditing={onClose}
-                  style={[
-                    gstyles.p1,
-                    {
-                      paddingHorizontal: theme.spacing_2,
-                      paddingVertical: theme.spacing_4,
-                      backgroundColor: theme.text(0.1),
-                      borderRadius: theme.borderRadius
-                    }
-                  ]}
-                  placeholder={"Enter desired username"}
-                  placeholderTextColor={theme.text(0.5)}
-                />
+                <View
+                  style={{
+                    backgroundColor: theme.text(0.1),
+                    borderRadius: theme.borderRadius,
+                    overflow: "hidden"
+                  }}
+                >
+                  <TextInput
+                    autoFocus
+                    value={username}
+                    autoCapitalize={false}
+                    autoCorrect={false}
+                    onChangeText={setUsername}
+                    returnKeyType={"done"}
+                    onSubmitEditing={onClose}
+                    style={[
+                      gstyles.p1,
+                      {
+                        paddingHorizontal: theme.spacing_2,
+                        paddingVertical: theme.spacing_4
+                      }
+                    ]}
+                    placeholder={"Enter desired username"}
+                    placeholderTextColor={theme.text(0.5)}
+                  />
+                </View>
               </View>
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>

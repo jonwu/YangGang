@@ -27,8 +27,17 @@ function user(state = null, action) {
       return state;
   }
 }
+function openCount(state = 0, action) {
+  switch (action.type) {
+    case ActionTypes.ITERATE_OPEN_COUNT:
+      return state + 1;
+    default:
+      return state;
+  }
+}
 export default combineReducers({
   theme,
   expoId,
-  user
+  user,
+  openCount
 });

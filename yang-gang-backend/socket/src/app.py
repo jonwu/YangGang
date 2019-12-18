@@ -120,6 +120,7 @@ class User(db.Model):
     created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
     username = db.Column(db.String(128))
     device_token = db.Column(db.String(100))
+    avatar_color = db.Column(db.Text())
 
 
 class UserSchema(ma.ModelSchema):
@@ -136,6 +137,7 @@ class RoomSchema(ma.ModelSchema):
 
 class MessageSchema(ma.ModelSchema):
     class Meta:
+        include_fk = True
         model = Message
         sqla_session = db.session
 

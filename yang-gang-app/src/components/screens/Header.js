@@ -1,23 +1,13 @@
 import React from "react";
-import { View, SafeAreaView, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, SafeAreaView } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import { NavigationActions } from "react-navigation";
 
-const generateStyles = theme => ({
-  headerSafeArea: {
-    backgroundColor: theme.bgHeader()
-  },
-  header: {
-    height: 40,
-    paddingHorizontal: 8,
-    backgroundColor: theme.bgHeader(),
-    alignItems: "center",
-    flexDirection: "row"
-  }
-});
+const generateStyles = theme => ({});
 
-const Back = ({ navigation }) => {
+export const Back = ({ navigation, btnColor }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   if (navigation.isFirstRouteInParent()) return null;
 
@@ -28,22 +18,26 @@ const Back = ({ navigation }) => {
         navigation.goBack();
       }}
     >
-      <Ionicons name={"ios-arrow-back"} color={theme.light()} size={24} />
+      <Ionicons
+        name={"ios-arrow-back"}
+        color={btnColor || theme.light()}
+        size={24}
+      />
     </TouchableOpacity>
   );
 };
-const Close = ({ navigation }) => {
+export const Close = ({ navigation, btnColor }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  if (navigation.isFirstRouteInParent()) return null;
+  // if (navigation.isFirstRouteInParent()) return null;
 
   return (
     <TouchableOpacity
-      style={{ padding: 8 }}
-      onPress={() => navigation.goBack()}
+      style={{ padding: 8, height: 40, overflow: "hidden" }}
+      onPress={() => navigation.dispatch(NavigationActions.back())}
     >
       <Ionicons
         name={"ios-close"}
-        color={theme.light()}
+        color={btnColor || theme.light()}
         size={36}
         style={{ marginTop: -6 }}
       />
@@ -51,47 +45,89 @@ const Close = ({ navigation }) => {
   );
 };
 
-const Header = ({
+const Navigator = ({
   bgColor,
   renderLeft,
   renderTitle,
   renderRight,
   navigation,
   title,
-  close
+  close,
+  btnColor,
+  children
 }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  const Left = (
+    <View style={gstyles.flex}>
+      {renderLeft ||
+        (!close && <Back navigation={navigation} btnColor={btnColor} />)}
+      {close && <Close navigation={navigation} btnColor={btnColor} />}
+    </View>
+  );
+
+  const Middle =
+    renderTitle ||
+    (title && (
+      <View style={[gstyles.flex, { alignItems: "center" }]}>
+        {renderTitle}
+        {title && !renderTitle && (
+          <Text
+            numberOfLines={1}
+            style={[
+              gstyles.h5_bold,
+              {
+                color: btnColor || theme.light(),
+                width: 200,
+                textAlign: "center"
+              }
+            ]}
+          >
+            {title}
+          </Text>
+        )}
+      </View>
+    ));
+
+  const Right = (
+    <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
+      {renderRight}
+    </View>
+  );
+
+  const Header = (
+    <View
+      style={[
+        {
+          minHeight: 40,
+          paddingHorizontal: 8,
+          backgroundColor: theme.bgHeader(),
+          alignItems: "center",
+          flexDirection: "row"
+        },
+        bgColor && { backgroundColor: bgColor }
+      ]}
+    >
+      {Left}
+      {Middle}
+      {Right}
+    </View>
+  );
+
   return (
     <SafeAreaView
-      style={[styles.headerSafeArea, bgColor && { backgroundColor: bgColor }]}
+      style={[
+        {
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.2,
+          shadowRadius: 2,
+          elevation: 1,
+          backgroundColor: bgColor || theme.bgHeader()
+        }
+      ]}
     >
-      <View style={[styles.header, bgColor && { backgroundColor: bgColor }]}>
-        <View style={gstyles.flex}>
-          {renderLeft || (!close && <Back navigation={navigation} />)}
-          {close && <Close navigation={navigation} />}
-        </View>
-        {renderTitle ||
-          (title && (
-            <View style={[gstyles.flex, { alignItems: "center" }]}>
-              {renderTitle}
-              {title && !renderTitle && (
-                <Text
-                  numberOfLines={1}
-                  style={[
-                    gstyles.p1_bold,
-                    { color: theme.light(), width: 200, textAlign: "center" }
-                  ]}
-                >
-                  {title}
-                </Text>
-              )}
-            </View>
-          ))}
-        <View style={[gstyles.flex, { alignItems: "flex-end" }]}>
-          {renderRight}
-        </View>
-      </View>
+      {Header}
     </SafeAreaView>
   );
 };
-export default Header;
+export default Navigator;

@@ -7,7 +7,8 @@ import {
   Dimensions,
   Platform,
   View,
-  Animated
+  Animated,
+  Text
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
@@ -25,7 +26,8 @@ import {
   FontAwesome,
   Entypo,
   MaterialCommunityIcons,
-  Octicons
+  Octicons,
+  Feather
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
 import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
@@ -35,6 +37,8 @@ import Header from "./Header";
 import MoreModal from "./MoreModal";
 import RatingModal from "./RatingModal";
 import { useCandidateResources } from "utils/Utils";
+import { Notifications } from "expo";
+import { updateRoom } from "modules/chat/actions";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -63,11 +67,13 @@ const renderIcon = ({ route }) => {
   if (route.image) return route.image;
   switch (route.iconType) {
     case "Entypo":
-      return <Entypo name={route.icon} size={24} color={route.color} />;
+      return <Entypo name={route.icon} size={20} color={route.color} />;
     case "FontAwesome":
-      return <FontAwesome name={route.icon} size={24} color={route.color} />;
+      return <FontAwesome name={route.icon} size={20} color={route.color} />;
+    case "Octicons":
+      return <Octicons name={route.icon} size={20} color={route.color} />;
     default:
-      return <Ionicons name={route.icon} size={24} color={route.color} />;
+      return <Ionicons name={route.icon} size={20} color={route.color} />;
   }
 };
 
@@ -75,6 +81,20 @@ const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
   const candidate = useSelector(state => state.app.candidate);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    Notifications.addListener(notification => {
+      if (notification.origin === "selected") {
+        const room = notification.data;
+        if (room && room.id) {
+          dispatch(updateRoom(room)).then(() => {
+            navigation.navigate("Chat", { roomId: room.id });
+          });
+        }
+      }
+    });
+  }, []);
 
   let routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
@@ -96,15 +116,21 @@ const TabScreen = ({ navigation }) => {
     {
       key: "instagram",
       icon: "instagram",
-      image: <Image source={instagramIcon} style={{ width: 22, height: 22 }} />,
+      image: <Image source={instagramIcon} style={{ width: 20, height: 20 }} />,
       iconType: "FontAwesome"
-    }
+    },
     // {
     //   key: "settings",
     //   icon: "md-settings",
     //   // iconType: "FontAwesome",
     //   color: theme.text()
-    // }
+    // },
+    {
+      key: "settings",
+      icon: "three-bars",
+      iconType: "Octicons",
+      color: theme.text()
+    }
   ];
 
   if (candidate === "donald_trump") {
@@ -182,12 +208,12 @@ const TabScreen = ({ navigation }) => {
         initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
 
-      <MoreIcon />
+      <MoreIcon navigation={navigation} />
     </React.Fragment>
   );
 };
 
-const MoreIcon = React.memo(() => {
+const MoreIcon = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
   const candidateResource = useCandidateResources();
@@ -218,7 +244,8 @@ const MoreIcon = React.memo(() => {
     <TouchableOpacity
       onPress={() => {
         Haptics.selectionAsync();
-        dispatch(updateShowMoneyModal(true));
+        navigation.navigate("Room");
+        // dispatch(updateShowMoneyModal(true));
       }}
       style={{
         position: "absolute",
@@ -243,16 +270,21 @@ const MoreIcon = React.memo(() => {
             overflow: "hidden"
           }}
         >
-          <Octicons name="three-bars" color={theme.light()} size={24} />
-          <Animated.Image
+          <Ionicons name="ios-chatbubbles" color={theme.light()} size={36} />
+          <Animated.View
             source={candidateResource.avatar}
             style={{
               position: "absolute",
+              backgroundColor: theme.blue(),
               width: "100%",
               height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
               transform: [{ translateY: avatarTranslateY.current }]
             }}
-          />
+          >
+            <Text style={gstyles.h2}>🥳</Text>
+          </Animated.View>
         </View>
       </SafeAreaView>
     </TouchableOpacity>

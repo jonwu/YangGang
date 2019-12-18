@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import TwitterItem from "components/items/TwitterItem";
 import ActionBarView from "components/items/ActionBarView";
 import { updateTweets } from "modules/app/actions";
-import TwitterSeparator from "components/items/TwitterSeparator";
+import Separator from "components/items/Separator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
 import EventItem from "components/items/EventItem";
@@ -143,7 +143,7 @@ const TwitterScreen = React.memo(({ navigation }) => {
         data={tweets}
         contentContainerStyle={{ paddingBottom: 88 }}
         renderItem={renderItem}
-        ItemSeparatorComponent={TwitterSeparator}
+        ItemSeparatorComponent={Separator}
         keyExtractor={item => item.id.toString()}
       />
     </>

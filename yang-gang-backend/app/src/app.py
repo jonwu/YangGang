@@ -13,6 +13,7 @@ from exponent_server_sdk import PushServerError
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import traceback
+import socketio
 
 
 def is_exponent_push_token(token):
@@ -26,13 +27,14 @@ def is_exponent_push_token(token):
 
 # Basic arguments. You should extend this function with the push features you
 # want to use, or simply pass in a `PushMessage` object.
-def send_push_message(tokens, message, extra=None):
+def send_push_message(tokens, message, data=None):
     try:
         print('sending message for tokens {}'.format(tokens))
-        message_list = [PushMessage(to=token, body=message, data=extra) for token in tokens]
+        message_list = [PushMessage(to=token, body=message, data=data) for token in tokens]
         responses = PushClient().publish_multiple(message_list)
         print('response: {}'.format(responses))
-    except PushServerError:
+    except PushServerError as e:
+        print('PushServerError detailed message: {}'.format(e.errors))
         # Encountered some likely formatting/validation error.
         traceback.print_exc()
         return
@@ -63,6 +65,10 @@ r = Redis(host='redis', port=6379)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+
+sio = socketio.Client(logger=True, engineio_logger=True)
+sio.connect('http://socket:5000', transports='websocket')
+print('my socketio sid is', sio.sid)
 
 
 @api.route('/notifications/<int:event_id>/<string:expo_id>')
@@ -104,7 +110,7 @@ class AllNotificationsForUser(Resource):
         return notifications_schema.dump(notifications)
 
 
-event_json = api.model('Resource', {
+event_json = api.model('Event Model', {
     'title': fields.String,
     'image': fields.String,
     'event_type': fields.String,
@@ -114,9 +120,38 @@ event_json = api.model('Resource', {
     'link': fields.String,
 })
 
-message_json = api.model('Resource', {
+message_json = api.model('Push Message Model', {
     'body': fields.String,
-    'data': fields.String
+    'data': fields.String,
+})
+
+# {
+#   tag: string,
+#   title: string,
+#   link: link,
+#   owner_id: owner_id,
+# }
+
+device_id_json = api.model('Create User Model', {
+    'device_token': fields.String,
+})
+
+room_json = api.model('Room Model', {
+    'owner_id': fields.Integer,
+    'title': fields.String,
+    'tag': fields.String,
+    'link': fields.String,
+})
+
+chat_message_json = api.model('Chat Model', {
+    'user_id': fields.Integer,
+    'message': fields.String
+})
+
+user_json = api.model('Modify User Model', {
+    'device_token': fields.String,
+    'username': fields.String,
+    'avatar_color': fields.String
 })
 
 
@@ -132,17 +167,175 @@ class SimpleGetPushApi(Resource):
     def post(self):
         message = request.get_json()
         print('payload for push received: {}'.format(message))
+        room = message['data']
+        room_schema = RoomSchema()
+        new_room = room_schema.load(room, session=db.session, partial=True)
+        db.session.add(new_room)
+        db.session.commit()
+        sio.emit('update room', room_schema.dump(new_room))
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         print('number of total push_ids: {}'.format(len(push_list)))
         increment = 100
         i = 0
         try:
             while i < len(push_list):
-                send_push_message(push_list[i: i + increment], message['body'])
+                send_push_message(push_list[i: i + increment], message['body'], room_schema.dump(new_room))
                 i += increment
             return 'success, pushed a total of {} messages'.format(len(push_list)), 200
         except Exception as e:
+            traceback.print_exc()
             abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
+
+
+@api.route('/user/<int:user_id>')
+class UserApi(Resource):
+    def get(self, user_id):
+        try:
+            user = User.query.filter(User.id == user_id).one_or_none()
+            user_schema = UserSchema()
+            return user_schema.dump(user)
+        except:
+            traceback.print_exc()
+
+    @api.expect(user_json)
+    def put(self, user_id):
+        try:
+            user = User.query.filter(User.id == user_id).one_or_none()
+            if user is None:
+                abort(
+                    404,
+                    "user not found for id: {user_id}".format(user_id=user_id),
+                )
+
+            new_fields = request.get_json()
+            user_schema = UserSchema()
+            update = user_schema.load(new_fields, instance=User().query.get(user_id), partial=True)
+
+            # merge the new object into the old and commit it to the db
+            db.session.merge(update)
+            db.session.commit()
+            data = user_schema.dump(update)
+
+            return data, 200
+        except:
+            traceback.print_exc()
+
+
+@api.route('/user')
+class PostUserApi(Resource):
+    @api.expect(device_id_json)
+    def post(self):
+        user_json = request.get_json()
+        user = User.query.filter(User.device_token == user_json['device_token']).one_or_none()
+        user_schema = UserSchema()
+        if user is not None:
+            print("found existing user")
+            return user_schema.dump(user)
+        try:
+            user = user_schema.load(user_json, session=db.session, partial=True)
+            db.session.add(user)
+            db.session.commit()
+            return user_schema.dump(user)
+        except Exception as e:
+            traceback.print_exc()
+            abort(404, str(e))
+
+
+@api.route('/getroom/<string:room_id>')
+class GetRoomApi(Resource):
+    def get(self, room_id):
+        room = Room.query.filter(Room.id == room_id).one_or_none()
+        room_schema = RoomSchema()
+        return room_schema.dump(room)
+
+
+@api.route('/rooms')
+class RoomApi(Resource):
+    def get(self):
+        rooms = Room.query.order_by(Room.created_date.desc()).limit(15).all()
+        room_schema = RoomSchema(many=True)
+        return room_schema.dump(rooms)
+
+    @api.expect(room_json)
+    def post(self):
+        try:
+            room = request.get_json()
+            room_schema = RoomSchema()
+            new_room = room_schema.load(room, session=db.session, partial=True)
+            db.session.add(new_room)
+            db.session.commit()
+            sio.emit('update room', room_schema.dump(new_room))
+            return room_schema.dump(new_room), 200
+        except Exception as e:
+            traceback.print_exc()
+            abort(404, 'internal server error: {}'.format(str(e)))
+
+
+@api.route('/rooms/<string:room_id>')
+class RoomApi(Resource):
+    def delete(self, room_id):
+        room = Room.query.filter(Room.id == room_id).one_or_none()
+
+        # Did we find a room?
+        if room is not None:
+            db.session.delete(room)
+            db.session.commit()
+            return make_response(
+                "room {room_id} deleted".format(room_id=room_id), 200
+            )
+        else:
+            abort(
+                404,
+                "room not found for id: {room_id}".format(room_id=room_id),
+            )
+
+    @api.expect(room_json)
+    def put(self, room_id):
+        new_fields = request.get_json()
+        room = Room.query.filter(Room.id == room_id).one_or_none()
+
+        if room is None:
+            abort(
+                404,
+                "room not found for id: {room_id}".format(room_id=room_id),
+            )
+
+        room_schema = RoomSchema()
+        update = room_schema.load(new_fields, instance=Room().query.get(room_id), partial=True)
+
+        # merge the new object into the old and commit it to the db
+        db.session.merge(update)
+        db.session.commit()
+        data = room_schema.dump(update)
+
+        return data, 200
+
+
+@api.route('/rooms/<string:room_id>/messages')
+class MessageApi(Resource):
+    def get(self, room_id):
+        messages = Message.query.filter(Message.room_id == room_id).all()
+        message_schema = MessageSchema(many=True)
+
+        return message_schema.dump(messages)
+
+    @api.expect(chat_message_json)
+    def post(self, room_id):
+        try:
+            message = request.get_json()
+            message_schema = MessageSchema()
+            room_schema = RoomSchema()
+            room = Room.query.order_by(Room.id == room_id).one_or_none()
+            room.message_count += 1
+            sio.emit('update room', room_schema.dump(room))
+            new_message = message_schema.load(message, session=db.session, partial=True)
+            new_message.room_id = room_id
+            db.session.add(new_message)
+            db.session.commit()
+            return message_schema.dump(new_message), 200
+        except Exception as e:
+            traceback.print_exc()
+            abort(404, 'internal server error: {}'.format(str(e)))
 
 
 @api.route("/simplepush/<string:expo_id>")
@@ -154,6 +347,7 @@ class SimplePushApi(Resource):
             db.session.commit()
             return 'added id {} to database'.format(expo_id), 200
         except Exception as e:
+            traceback.print_exc()
             abort(404, 'internal server error: {}'.format(str(e)))
 
 
@@ -179,7 +373,6 @@ class AllEventsApi(Resource):
 
             return schema.dump(new_event), 201
         except Exception as e:
-            import traceback
             traceback.print_exc()
             abort(404, 'internal server error: {}'.format(str(e)))
 
@@ -353,6 +546,59 @@ class RedditStatsApi(Resource):
         returns a twitter stats from the past two days for all candidates
         """
         return [x.as_dict() for x in get_recent_data(2, RedditStats)]
+
+
+class Message(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "message"
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User')
+    room_id = db.Column(db.Integer)
+    message = db.Column(db.Text())
+
+
+class Room(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "room"
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    owner_id = db.Column(db.Integer)
+    title = db.Column(db.Text())
+    link = db.Column(db.Text())
+    tag = db.Column(db.Text())
+    message_count = db.Column(db.Integer, default=0)
+
+
+class User(db.Model):
+    """ User Model for storing user related details """
+    __tablename__ = "user"
+    id = db.Column(db.Integer, primary_key=True)
+    created_date = db.Column(db.DateTime(), server_default=db.func.current_timestamp())
+    username = db.Column(db.String(128))
+    device_token = db.Column(db.String(100))
+    avatar_color = db.Column(db.Text())
+
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+        sqla_session = db.session
+
+
+class RoomSchema(ma.ModelSchema):
+    class Meta:
+        model = Room
+        sqla_session = db.session
+
+
+class MessageSchema(ma.ModelSchema):
+    class Meta:
+        model = Message
+        sqla_session = db.session
+
+    user = ma.Nested(UserSchema(only=("username", "avatar_color")))
 
 
 class TwitterStats(db.Model):

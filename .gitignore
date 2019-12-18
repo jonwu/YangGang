@@ -8,3 +8,6 @@ yang-gang-app/*.mobileprovision
 yang-gang-app/*.orig.*
 yang-gang-app/web-build/
 yang-gang-app/web-report/
+yang-gang-backend/app/src/alembic/versions/__pycache__/*.cpython-36.pyc
+yang-gang-backend/poller/src/__pycache__/*.cpython-36.pyc
+yang-gang-backend/app/src/alembic/__pycache__/env.cpython-36.pyc

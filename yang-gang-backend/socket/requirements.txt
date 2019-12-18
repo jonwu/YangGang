@@ -1,0 +1,8 @@
+flask
+flask-marshmallow
+flask-socketio
+Flask-SQLAlchemy
+gevent-websocket
+marshmallow-sqlalchemy
+pymysql
+requests

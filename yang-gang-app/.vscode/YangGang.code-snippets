@@ -35,5 +35,10 @@
       "export default $1;"
     ],
     "description": "rct"
+  },
+  "Text Tag Boilerplate ": {
+    "prefix": "text",
+    "body": ["<Text style={gstyles.$1}>$3</Text>"],
+    "description": "Text Tag Boilerplate "
   }
 }

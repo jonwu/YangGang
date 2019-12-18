@@ -2,11 +2,12 @@ import * as React from "react";
 import { AppState } from "react-native";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 import TabScreen from "components/screens/TabScreen";
-import WebviewScreen from "components/screens/WebviewScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
 import DescriptionScreen from "components/screens/DescriptionScreen";
 import ProgressScreen from "components/screens/ProgressScreen";
 import MerchScreen from "components/screens/MerchScreen";
+import ChatScreen from "components/screens/ChatScreen";
+import RoomScreen from "components/screens/RoomScreen";
 import { useRefreshStats, useEventsStore } from "utils/StoreUtils";
 import PostEventsScreen from "./screens/PostEventsScreen";
 import { registerForPushNotificationsAsync } from "utils/PushNotificationsUtils";
@@ -18,26 +19,41 @@ import {
   updateInstagram,
   updateAllYoutubes,
   getLastUpdate,
+  postUser,
   iterateCount
 } from "modules/app/actions";
 import moment from "moment";
 import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
 import * as Amplitude from "expo-analytics-amplitude";
+import { connectSocket } from "modules/chat/actions";
+import Constants from "expo-constants";
+console.disableYellowBox = true;
 
 const MainStack = createStackNavigator(
   {
-    Tabs: TabScreen,
-    Webview: WebviewScreen
+    Tabs: TabScreen
   },
   {
     headerMode: "none"
   }
 );
 
+const ChatroomStack = createStackNavigator(
+  {
+    Room: RoomScreen,
+    Chat: ChatScreen
+  },
+  {
+    headerMode: "none"
+  }
+);
 const RootStack = createStackNavigator(
   {
     Main: {
       screen: MainStack
+    },
+    Room: {
+      screen: ChatroomStack
     },
     Photo: {
       screen: PhotoScreen
@@ -81,6 +97,8 @@ const Root = React.memo(() => {
   React.useEffect(() => {
     dispatch(iterateCount());
     dispatch(registerForPushNotificationsAsync());
+    dispatch(postUser(Constants.installationId));
+    dispatch(connectSocket());
   }, []);
 
   React.useEffect(() => {

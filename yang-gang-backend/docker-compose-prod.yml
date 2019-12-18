@@ -17,6 +17,8 @@ services:
             BUILD_ENV: 'prod'
         links:
             - db
+        volumes:
+            - ./poller/src:/src
     db:
         image: mysql:5.7
         restart: always

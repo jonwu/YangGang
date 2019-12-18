@@ -216,21 +216,25 @@ export function updateShowMoneyModal(show) {
 
 export function updateExpoId(id) {
   return (dispatch, getState) => {
-    if (getState().settings.expoId === id)
-      return new Promise(resolve => resolve());
-    return BackendUtils.postNotifications(id)
-      .then(() => {
-        dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
-        return id;
-      })
-      .catch(() => {
-        BackendUtils.getNotifications().then(response => {
-          const hasData = response.data.find(data => data.id === id);
-          if (hasData) {
-            dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
-          }
-        });
-      });
+    return BackendUtils.postNotifications(id).then(() => {
+      dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
+      return id;
+    });
+    // if (getState().settings.expoId === id)
+    //   return new Promise(resolve => resolve());
+    // return BackendUtils.postNotifications(id)
+    //   .then(() => {
+    //     dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
+    //     return id;
+    //   })
+    //   .catch(() => {
+    //     BackendUtils.getNotifications().then(response => {
+    //       const hasData = response.data.find(data => data.id === id);
+    //       if (hasData) {
+    //         dispatch({ type: ActionTypes.UPDATE_EXPO_ID, id });
+    //       }
+    //     });
+    //   });
   };
 }
 
@@ -245,6 +249,38 @@ export function updateCandidate(candidate) {
   };
 }
 
+export function postUser(device_token) {
+  return (dispatch, getState) => {
+    BackendUtils.postUser({ device_token })
+      .then(response => {
+        const user = response.data;
+        return dispatch({ type: ActionTypes.UPDATE_USER, user });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+}
+
+export function updateModal(key, show) {
+  return { type: ActionTypes.UPDATE_MODAL, key, show };
+}
+
+export function updateUser(params) {
+  return (dispatch, getState) => {
+    const user = getState().settings.user;
+    if (!user) return;
+    BackendUtils.putUser(user.id, params)
+      .then(response => {
+        const user = response.data;
+        console.log("PUT USER", user);
+        return dispatch({ type: ActionTypes.UPDATE_USER, user });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+}
 export function iterateCount() {
   return {
     type: ActionTypes.ITERATE_OPEN_COUNT

@@ -4,7 +4,7 @@ import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import RedditItem from "components/items/RedditItem";
 import { updateReddit, updateNews } from "modules/app/actions";
-import TwitterSeparator from "components/items/TwitterSeparator";
+import Separator from "components/items/Separator";
 import Loading from "components/utils/Loading";
 import lodash from "lodash";
 import NewsTinyItem from "components/items/NewsTinyItem";
@@ -63,7 +63,7 @@ const RedditScreen = React.memo(({ navigation }) => {
       refreshing={loadingReddit.isRequesting}
       data={reddit}
       renderItem={renderItem}
-      ItemSeparatorComponent={TwitterSeparator}
+      ItemSeparatorComponent={Separator}
       keyExtractor={item => item.id}
       contentContainerStyle={{ paddingBottom: 88 }}
     />

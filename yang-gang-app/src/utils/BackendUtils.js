@@ -1,6 +1,6 @@
 import axios from "axios";
-export const ROOT_URL = "http://34.217.208.191"; // dev
-// export const ROOT_URL = "http://54.185.34.163"; // prod
+// export const ROOT_URL = "http://34.217.208.191"; // dev
+export const ROOT_URL = "http://54.185.34.163"; // prod
 
 const PORT = "80";
 
@@ -15,9 +15,9 @@ instance.interceptors.request.use(
     if (process.env.NODE_ENV !== "production") {
       console.log(
         `\n(${i_config.method.toUpperCase()}) ${i_config.url} ${
-        i_config.params
-          ? JSON.stringify(i_config.params)
-          : JSON.stringify(i_config.data)
+          i_config.params
+            ? JSON.stringify(i_config.params)
+            : JSON.stringify(i_config.data)
         }`
       );
     }

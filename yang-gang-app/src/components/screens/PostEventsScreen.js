@@ -261,8 +261,8 @@ const PostEventsScreen = ({ navigation }) => {
                   .then(() => {
                     alert("Success!");
                   })
-                  .catch(() => {
-                    alert("Error");
+                  .catch(error => {
+                    alert(JSON.stringify(error));
                   });
               }}
             />

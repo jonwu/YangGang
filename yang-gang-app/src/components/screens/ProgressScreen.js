@@ -20,7 +20,6 @@ import sandersImg from "assets/sanders.jpg";
 import warrenImg from "assets/warren.jpg";
 import buttigiegImg from "assets/buttigieg.jpg";
 import bidenImg from "assets/biden.jpg";
-import kamalaImg from "assets/kamala.jpg";
 import gabbardImg from "assets/gabbard.jpg";
 import trumpImg from "assets/trump.jpg";
 import { LinearGradient } from "expo-linear-gradient";
@@ -39,7 +38,6 @@ const IMAGES = {
   warren: warrenImg,
   buttigieg: buttigiegImg,
   biden: bidenImg,
-  kamala: kamalaImg,
   gabbard: gabbardImg,
   trump: trumpImg
 };
@@ -175,7 +173,7 @@ const generateDelta = data => {
         return { ...points, today: stats };
       }
     },
-    { yesterday: null, latest: null }
+    { yesterday: 0, latest: 0 }
   );
   return {
     biden:
@@ -190,9 +188,6 @@ const generateDelta = data => {
     warren:
       Number(points.today.num_followers_warren) -
       Number(points.yesterday.num_followers_warren),
-    kamala:
-      Number(points.today.num_followers_kamala) -
-      Number(points.yesterday.num_followers_kamala),
     yang:
       Number(points.today.num_followers_yang) -
       Number(points.yesterday.num_followers_yang),
@@ -214,7 +209,6 @@ const ConnectedHeader = connectActionSheet(
       "Joe Biden",
       "Elizabeth Warren",
       "Pete Buttigieg",
-      "Kamala Harris",
       "Tulsi Gabbard",
       "Donald Trump",
       "Cancel"
@@ -224,7 +218,6 @@ const ConnectedHeader = connectActionSheet(
       "biden",
       "warren",
       "buttigieg",
-      "kamala",
       "gabbard",
       "trump"
     ];

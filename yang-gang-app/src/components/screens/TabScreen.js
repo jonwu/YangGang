@@ -34,6 +34,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import MoreModal from "./MoreModal";
+import RatingModal from "./RatingModal";
 import { useCandidateResources } from "utils/Utils";
 import { Notifications } from "expo";
 import { updateRoom } from "modules/chat/actions";
@@ -173,6 +174,7 @@ const TabScreen = ({ navigation }) => {
   return (
     <React.Fragment>
       <MoreModal navigation={navigation} />
+      <RatingModal />
       {/* <MoneyDropModal /> */}
       {statusBar}
       {/* <Header

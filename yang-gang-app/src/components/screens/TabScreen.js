@@ -29,16 +29,14 @@ import {
   Feather
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
-import {
-  updateTheme,
-  updateShowMoneyModal,
-} from "modules/app/actions";
+import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import MoreModal from "./MoreModal";
 import { useCandidateResources } from "utils/Utils";
 import { Notifications } from "expo";
+import { updateRoom } from "modules/chat/actions";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -81,19 +79,19 @@ const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
   const candidate = useSelector(state => state.app.candidate);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    Notifications.addListener((notification) => {
+    Notifications.addListener(notification => {
       const room = notification.data;
       if (room && room.id) {
-        navigation.navigate("Chat", { roomId: room.id });
+        dispatch(updateRoom(room)).then(() => {
+          navigation.navigate("Chat", { roomId: room.id });
+        });
       }
-    })
-    // const room = {id: 1}
-    // if (room && room.id) {
-    //   navigation.navigate("Chat", { roomId: room.id });
-    // }
-  }, [])
+    });
+  }, []);
+
   let routes = [
     { key: "twitter", icon: "logo-twitter", color: "#00aced" },
     {

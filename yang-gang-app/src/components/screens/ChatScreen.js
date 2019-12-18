@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView, Keyboard } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,15 +11,14 @@ import {
   Send,
   Actions
 } from "react-native-gifted-chat";
-import {
-  MaterialIcons
-} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import Header, { Back } from "./Header";
 import Loading from "components/utils/Loading";
 import { sendMessage, connectRoom } from "modules/chat/actions";
 import RoomItem from "components/items/RoomItem";
 import UsernameModal from "./UsernameModal";
 import { updateModal } from "modules/app/actions";
+import ChatLoading from "components/utils/ChatLoading";
 
 const dummy = [
   {
@@ -84,14 +83,15 @@ const generateStyles = theme => ({});
  */
 
 const convertMessageToGifted = message => {
+  console.log(message);
   return {
     _id: message.id,
     text: message.message,
     createdAt: new Date(message.created_date),
     user: {
-      _id: message.user_id,
-      name: null,
-      avatar: null
+      _id: message.user.id,
+      name: message.user.username
+      // avatar: null
     }
   };
 };
@@ -99,8 +99,6 @@ const convertMessageToGifted = message => {
 const ChatScreen = ({ navigation }) => {
   const roomId = navigation.getParam("roomId");
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const dispatch = useDispatch();
-  const user = useSelector(state => state.settings.user);
 
   const room = useSelector(state =>
     state.chat.rooms.find(room => room.id === roomId)
@@ -111,16 +109,62 @@ const ChatScreen = ({ navigation }) => {
     connectRoom(roomId);
   }, []);
 
-  if (!messages) return <Loading />;
-  messages = messages.map(convertMessageToGifted);
+  const renderHeader = (
+    <Header
+      btnColor={theme.text()}
+      bgColor={theme.bg3()}
+      navigation={navigation}
+      renderTitle={
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ height: 40, justifyContent: "center" }}>
+            <Back navigation={navigation} btnColor={theme.text()} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <RoomItem
+              showSource
+              active
+              room={room}
+              style={{ padding: theme.spacing_4 }}
+            />
+          </View>
+        </View>
+      }
+      title={"General Chat"}
+    />
+  );
 
+  return (
+    <>
+      <UsernameModal />
+      <View style={{ flex: 1, backgroundColor: theme.bg3() }}>
+        {renderHeader}
+        {!messages ? <Loading /> : <Chat messages={messages} roomId={roomId} />}
+      </View>
+    </>
+  );
+};
+
+const Chat = React.memo(({ messages, roomId }) => {
+  console.log("RENDERING CHAT  ========= ");
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.settings.user);
+  const { theme, gstyles, styles } = useThemeKit(generateStyles);
+  // messages = messages.reverse().slice(0, 15);
+  messages = messages.map(convertMessageToGifted);
+  const [text, setText] = React.useState("");
   const onSend = (nextMessages = []) => {
-    if (!user) return
+    if (!user) {
+      Keyboard.dismiss();
+      setTimeout(() => setText(nextMessages[0].text), 50);
+      return;
+    }
 
     if (!user.username) {
-      dispatch(updateModal("username", true))
+      Keyboard.dismiss();
+      dispatch(updateModal("username", true));
+      setTimeout(() => setText(nextMessages[0].text), 50);
       return;
-    };
+    }
 
     sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
   };
@@ -168,72 +212,37 @@ const ChatScreen = ({ navigation }) => {
   };
 
   const renderActions = props => {
-
-    return <Actions icon={() => <MaterialIcons name={"person"} color={theme.text(0.5)} size={24} />} {...props} onPressActionButton={() => {
-      dispatch(updateModal("username", true));
-    }} />;
-  };
-
-  // /** render the time labels in the bubble */
-  // const renderTime = () => {
-  //   return (
-  //     <Time
-  //       textStyle={{
-  //         right: {
-  //           color: theme.text(),
-  //           fontFamily: "brandon-book",
-  //           fontSize: 14
-  //         },
-  //         left: {
-  //           color: theme.text(),
-  //           fontFamily: "brandon-book",
-  //           fontSize: 14
-  //         }
-  //       }}
-  //     />
-  //   );
-  // };
-  return (
-    <View style={{ flex: 1, backgroundColor: theme.bg3() }}>
-      <UsernameModal />
-      <Header
-        btnColor={theme.text()}
-        bgColor={theme.bg3()}
-        navigation={navigation}
-        renderTitle={
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ height: 40, justifyContent: "center" }}>
-              <Back navigation={navigation} btnColor={theme.text()} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <RoomItem
-                active
-                room={room}
-                style={{ padding: theme.spacing_4 }}
-              />
-            </View>
-          </View>
-        }
-        title={"General Chat"}
-      />
-
-      <GiftedChat
-        messages={messages}
-        onSend={onSend}
-        renderBubble={renderBubble}
-        renderInputToolbar={renderInputToolbar}
-        renderComposer={renderComposer}
-        renderSend={renderSend}
-        renderActions={renderActions}
-        inverted={false}
-        showUserAvatar
-        renderUsernameOnMessage
-        user={{
-          _id: user.id
+    return (
+      <Actions
+        icon={() => (
+          <MaterialIcons name={"person"} color={theme.text(0.3)} size={24} />
+        )}
+        {...props}
+        onPressActionButton={() => {
+          Keyboard.dismiss();
+          dispatch(updateModal("username", true));
         }}
       />
-    </View>
-  );
-};
+    );
+  };
 
+  return (
+    <GiftedChat
+      messages={messages}
+      onSend={onSend}
+      renderBubble={renderBubble}
+      renderInputToolbar={renderInputToolbar}
+      renderComposer={renderComposer}
+      renderSend={renderSend}
+      renderActions={renderActions}
+      // showUserAvatar
+      renderUsernameOnMessage
+      user={{
+        _id: user.id
+      }}
+      text={text}
+      onInputTextChanged={text => setText(text)}
+    />
+  );
+});
 export default ChatScreen;

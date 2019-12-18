@@ -1,13 +1,11 @@
 import axios from "axios";
-export const ROOT_URL = "http://34.217.208.191";
+export const ROOT_URL = "http://34.217.208.191"; // dev
+// export const ROOT_URL = "http://54.185.34.163"; // prod
 const PORT = "80";
 
 const URL = `${ROOT_URL}:${PORT}`;
 // const URL = "http://localhost:80";
 // const URL = "http://192.168.2.11:80";
-
-// const URL = "http://34.217.208.191:80"; //dev
-// const URL = "http://54.185.34.163:80";
 
 const instance = axios.create({ timeout: 10000, baseURL: URL });
 

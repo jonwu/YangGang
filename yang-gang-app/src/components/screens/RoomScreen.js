@@ -18,6 +18,7 @@ import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import RoomItem from "components/items/RoomItem";
+import ChatLoading from "components/utils/ChatLoading";
 
 const generateStyles = theme => ({});
 
@@ -99,7 +100,7 @@ const RoomScreen = ({ navigation }) => {
   const isConnected = useSelector(state => state.chat.isConnected);
   const rooms = useSelector(state => state.chat.rooms);
 
-  if (!isConnected) return <Loading />;
+  // if (!isConnected) return <Loading />;
 
   return (
     <View style={{ flex: 1 }}>
@@ -111,16 +112,21 @@ const RoomScreen = ({ navigation }) => {
         btnColor={theme.text()}
         bgColor={theme.bg3()}
       />
-      {/* <OptionBars navigation={navigation} /> */}
-      <FlatList
-        style={{ backgroundColor: theme.bg3(), flex: 1 }}
-        data={rooms}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item: room, i }) => {
-          return <RoomItem key={room.id} navigation={navigation} room={room} />;
-        }}
-        ItemSeparatorComponent={Separator}
-      />
+      {!isConnected ? (
+        <ChatLoading />
+      ) : (
+        <FlatList
+          style={{ backgroundColor: theme.bg3(), flex: 1 }}
+          data={rooms}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({ item: room, i }) => {
+            return (
+              <RoomItem key={room.id} navigation={navigation} room={room} />
+            );
+          }}
+          ItemSeparatorComponent={Separator}
+        />
+      )}
     </View>
   );
 };

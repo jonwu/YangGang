@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const generateStyles = theme => ({});
 
-const BasicForm = ({ title, value, setValue }) => {
+const BasicForm = ({ title, value, setValue, autoCapitalize = true }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
     <View
@@ -37,6 +37,7 @@ const BasicForm = ({ title, value, setValue }) => {
             padding: theme.spacing_5
           }
         ]}
+        autoCapitalize={autoCapitalize}
         value={value}
         onChangeText={text => setValue(text)}
       />
@@ -235,7 +236,12 @@ const PostEventsScreen = ({ navigation }) => {
             <Tag setTag={setTag} tag="hype" />
             <Tag setTag={setTag} tag="minor" />
           </View>
-          <BasicForm title={"link"} value={pnLink} setValue={setPnLink} />
+          <BasicForm
+            title={"link"}
+            value={pnLink}
+            setValue={setPnLink}
+            autoCapitalize={false}
+          />
           <View style={{ padding: theme.spacing_2 }}>
             <Button
               text="Post Message"

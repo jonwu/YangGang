@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, Modal, TouchableWithoutFeedback, TextInput, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableWithoutFeedback,
+  TextInput,
+  KeyboardAvoidingView,
+  Keyboard
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import { updateModal, updateUser } from "modules/app/actions";
@@ -14,15 +22,18 @@ const UsernameModal = () => {
   const dispatch = useDispatch();
 
   const onClose = () => {
-    dispatch(updateUser({username}))
-    dispatch(updateModal("username", false))
-  }
+    Keyboard.dismiss();
+    dispatch(updateUser({ username }));
+    dispatch(updateModal("username", false));
+  };
   return (
-    <Modal visible={isVisible} transparent={true} animationType="fade">
-      <TouchableWithoutFeedback
-        style={{ flex: 1 }}
-        onPress={onClose}
-      >
+    <Modal
+      visible={isVisible}
+      transparent={true}
+      animationType="fade"
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={onClose}>
         <View
           style={{
             flex: 1,
@@ -31,28 +42,42 @@ const UsernameModal = () => {
           }}
         >
           <TouchableWithoutFeedback onPress={() => {}}>
-            <KeyboardAvoidingView behavior="position"
-                enabled
-                // keyboardVerticalOffset={200}
-                >
-                  <View style={{
+            <KeyboardAvoidingView
+              behavior="position"
+              enabled
+              // keyboardVerticalOffset={200}
+            >
+              <View
+                style={{
                   backgroundColor: theme.bg3(),
                   height: 200,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  padding: theme.spacing_2,
-                }} >
+                  padding: theme.spacing_2
+                }}
+              >
                 <Text style={[gstyles.h3_bold, gstyles.bottom_2]}>
                   Change Username
                 </Text>
                 <TextInput
+                  autoFocus
                   value={username}
                   onChangeText={setUsername}
                   returnKeyType={"done"}
                   onSubmitEditing={onClose}
-                  style={[gstyles.p1, {paddingHorizontal: theme.spacing_2, paddingVertical: theme.spacing_4, backgroundColor: theme.text(0.1), borderRadius: theme.borderRadius}]} placeholder={'Enter desired username'} placeholderTextColor={theme.text(0.5)}/>
-
-                </View>
+                  style={[
+                    gstyles.p1,
+                    {
+                      paddingHorizontal: theme.spacing_2,
+                      paddingVertical: theme.spacing_4,
+                      backgroundColor: theme.text(0.1),
+                      borderRadius: theme.borderRadius
+                    }
+                  ]}
+                  placeholder={"Enter desired username"}
+                  placeholderTextColor={theme.text(0.5)}
+                />
+              </View>
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
         </View>

@@ -17,6 +17,7 @@ export const connectSocket = () => {
 export const initializeChatListeners = () => {
   return dispatch => {
     socket.on("after connect", rooms => {
+      // console.log("GET Rooms", rooms);
       dispatch({
         type: ActionTypes.CONNECTED,
         rooms: rooms
@@ -27,7 +28,7 @@ export const initializeChatListeners = () => {
       dispatch({
         type: ActionTypes.ROOM_CONNECTED,
         roomId: room_id,
-        messages
+        messages: messages.reverse()
       });
     });
 
@@ -49,10 +50,19 @@ export const initializeChatListeners = () => {
 };
 
 export const connectRoom = roomId => {
+  console.log("Connect Room", roomId);
   socket.emit("join", { room_id: roomId });
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {
-  console.log("Send Message", userId, roomId, message)
+  console.log("Send Message", userId, roomId, message);
   socket.emit("send message", { user_id: userId, room_id: roomId, message });
+};
+
+export const updateRoom = room => dispatch => {
+  dispatch({
+    type: ActionTypes.UPDATE_ROOM,
+    room
+  });
+  return Promise.resolve();
 };

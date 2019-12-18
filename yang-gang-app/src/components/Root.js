@@ -2,7 +2,6 @@ import * as React from "react";
 import { AppState } from "react-native";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 import TabScreen from "components/screens/TabScreen";
-import WebviewScreen from "components/screens/WebviewScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
 import DescriptionScreen from "components/screens/DescriptionScreen";
 import ProgressScreen from "components/screens/ProgressScreen";
@@ -32,8 +31,7 @@ console.disableYellowBox = true;
 
 const MainStack = createStackNavigator(
   {
-    Tabs: TabScreen,
-    Webview: WebviewScreen
+    Tabs: TabScreen
   },
   {
     headerMode: "none"

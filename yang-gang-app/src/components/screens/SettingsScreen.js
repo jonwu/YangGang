@@ -160,7 +160,9 @@ const SettingsScreen = React.memo(
         Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
         label={"Rate the app!"}
       /> */}
-        {(Constants.installationId === "56ED3426-D29C-4B1C-AA98-16C5E0BCC08D" ||
+        {((Constants.manifest.releaseChannel &&
+          Constants.manifest.releaseChannel.indexOf("staging") !== -1) ||
+          Constants.installationId === "56ED3426-D29C-4B1C-AA98-16C5E0BCC08D" ||
           __DEV__) && (
           <SettingsRow
             onPress={() => navigation.navigate("PostEvent")}

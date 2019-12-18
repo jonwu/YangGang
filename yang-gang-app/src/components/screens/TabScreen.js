@@ -7,7 +7,8 @@ import {
   Dimensions,
   Platform,
   View,
-  Animated
+  Animated,
+  Text
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import RedditScreen from "./RedditScreen";
@@ -84,11 +85,13 @@ const TabScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     Notifications.addListener(notification => {
-      const room = notification.data;
-      if (room && room.id) {
-        dispatch(updateRoom(room)).then(() => {
-          navigation.navigate("Chat", { roomId: room.id });
-        });
+      if (notification.origin === "selected") {
+        const room = notification.data;
+        if (room && room.id) {
+          dispatch(updateRoom(room)).then(() => {
+            navigation.navigate("Chat", { roomId: room.id });
+          });
+        }
       }
     });
   }, []);
@@ -268,15 +271,20 @@ const MoreIcon = React.memo(({ navigation }) => {
           }}
         >
           <Ionicons name="ios-chatbubbles" color={theme.light()} size={36} />
-          <Animated.Image
+          <Animated.View
             source={candidateResource.avatar}
             style={{
               position: "absolute",
+              backgroundColor: theme.blue(),
               width: "100%",
               height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
               transform: [{ translateY: avatarTranslateY.current }]
             }}
-          />
+          >
+            <Text style={gstyles.h2}>🥳</Text>
+          </Animated.View>
         </View>
       </SafeAreaView>
     </TouchableOpacity>

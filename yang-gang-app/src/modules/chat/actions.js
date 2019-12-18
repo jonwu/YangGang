@@ -8,16 +8,21 @@ const socket = SocketIOClient(`${ROOT_URL}:5000`, {
 
 export const connectSocket = () => {
   return dispatch => {
-    dispatch(initializeChatListeners());
-    socket.disconnect();
-    socket.connect();
+    return new Promise(resolve => {
+      socket.disconnect();
+      socket.removeAllListeners();
+      socket.connect();
+      dispatch(initializeChatListeners());
+      socket.on("connect", () => {
+        resolve();
+      });
+    });
   };
 };
 
 export const initializeChatListeners = () => {
   return dispatch => {
     socket.on("after connect", rooms => {
-      // console.log("GET Rooms", rooms);
       dispatch({
         type: ActionTypes.CONNECTED,
         rooms: rooms
@@ -49,9 +54,14 @@ export const initializeChatListeners = () => {
   };
 };
 
-export const connectRoom = roomId => {
-  console.log("Connect Room", roomId);
-  socket.emit("join", { room_id: roomId });
+export const connectRoom = roomId => (dispatch, getState) => {
+  if (getState().chat.isConnected) {
+    socket.emit("join", { room_id: roomId });
+  } else {
+    dispatch(connectSocket()).then(() => {
+      socket.emit("join", { room_id: roomId });
+    });
+  }
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {

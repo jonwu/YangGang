@@ -13,7 +13,7 @@ from exponent_server_sdk import PushServerError
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import traceback
-import socketio
+import requests
 
 
 def is_exponent_push_token(token):
@@ -168,11 +168,7 @@ class SimpleGetPushApi(Resource):
         new_room = room_schema.load(room, session=db.session, partial=True)
         db.session.add(new_room)
         db.session.commit()
-        sio = socketio.Client(logger=True, engineio_logger=True)
-        sio.connect('http://socket:5000', transports='websocket')
-        print('my socketio sid is', sio.sid)
-        sio.emit('update room', room_schema.dump(new_room))
-        sio.disconnect()
+        requests.post('http://socket:5000/updateroom', json=room_schema.dump(new_room))
         push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
         print('number of total push_ids: {}'.format(len(push_list)))
         increment = 100
@@ -325,13 +321,9 @@ class MessageApi(Resource):
             message = request.get_json()
             message_schema = MessageSchema()
             room_schema = RoomSchema()
-            room = Room.query.order_by(Room.id == room_id).one_or_none()
+            room = Room.query.filter(Room.id == room_id).one_or_none()
             room.message_count += 1
-            sio = socketio.Client(logger=True, engineio_logger=True)
-            sio.connect('http://socket:5000', transports='websocket')
-            print('my socketio sid is', sio.sid)
-            sio.emit('update room', room_schema.dump(room))
-            sio.disconnect()
+            requests.post('http://socket:5000/updateroom', json=room_schema.dump(room))
             new_message = message_schema.load(message, session=db.session, partial=True)
             new_message.room_id = room_id
             db.session.add(new_message)
@@ -599,6 +591,7 @@ class RoomSchema(ma.ModelSchema):
 
 class MessageSchema(ma.ModelSchema):
     class Meta:
+        include_fk = True
         model = Message
         sqla_session = db.session
 

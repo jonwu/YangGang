@@ -55,7 +55,7 @@ export const initializeChatListeners = () => {
 };
 
 export const connectRoom = roomId => (dispatch, getState) => {
-  if (getState().chat.isConnected) {
+  if (socket.connected) {
     socket.emit("join", { room_id: roomId });
   } else {
     dispatch(connectSocket()).then(() => {
@@ -65,7 +65,6 @@ export const connectRoom = roomId => (dispatch, getState) => {
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {
-  console.log("Send Message", userId, roomId, message);
   socket.emit("send message", { user_id: userId, room_id: roomId, message });
 };
 

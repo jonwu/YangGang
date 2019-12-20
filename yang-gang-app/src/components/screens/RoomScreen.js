@@ -191,10 +191,8 @@ const DummyRooms = [
 const RoomScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const dispatch = useDispatch();
-  const isConnected = useSelector(state => state.chat.isConnected);
+  // const isConnected = useSelector(state => state.chat.isConnected);
   const rooms = useSelector(state => state.chat.rooms);
-
-  // if (!isConnected) return <Loading />;
 
   return (
     <View style={{ flex: 1 }}>
@@ -206,7 +204,7 @@ const RoomScreen = ({ navigation }) => {
         btnColor={theme.text()}
         bgColor={theme.bg3()}
       />
-      {!isConnected ? (
+      {!rooms ? (
         <ChatLoading />
       ) : (
         <FlatList

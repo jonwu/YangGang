@@ -113,7 +113,8 @@ export default function App() {
       require("assets/modalbg.jpg"),
       require("assets/icYang.jpg"),
       require("assets/icBernie.png"),
-      require("assets/icTrump.jpg")
+      require("assets/icTrump.jpg"),
+      require("assets/party.png")
     ]);
 
     cacheImages([

@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  Platform
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,7 +30,8 @@ const UsernameModal = () => {
 
   const onClose = () => {
     Keyboard.dismiss();
-    if (username && username.trim() != "") dispatch(updateUser({ username }));
+    if (username && username.trim() != "" && username != user.username)
+      dispatch(updateUser({ username }));
     dispatch(updateModal("username", false));
   };
   return (
@@ -50,7 +52,7 @@ const UsernameModal = () => {
           <TouchableWithoutFeedback onPress={() => {}}>
             <KeyboardAvoidingView
               behavior="position"
-              enabled
+              enabled={Platform.OS === "ios"}
               // keyboardVerticalOffset={200}
             >
               <View

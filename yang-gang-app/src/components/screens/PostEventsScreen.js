@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const generateStyles = theme => ({});
 
-const BasicForm = ({ title, value, setValue, autoCapitalize = false }) => {
+const BasicForm = ({ title, value, setValue, autoCapitalize = "none" }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
     <View
@@ -240,7 +240,7 @@ const PostEventsScreen = ({ navigation }) => {
             title={"link"}
             value={pnLink}
             setValue={setPnLink}
-            autoCapitalize={false}
+            autoCapitalize={"none"}
           />
           <View style={{ padding: theme.spacing_2 }}>
             <Button

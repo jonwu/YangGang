@@ -19,6 +19,7 @@ import SettingsScreen from "./SettingsScreen";
 import InstagramScreen from "./InstagramScreen";
 import MoneyDropModal from "./MoneyDropModal";
 import instagramIcon from "assets/instagram.png";
+import partyIcon from "assets/party.png";
 
 import { TabView, TabBar } from "react-native-tab-view";
 import {
@@ -283,7 +284,7 @@ const MoreIcon = React.memo(({ navigation }) => {
               transform: [{ translateY: avatarTranslateY.current }]
             }}
           >
-            <Text style={gstyles.h2}>🥳</Text>
+            <Image source={partyIcon} style={{ height: 30, width: 30 }}></Image>
           </Animated.View>
         </View>
       </SafeAreaView>

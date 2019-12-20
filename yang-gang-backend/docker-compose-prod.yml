@@ -7,6 +7,12 @@ services:
             - db
         ports:
             - "80:80"
+    socket:
+        build: ./socket
+        links:
+            - db
+        ports:
+            - "5000:5000"
     redis:
         image: redis
         restart: always

@@ -7,7 +7,7 @@ flask-socketio
 python-socketio[client]
 Flask-SQLAlchemy
 gevent
-gunicorn
+gunicorn==19.7.1
 marshmallow-sqlalchemy
 pymysql
 redis

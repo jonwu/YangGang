@@ -13,7 +13,7 @@ from exponent_server_sdk import PushServerError
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 import traceback
-import socketio
+import requests
 
 
 def is_exponent_push_token(token):
@@ -65,10 +65,6 @@ r = Redis(host='redis', port=6379)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
-sio = socketio.Client(logger=True, engineio_logger=True)
-sio.connect('http://socket:5000', transports='websocket')
-print('my socketio sid is', sio.sid)
 
 
 @api.route('/notifications/<int:event_id>/<string:expo_id>')
@@ -165,26 +161,30 @@ class SimpleGetPushApi(Resource):
 
     @api.expect(message_json)
     def post(self):
-        message = request.get_json()
-        print('payload for push received: {}'.format(message))
-        room = message['data']
-        room_schema = RoomSchema()
-        new_room = room_schema.load(room, session=db.session, partial=True)
-        db.session.add(new_room)
-        db.session.commit()
-        sio.emit('update room', room_schema.dump(new_room))
-        push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
-        print('number of total push_ids: {}'.format(len(push_list)))
-        increment = 100
-        i = 0
         try:
-            while i < len(push_list):
-                send_push_message(push_list[i: i + increment], message['body'], room_schema.dump(new_room))
-                i += increment
-            return 'success, pushed a total of {} messages'.format(len(push_list)), 200
+            message = request.get_json()
+            print('payload for push received: {}'.format(message))
+            room = message['data']
+            room_schema = RoomSchema()
+            new_room = room_schema.load(room, session=db.session, partial=True)
+            db.session.add(new_room)
+            db.session.commit()
+            requests.post('http://socket:5000/updateroom', json=room_schema.dump(new_room))
+            push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
+            print('number of total push_ids: {}'.format(len(push_list)))
+            increment = 100
+            i = 0
+            try:
+                while i < len(push_list):
+                    send_push_message(push_list[i: i + increment], message['body'], room_schema.dump(new_room))
+                    i += increment
+                return 'success, pushed a total of {} messages'.format(len(push_list)), 200
+            except Exception as e:
+                traceback.print_exc()
+                abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
         except Exception as e:
             traceback.print_exc()
-            abort(404, 'internal server error at batch {}: {}'.format(i / increment, str(e)))
+            abort(404, 'internal server error: {}'.format(str(e)))
 
 
 @api.route('/user/<int:user_id>')
@@ -325,9 +325,9 @@ class MessageApi(Resource):
             message = request.get_json()
             message_schema = MessageSchema()
             room_schema = RoomSchema()
-            room = Room.query.order_by(Room.id == room_id).one_or_none()
+            room = Room.query.filter(Room.id == room_id).one_or_none()
             room.message_count += 1
-            sio.emit('update room', room_schema.dump(room))
+            requests.post('http://socket:5000/updateroom', json=room_schema.dump(room))
             new_message = message_schema.load(message, session=db.session, partial=True)
             new_message.room_id = room_id
             db.session.add(new_message)
@@ -595,6 +595,7 @@ class RoomSchema(ma.ModelSchema):
 
 class MessageSchema(ma.ModelSchema):
     class Meta:
+        include_fk = True
         model = Message
         sqla_session = db.session
 

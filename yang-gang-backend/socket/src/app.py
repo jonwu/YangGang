@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, abort
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -19,6 +19,18 @@ headers = {'Content-type': 'application/json'}
 @app.route('/ping')
 def ping():
     return 'hello', 200
+
+
+@app.route('/updateroom', methods=['POST'])
+def update_room():
+    data = request.get_json()
+    try:
+        print("emitting: {} to all".format(data))
+        socketio.emit("update room", data, broadcast=True)
+        return 'successfully updated room', 200
+    except Exception as e:
+        traceback.print_exc()
+        return abort(404, 'internal server error: {}'.format(str(e)))
 
 
 # todo: add graceful failure when adding to push_ids table
@@ -54,15 +66,6 @@ def send_message(data):
             emit("broadcast message", message_schema.dump(new_message), broadcast=True, room=room_id)
         except Exception:
             traceback.print_exc()
-    except:
-        traceback.print_exc()
-
-
-@socketio.on("update room")
-def update_room(data):
-    try:
-        print("emitting: {} to all".format(data))
-        emit("update room", data, broadcast=True)
     except:
         traceback.print_exc()
 

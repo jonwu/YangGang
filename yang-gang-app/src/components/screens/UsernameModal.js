@@ -29,7 +29,7 @@ const UsernameModal = () => {
 
   const onClose = () => {
     Keyboard.dismiss();
-    if (username.trim() != "") dispatch(updateUser({ username }));
+    if (username && username.trim() != "") dispatch(updateUser({ username }));
     dispatch(updateModal("username", false));
   };
   return (

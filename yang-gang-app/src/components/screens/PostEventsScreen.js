@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const generateStyles = theme => ({});
 
-const BasicForm = ({ title, value, setValue, autoCapitalize = true }) => {
+const BasicForm = ({ title, value, setValue, autoCapitalize = false }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
     <View

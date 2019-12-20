@@ -11,7 +11,7 @@ import {
   Send,
   Actions
 } from "react-native-gifted-chat";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header, { Back } from "./Header";
 import Loading from "components/utils/Loading";
 import { sendMessage, connectRoom } from "modules/chat/actions";
@@ -214,7 +214,11 @@ const Chat = React.memo(({ messages, roomId }) => {
     return (
       <Actions
         icon={() => (
-          <MaterialIcons name={"person"} color={theme.text(0.3)} size={24} />
+          <MaterialCommunityIcons
+            name={"face-profile"}
+            color={theme.text(0.3)}
+            size={24}
+          />
         )}
         {...props}
         onPressActionButton={() => {

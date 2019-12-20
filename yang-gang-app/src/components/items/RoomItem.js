@@ -105,7 +105,12 @@ const RoomItem = React.memo(
         onPress={() => navigation.navigate("Chat", { roomId: id })}
         disabled={!navigation}
       >
-        <View style={[{ padding: theme.spacing_2 }, style]}>
+        <View
+          style={[
+            { padding: theme.spacing_2, backgroundColor: theme.bg3() },
+            style
+          ]}
+        >
           <View
             style={[
               {

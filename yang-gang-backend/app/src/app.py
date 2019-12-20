@@ -342,6 +342,9 @@ class MessageApi(Resource):
 class SimplePushApi(Resource):
     def post(self, expo_id):
         try:
+            push_id = PushIds.query.filter(PushIds.id == expo_id).one_or_none()
+            if push_id is not None:
+                return 'id already exists', 200
             push_object = PushIds(id=expo_id)
             db.session.add(push_object)
             db.session.commit()

@@ -3,8 +3,12 @@
     "name": "Andrew Yang",
     "slug": "yang",
     "privacy": "public",
-    "sdkVersion": "34.0.0",
-    "platforms": ["ios", "android", "web"],
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "orientation": "portrait",
     "version": "1.1.6",
     "icon": "./src/assets/logo-4.png",
@@ -19,7 +23,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["./src/assets/*"],
+    "assetBundlePatterns": [
+      "./src/assets/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jonwu.yang",

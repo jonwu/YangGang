@@ -8,7 +8,11 @@ import traceback
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@db:3306/db'
+
+# TODO: change the command i used below to migration. this was a quick fix for message table to store emojis.
+# ALTER TABLE Tablename CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@db:3306/db?charset=utf8mb4'
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)

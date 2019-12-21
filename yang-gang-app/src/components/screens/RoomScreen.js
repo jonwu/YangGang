@@ -198,13 +198,13 @@ const RoomScreen = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       {/* <StatusBar barStyle="light-content" /> */}
       <Header
-        title={"The YG Club"}
+        title={"Andrew Yang Alerts"}
         navigation={navigation}
         close
         btnColor={theme.text()}
         bgColor={theme.bg3()}
       />
-      {!rooms ? (
+      {!rooms || rooms.length === 0 ? (
         <ChatLoading />
       ) : (
         <FlatList

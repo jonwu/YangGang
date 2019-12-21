@@ -126,7 +126,12 @@ const RoomItem = React.memo(
               size={12}
               style={gstyles.right_5}
             />
-            <Text style={[gstyles.caption_bold, { color: COLORS[tag] }]}>
+            <Text
+              style={[
+                gstyles.caption_bold,
+                { color: COLORS[tag] || theme.text(0.3) }
+              ]}
+            >
               {tag.toUpperCase()}
             </Text>
             <View

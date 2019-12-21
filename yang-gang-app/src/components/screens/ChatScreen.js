@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, SafeAreaView, Keyboard, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Keyboard,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform
+} from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -20,6 +28,7 @@ import UsernameModal from "./UsernameModal";
 import { updateModal } from "modules/app/actions";
 import ChatLoading from "components/utils/ChatLoading";
 import * as Haptics from "expo-haptics";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 
 const dummy = [
   {
@@ -160,7 +169,7 @@ const Chat = React.memo(({ messages, roomId }) => {
     if (!user.username) {
       Keyboard.dismiss();
       dispatch(updateModal("username", true));
-      setTimeout(() => setText(nextMessages[0].text), 50);
+      setTimeout(() => setText(nextMessages[0].text), 500);
       return;
     }
 
@@ -230,22 +239,26 @@ const Chat = React.memo(({ messages, roomId }) => {
   };
 
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={onSend}
-      renderBubble={renderBubble}
-      renderInputToolbar={renderInputToolbar}
-      renderComposer={renderComposer}
-      renderSend={renderSend}
-      renderActions={renderActions}
-      renderUsernameOnMessage
-      renderChatEmpty={() => <ScrollView style={{ flex: 1 }} />}
-      user={{
-        _id: user.id
-      }}
-      text={text}
-      onInputTextChanged={text => setText(text)}
-    />
+    <View style={{ flex: 1 }}>
+      <GiftedChat
+        messages={messages}
+        onSend={onSend}
+        renderBubble={renderBubble}
+        renderInputToolbar={renderInputToolbar}
+        renderComposer={renderComposer}
+        renderSend={renderSend}
+        renderActions={renderActions}
+        renderUsernameOnMessage
+        renderChatEmpty={() => <ScrollView style={{ flex: 1 }} />}
+        user={{
+          _id: user.id
+        }}
+        text={text}
+        isKeyboardInternallyHandled={!(Platform.OS === "android")}
+        onInputTextChanged={text => setText(text)}
+      />
+      {Platform.OS === "android" && <KeyboardSpacer />}
+    </View>
   );
 });
 export default ChatScreen;

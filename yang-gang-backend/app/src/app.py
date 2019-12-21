@@ -57,7 +57,7 @@ def send_push_message(tokens, message, data=None):
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@db:3306/db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@db:3306/db?charset=utf8mb4'
 
 api = Api(app=app, doc='/docs')
 r = Redis(host='redis', port=6379)

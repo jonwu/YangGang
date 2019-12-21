@@ -3,6 +3,7 @@ FROM python:3.6-stretch
 # for debugging
 RUN apt-get update
 RUN apt-get -y install vim
+RUN apt-get -y install lsof
 RUN apt-get -y install python3-dev
 RUN apt-get -y install python3-dev
 RUN apt-get -y install libevent-dev

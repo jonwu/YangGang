@@ -17,6 +17,10 @@ services:
             - db
         ports:
             - "5000:5000"
+        ulimits:
+            nofile:
+                soft: 20000
+                hard: 40000
     redis:
         image: redis
     poller:

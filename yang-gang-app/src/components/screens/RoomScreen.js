@@ -208,7 +208,7 @@ const RoomScreen = ({ navigation }) => {
         <ChatLoading />
       ) : (
         <FlatList
-          style={{ backgroundColor: theme.bg(), flex: 1 }}
+          style={{ backgroundColor: theme.bg() }}
           data={rooms}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item: room, i }) => {

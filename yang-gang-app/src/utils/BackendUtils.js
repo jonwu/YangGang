@@ -1,6 +1,6 @@
 import axios from "axios";
-export const ROOT_URL = "http://34.217.208.191"; // dev
-// export const ROOT_URL = "http://54.185.34.163"; // prod
+// export const ROOT_URL = "http://34.217.208.191"; // dev
+export const ROOT_URL = "http://54.185.34.163"; // prod
 
 const PORT = "80";
 

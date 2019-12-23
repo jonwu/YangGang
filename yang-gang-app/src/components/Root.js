@@ -105,18 +105,18 @@ const Root = React.memo(() => {
     fetchAll(candidate);
   }, [candidate]);
 
+  const refresh = () => {
+    const lastUpdate = dispatch(getLastUpdate());
+    if (lastUpdate && moment().isAfter(moment(lastUpdate).add(1, "hours"))) {
+      fetchAll(candidate);
+    }
+  };
   React.useEffect(() => {
-    console.log("Initialize App Change Listener");
-
     const handleAppStateChange = nextAppState => {
+      console.log("App State", nextAppState);
       if (nextAppState === "active") {
-        const lastUpdate = dispatch(getLastUpdate());
-        if (
-          lastUpdate &&
-          moment().isAfter(moment(lastUpdate).add(1, "hours"))
-        ) {
-          fetchAll(candidate);
-        }
+        refresh();
+        dispatch(connectSocket());
       }
     };
 

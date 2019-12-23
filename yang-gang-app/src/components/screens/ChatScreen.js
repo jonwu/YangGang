@@ -22,7 +22,11 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header, { Back } from "./Header";
 import Loading from "components/utils/Loading";
-import { sendMessage, connectRoom } from "modules/chat/actions";
+import {
+  sendMessage,
+  connectRoom,
+  setCurrentRoomId
+} from "modules/chat/actions";
 import RoomItem from "components/items/RoomItem";
 import UsernameModal from "./UsernameModal";
 import { updateModal } from "modules/app/actions";
@@ -115,7 +119,11 @@ const ChatScreen = ({ navigation }) => {
   let messages = useSelector(state => state.chat.messages[roomId]);
 
   React.useEffect(() => {
-    dispatch(connectRoom(roomId));
+    dispatch(setCurrentRoomId(roomId));
+    connectRoom(roomId);
+    return () => {
+      dispatch(setCurrentRoomId(null));
+    };
   }, []);
 
   const renderHeader = (

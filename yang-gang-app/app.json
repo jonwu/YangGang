@@ -26,7 +26,7 @@
       "appStoreUrl": "https://itunes.apple.com/us/app/yang-humanity-first/id1477732890"
     },
     "android": {
-      "versionCode": 9,
+      "versionCode": 10,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.jonwu.yang",
       "package": "com.jonwu.yang",
       "permissions": [],

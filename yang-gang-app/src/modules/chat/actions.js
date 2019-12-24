@@ -2,27 +2,54 @@ import * as ActionTypes from "./actionTypes";
 import SocketIOClient from "socket.io-client";
 import { ROOT_URL } from "utils/BackendUtils";
 
-const socket = SocketIOClient(`${ROOT_URL}:5000`, {
+let socket = SocketIOClient(`${ROOT_URL}:5000`, {
+  forceNew: true,
   transports: ["websocket"]
 });
 
 export const connectSocket = () => {
   return dispatch => {
-    return new Promise(resolve => {
-      socket.disconnect();
-      socket.removeAllListeners();
-      socket.connect();
-      dispatch(initializeChatListeners());
-      socket.on("connect", () => {
-        resolve();
-      });
-    });
+    // console.log("Connected Status ----> ", socket.connected, socket.id);
+    // disconnectSocket();
+    dispatch(initializeChatListeners());
+    socket.connect();
   };
+};
+export const disconnectSocket = () => {
+  socket.disconnect();
+  socket.removeAllListeners();
 };
 
 export const initializeChatListeners = () => {
-  return dispatch => {
+  console.log("Initialize Chat Listeners");
+  return (dispatch, getStore) => {
+    socket.on("connect_timeout", timeout => {
+      console.log("Connect Timeout", timeout);
+    });
+    socket.on("connect_error", error => {
+      console.log("Connect Error", error);
+    });
+
+    socket.on("reconnect_error", error => {
+      console.log("Reconnect Error", error);
+    });
+
+    socket.on("error", error => {
+      console.log("Error", error);
+    });
+
+    socket.on("reconnect", attemptNumber => {
+      console.log("on reconnect!", attemptNumber);
+    });
+
+    socket.on("connect", () => {
+      const roomId = getStore().chat.currentRoomId;
+      console.log("on connect roomId", roomId);
+      if (roomId) connectRoom(roomId);
+    });
+
     socket.on("after connect", rooms => {
+      console.log("after connect roomId", rooms.length);
       dispatch({
         type: ActionTypes.CONNECTED,
         rooms: rooms
@@ -54,14 +81,15 @@ export const initializeChatListeners = () => {
   };
 };
 
-export const connectRoom = roomId => (dispatch, getState) => {
-  if (socket.connected) {
-    socket.emit("join", { room_id: roomId });
-  } else {
-    dispatch(connectSocket()).then(() => {
-      socket.emit("join", { room_id: roomId });
-    });
-  }
+export const connectRoom = roomId => {
+  if (socket.connected) socket.emit("join", { room_id: roomId });
+};
+
+export const setCurrentRoomId = roomId => {
+  return {
+    type: ActionTypes.ROOM_JOINED,
+    roomId
+  };
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {

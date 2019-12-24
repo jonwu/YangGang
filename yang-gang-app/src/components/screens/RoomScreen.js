@@ -204,11 +204,11 @@ const RoomScreen = ({ navigation }) => {
         btnColor={theme.text()}
         bgColor={theme.bg3()}
       />
-      {!rooms || rooms.length === 0 ? (
+      {rooms.length === 0 ? (
         <ChatLoading />
       ) : (
         <FlatList
-          style={{ backgroundColor: theme.bg(), flex: 1 }}
+          style={{ backgroundColor: theme.bg() }}
           data={rooms}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item: room, i }) => {

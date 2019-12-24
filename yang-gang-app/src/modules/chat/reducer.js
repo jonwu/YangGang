@@ -12,7 +12,7 @@ function isConnected(state = false, action) {
   }
 }
 
-function rooms(state = null, action) {
+function rooms(state = [], action) {
   switch (action.type) {
     case ActionTypes.CONNECTED:
       return action.rooms;
@@ -32,7 +32,7 @@ function rooms(state = null, action) {
 
 function currentRoomId(state = null, action) {
   switch (action.type) {
-    case ActionTypes.ROOM_CONNECTED:
+    case ActionTypes.ROOM_JOINED:
       return action.roomId;
     case ActionTypes.DISCONNECTED:
       return null;

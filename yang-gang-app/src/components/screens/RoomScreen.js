@@ -204,7 +204,7 @@ const RoomScreen = ({ navigation }) => {
         btnColor={theme.text()}
         bgColor={theme.bg3()}
       />
-      {!rooms || rooms.length === 0 ? (
+      {rooms.length === 0 ? (
         <ChatLoading />
       ) : (
         <FlatList

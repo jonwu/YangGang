@@ -2,16 +2,14 @@ import * as ActionTypes from "./actionTypes";
 import SocketIOClient from "socket.io-client";
 import { ROOT_URL } from "utils/BackendUtils";
 
-let socket = null;
+let socket = SocketIOClient(`${ROOT_URL}:5000`, {
+  forceNew: true,
+  transports: ["websocket"]
+});
 
 export const connectSocket = () => {
   return dispatch => {
     // console.log("Connected Status ----> ", socket.connected, socket.id);
-    socket = SocketIOClient(`${ROOT_URL}:5000`, {
-      forceNew: true,
-      multiplex: false,
-      transports: ["websocket"]
-    });
     // disconnectSocket();
     dispatch(initializeChatListeners());
     socket.connect();

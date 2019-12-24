@@ -121,6 +121,9 @@ const ChatScreen = ({ navigation }) => {
   React.useEffect(() => {
     dispatch(setCurrentRoomId(roomId));
     connectRoom(roomId);
+  }, [roomId]);
+
+  React.useEffect(() => {
     return () => {
       dispatch(setCurrentRoomId(null));
     };

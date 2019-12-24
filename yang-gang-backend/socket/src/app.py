@@ -7,7 +7,7 @@ import traceback
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
-socketio = SocketIO(app)
+socketio = SocketIO(app, logger=True, engineio_logger=True)
 
 # TODO: change the command i used below to migration. this was a quick fix for message table to store emojis.
 # ALTER TABLE Tablename CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin
@@ -36,9 +36,6 @@ def update_room():
         traceback.print_exc()
         return abort(404, 'internal server error: {}'.format(str(e)))
 
-
-# todo: add graceful failure when adding to push_ids table
-# todo: return error code on error when sending push note
 
 @socketio.on('connect')
 def connect():

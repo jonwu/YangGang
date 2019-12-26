@@ -15,6 +15,7 @@
     "expo-av": "^6.0.0",
     "expo-facebook": "~6.0.0",
     "expo-haptics": "~6.0.0",
+    "expo-in-app-purchases": "^8.0.0",
     "expo-linear-gradient": "~6.0.0",
     "expo-mail-composer": "~6.0.0",
     "expo-web-browser": "~6.0.0",

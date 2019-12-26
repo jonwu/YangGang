@@ -40,6 +40,7 @@ import RatingModal from "./RatingModal";
 import { useCandidateResources } from "utils/Utils";
 import { Notifications } from "expo";
 import { updateRoom } from "modules/chat/actions";
+import DonationModal from "./DonationModal";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -179,6 +180,7 @@ const TabScreen = ({ navigation }) => {
     <React.Fragment>
       <MoreModal navigation={navigation} />
       <RatingModal />
+      <DonationModal />
       {/* <MoneyDropModal /> */}
       {statusBar}
       {/* <Header

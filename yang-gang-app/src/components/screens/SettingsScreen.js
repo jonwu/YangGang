@@ -154,6 +154,19 @@ const SettingsScreen = React.memo(
           }
           label={"Send feedback"}
         />
+        <SettingsRow
+          onPress={() =>{
+
+          }}
+          Icon={
+            <MaterialCommunityIcons
+              name="email"
+              size={24}
+              color={theme.text()}
+            />
+          }
+          label={"Donate"}
+        />
 
         {/* <SettingsRow
         onPress={StoreReview.requestReview}

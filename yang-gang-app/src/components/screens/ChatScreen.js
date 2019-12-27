@@ -260,7 +260,20 @@ const Chat = React.memo(({ messages, roomId }) => {
         renderSend={renderSend}
         renderActions={renderActions}
         renderUsernameOnMessage
-        renderChatEmpty={() => <ScrollView style={{ flex: 1 }} />}
+        renderChatEmpty={() => <View style={{ flex: 1, transform: [{scaleY: -1}], alignItems: 'center' }}>
+          <View style={{flex: 1 }}/>
+          <View style={{paddingBottom: 48}}>
+            <Text style={[gstyles.h4_bold, gstyles.bottom_4]}>
+              Ready... Set...
+            </Text>
+            <Text style={gstyles.p1}>
+              This is the beginning of a chat room.
+            </Text>
+            <Text style={gstyles.p1}>
+              Type something to kick it off!
+            </Text>
+          </View>
+        </View>}
         user={{
           _id: user.id
         }}

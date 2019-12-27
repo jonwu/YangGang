@@ -9,8 +9,7 @@ let socket = SocketIOClient(`${ROOT_URL}:5000`, {
 
 export const connectSocket = () => {
   return dispatch => {
-    // console.log("Connected Status ----> ", socket.connected, socket.id);
-    // disconnectSocket();
+    disconnectSocket();
     dispatch(initializeChatListeners());
     socket.connect();
   };
@@ -93,7 +92,11 @@ export const setCurrentRoomId = roomId => {
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {
-  socket.emit("send message", { user_id: userId, room_id: roomId, message });
+  socket.emit(
+    "send message",
+    { user_id: userId, room_id: roomId, message },
+    () => {}
+  );
 };
 
 export const updateRoom = room => dispatch => {

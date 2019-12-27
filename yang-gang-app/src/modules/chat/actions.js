@@ -2,16 +2,13 @@ import * as ActionTypes from "./actionTypes";
 import SocketIOClient from "socket.io-client";
 import { ROOT_URL } from "utils/BackendUtils";
 
-let socket = SocketIOClient(`${ROOT_URL}:5000`, {
-  forceNew: true,
-  transports: ["websocket"]
-});
-
+let socket = null;
 export const connectSocket = () => {
   return dispatch => {
-    disconnectSocket();
-    dispatch(initializeChatListeners());
-    socket.connect();
+    socket = SocketIOClient(`${ROOT_URL}:5000`, {
+      transports: ["websocket"]
+    });
+    dispatch(initializeChatListeners(socket));
   };
 };
 export const disconnectSocket = () => {
@@ -48,7 +45,7 @@ export const initializeChatListeners = () => {
     });
 
     socket.on("after connect", rooms => {
-      console.log("after connect roomId", rooms.length);
+      console.log("after connect rooms length", rooms.length);
       dispatch({
         type: ActionTypes.CONNECTED,
         rooms: rooms
@@ -92,11 +89,7 @@ export const setCurrentRoomId = roomId => {
 };
 
 export const sendMessage = ({ userId, roomId, message }) => {
-  socket.emit(
-    "send message",
-    { user_id: userId, room_id: roomId, message },
-    () => {}
-  );
+  socket.emit("send message", { user_id: userId, room_id: roomId, message });
 };
 
 export const updateRoom = room => dispatch => {

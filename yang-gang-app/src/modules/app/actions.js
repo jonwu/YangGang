@@ -192,18 +192,15 @@ export function updateNews() {
         "news",
         BackendUtils.getNews(candidate).then(response => {
           const news = lodash.uniqBy(response.data.articles, "title");
-          news.sort((a, b) => {
-            return (
-              moment(a.publishedAt).format("Y-MM-DD") <
-              moment(b.publishedAt).format("Y-MM-DD")
-            );
-          });
+          const sorted = lodash
+            .orderBy(news, o => moment(o.publishedAt))
+            .reverse();
           dispatch({
             type: ActionTypes.UPDATE_NEWS,
             candidate,
-            news
+            news: sorted
           });
-          return news;
+          return sorted;
         })
       )
     );

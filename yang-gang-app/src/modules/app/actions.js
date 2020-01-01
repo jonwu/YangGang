@@ -4,12 +4,14 @@ import { load } from "modules/loading/actions";
 import lodash from "lodash";
 import moment from "moment";
 import * as Amplitude from "expo-analytics-amplitude";
+
 import {
   EVENT_FETCH_YOUTUBE,
   EVENT_FETCH_REDDIT,
   EVENT_FETCH_TWITTER,
   EVENT_FETCH_INSTAGRAM,
-  EVENT_FETCH_NEWS
+  EVENT_FETCH_NEWS,
+  EVENT_SHOW_PATRON_AUTO
 } from "utils/AnalyticsUtils";
 
 export function updateTheme(theme) {
@@ -284,5 +286,20 @@ export function updateUser(params) {
 export function iterateCount() {
   return {
     type: ActionTypes.ITERATE_OPEN_COUNT
+  };
+}
+
+export function possiblyOpenDonationModal() {
+  return (dispatch, getState) => {
+    const openCount = getState().settings.openCount;
+    const onboarded =
+      getState().settings.onboards && getState().settings.onboards.donation;
+    const currentRoomId = getState().chat.currentRoomId;
+
+    if (true && !currentRoomId) {
+      dispatch(updateModal("donation", true));
+      dispatch(onboard("donation"));
+      Amplitude.logEvent(EVENT_SHOW_PATRON_AUTO);
+    }
   };
 }

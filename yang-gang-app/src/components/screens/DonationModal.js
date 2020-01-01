@@ -16,11 +16,12 @@ const DonationModal = () => {
   const isVisible = useSelector(state => state.app.modals.donation);
   const dispatch = useDispatch();
   const openCount = useSelector(state => state.settings.openCount);
-  const onboarded = useSelector(state => state.settings.onboards.donation);
+  const onboarded = useSelector(
+    state => state.settings.onboards && state.settings.onboards.donation
+  );
 
   React.useEffect(() => {
-    // if (openCount > 7 && !onboarded) {
-    if (false) {
+    if (openCount > 7 && !onboarded) {
       dispatch(updateModal("donation", true));
       dispatch(onboard("donation"));
     }

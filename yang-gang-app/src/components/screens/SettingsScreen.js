@@ -19,7 +19,11 @@ import { updateTheme, updateCandidate, updateModal } from "modules/app/actions";
 import { StoreReview } from "expo";
 import * as MailComposer from "expo-mail-composer";
 import Constants from "expo-constants";
-import { EVENT_SWAP, EVENT_OPEN_STATS } from "utils/AnalyticsUtils";
+import {
+  EVENT_SWAP,
+  EVENT_OPEN_STATS,
+  EVENT_CLICK_PATRON_SETTINGS
+} from "utils/AnalyticsUtils";
 import * as Amplitude from "expo-analytics-amplitude";
 import { useCandidateResources } from "utils/Utils";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
@@ -182,6 +186,7 @@ const SettingsScreen = React.memo(
       </View> */}
         <SettingsRow
           onPress={() => {
+            Amplitude.logEvent(EVENT_CLICK_PATRON_SETTINGS);
             dispatch(updateModal("donation", true));
           }}
           Icon={<AntDesign name="star" size={24} color={theme.yangGold()} />}

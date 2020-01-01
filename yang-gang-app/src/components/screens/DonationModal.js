@@ -6,6 +6,8 @@ import { updateModal, onboard } from "modules/app/actions";
 import Button from "components/utils/Button";
 import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { openWebBrowser } from "utils/Utils";
+import * as Amplitude from "expo-analytics-amplitude";
+import { EVENT_CLICK_PATRON_MODAL } from "utils/AnalyticsUtils";
 
 const generateStyles = theme => ({});
 
@@ -17,7 +19,8 @@ const DonationModal = () => {
   const onboarded = useSelector(state => state.settings.onboards.donation);
 
   React.useEffect(() => {
-    if (openCount > 7 && !onboarded) {
+    // if (openCount > 7 && !onboarded) {
+    if (false) {
       dispatch(updateModal("donation", true));
       dispatch(onboard("donation"));
     }
@@ -98,6 +101,7 @@ const DonationModal = () => {
                   onPress={() => {
                     dispatch(updateModal("donation", false));
                     openWebBrowser("https://www.patreon.com/theyangapp", theme);
+                    Amplitude.logEvent(EVENT_CLICK_PATRON_MODAL);
                   }}
                 />
               </View>

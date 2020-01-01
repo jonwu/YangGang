@@ -262,6 +262,9 @@ export function postUser(device_token) {
 export function updateModal(key, show) {
   return { type: ActionTypes.UPDATE_MODAL, key, show };
 }
+export function onboard(key) {
+  return { type: ActionTypes.UPDATE_ONBOARD, key };
+}
 
 export function updateUser(params) {
   return (dispatch, getState) => {

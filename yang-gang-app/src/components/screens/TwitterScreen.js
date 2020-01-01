@@ -1,5 +1,5 @@
 import React from "react";
-import { View, WebView, FlatList, Text } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
 import TwitterItem from "components/items/TwitterItem";

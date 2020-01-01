@@ -35,12 +35,9 @@ import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
-import MoreModal from "./MoreModal";
-import RatingModal from "./RatingModal";
 import { useCandidateResources } from "utils/Utils";
 import { Notifications } from "expo";
 import { updateRoom } from "modules/chat/actions";
-import DonationModal from "./DonationModal";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -86,9 +83,25 @@ const TabScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    // const room = {
+    //   created_date: "2019-12-27T17:03:35",
+    //   id: 14,
+    //   link: "https://twitter.com/andrewyang/status/1210555040034893825?s=21",
+    //   message_count: 36,
+    //   owner_id: 3,
+    //   tag: "news",
+    //   title:
+    //     "‘Our Message Is Too Important’: Andrew Yang Ends His MSNBC Boycott"
+    // };
+    // if (room && room.id) {
+    //   dispatch(updateRoom(room)).then(() => {
+    //     navigation.navigate("Chat", { roomId: room.id });
+    //   });
+    // }
     Notifications.addListener(notification => {
       if (notification.origin === "selected") {
         const room = notification.data;
+
         if (room && room.id) {
           dispatch(updateRoom(room)).then(() => {
             navigation.navigate("Chat", { roomId: room.id });
@@ -178,28 +191,8 @@ const TabScreen = ({ navigation }) => {
 
   return (
     <React.Fragment>
-      <MoreModal navigation={navigation} />
-      <RatingModal />
-      <DonationModal />
-      {/* <MoneyDropModal /> */}
       {statusBar}
-      {/* <Header
-        bgColor={theme.bgTabs()}
-        renderTitle={<YangLogo />}
-        renderRight={<ThemeIcon />}
-        navigation={navigation}
-      /> */}
-      {/* <Image source={header} style={{ width: "100%", height: 180 }} />
-      <View
-        style={{
-          backgroundColor: theme.yang(0.5),
-          position: "absolute",
-          left: 0,
-          top: 0,
-          right: 0,
-          height: 180
-        }}
-      /> */}
+
       <TabView
         lazy
         tabBarPosition={"top"}
@@ -210,7 +203,6 @@ const TabScreen = ({ navigation }) => {
         onIndexChange={index => setIndex(index)}
         initialLayout={{ height: 0, width: Dimensions.get("window").width }}
       />
-
       <MoreIcon navigation={navigation} />
     </React.Fragment>
   );

@@ -12,9 +12,10 @@ import { useDispatch } from "react-redux";
 import {
   MaterialCommunityIcons,
   FontAwesome,
-  MaterialIcons
+  MaterialIcons,
+  AntDesign
 } from "@expo/vector-icons";
-import { updateTheme, updateCandidate } from "modules/app/actions";
+import { updateTheme, updateCandidate, updateModal } from "modules/app/actions";
 import { StoreReview } from "expo";
 import * as MailComposer from "expo-mail-composer";
 import Constants from "expo-constants";
@@ -25,7 +26,7 @@ import { connectActionSheet } from "@expo/react-native-action-sheet";
 
 const generateStyles = theme => ({});
 
-const SettingsRow = ({ Icon, label, onPress, removeSeparator }) => {
+const SettingsRow = ({ Icon, label, labelColor, onPress, removeSeparator }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
     <View>
@@ -38,7 +39,11 @@ const SettingsRow = ({ Icon, label, onPress, removeSeparator }) => {
           }}
         >
           <View style={{ width: 40 }}>{Icon}</View>
-          <Text style={gstyles.p1_bold}>{label}</Text>
+          <Text
+            style={[gstyles.p1_bold, labelColor ? { color: labelColor } : {}]}
+          >
+            {label}
+          </Text>
         </View>
       </TouchableOpacity>
       {!removeSeparator && (
@@ -154,19 +159,6 @@ const SettingsScreen = React.memo(
           }
           label={"Send feedback"}
         />
-        <SettingsRow
-          onPress={() =>{
-
-          }}
-          Icon={
-            <MaterialCommunityIcons
-              name="email"
-              size={24}
-              color={theme.text()}
-            />
-          }
-          label={"Donate"}
-        />
 
         {/* <SettingsRow
         onPress={StoreReview.requestReview}
@@ -188,6 +180,14 @@ const SettingsScreen = React.memo(
           {Constants.installationId}
         </Text>
       </View> */}
+        <SettingsRow
+          onPress={() => {
+            dispatch(updateModal("donation", true));
+          }}
+          Icon={<AntDesign name="star" size={24} color={theme.yangGold()} />}
+          labelColor={theme.text()}
+          label={"Become a Patron"}
+        />
       </ScrollView>
     );
   }

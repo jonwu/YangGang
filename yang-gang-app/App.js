@@ -19,6 +19,13 @@ import * as Amplitude from "expo-analytics-amplitude";
 import Constants from "expo-constants";
 import { Asset } from "expo-asset";
 import { useDimensionStore } from "utils/DimensionUtils";
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  FontAwesome,
+  Octicons,
+  Ionicons
+} from "@expo/vector-icons";
 
 const { store, persistor } = configureStore();
 
@@ -46,6 +53,10 @@ function cacheImages(images) {
       return Asset.fromModule(image).downloadAsync();
     }
   });
+}
+
+function cacheFonts(fonts) {
+  return fonts.map(font => Font.loadAsync(font));
 }
 
 export default function App() {
@@ -115,6 +126,14 @@ export default function App() {
       require("assets/icBernie.png"),
       require("assets/icTrump.jpg"),
       require("assets/party.png")
+    ]);
+
+    cacheFonts([
+      AntDesign.font,
+      MaterialCommunityIcons.font,
+      FontAwesome.font,
+      Octicons.font,
+      Ionicons.font
     ]);
 
     cacheImages([

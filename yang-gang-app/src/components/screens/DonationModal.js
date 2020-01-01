@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, Modal, TouchableWithoutFeedback } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
-import { updateModal } from "modules/app/actions";
+import { updateModal, onboard } from "modules/app/actions";
 import Button from "components/utils/Button";
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+import { openWebBrowser } from "utils/Utils";
 
 const generateStyles = theme => ({});
 
@@ -11,6 +13,15 @@ const DonationModal = () => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const isVisible = useSelector(state => state.app.modals.donation);
   const dispatch = useDispatch();
+  const openCount = useSelector(state => state.settings.openCount);
+  const onboarded = useSelector(state => state.settings.onboards.donation);
+
+  React.useEffect(() => {
+    if (openCount > 7 && !onboarded) {
+      dispatch(updateModal("donation", true));
+      dispatch(onboard("donation"));
+    }
+  }, [openCount]);
   return (
     <Modal
       animationType="fade"
@@ -36,7 +47,8 @@ const DonationModal = () => {
                 borderTopLeftRadius: 16,
                 borderTopRightRadius: 16,
                 padding: theme.spacing_2,
-                paddingVertical: 64,
+                paddingTop: 48,
+                paddingBottom: 64,
                 alignItems: "center"
               }}
             >
@@ -44,31 +56,49 @@ const DonationModal = () => {
                 <Text style={[gstyles.p1_50, gstyles.bottom_2]}>
                   Pay what you think is fair
                 </Text>
-                <Text style={[gstyles.h4_bold, gstyles.bottom_1]}>
-                  Choose your own price
+                <Text style={[gstyles.h4_bold, { textAlign: "center" }]}>
+                  Your contribution helps us cover
                 </Text>
-                <Text
-                  style={[
-                    gstyles.h2_bold,
-                    gstyles.bottom_5,
-                    { color: theme.blue() }
-                  ]}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginVertical: theme.spacing_1
+                  }}
                 >
-                  $3
-                </Text>
-                <Text
-                  style={[
-                    gstyles.p1,
-                    { color: theme.blue() },
-                    gstyles.bottom_1
-                  ]}
-                >
-                  /month
-                </Text>
+                  <View style={{ width: 100, alignItems: "center" }}>
+                    <MaterialCommunityIcons
+                      name={"server"}
+                      color={theme.yangRed()}
+                      size={36}
+                    />
+                    <Text style={[gstyles.p1_50]}>Server cost</Text>
+                  </View>
+                  <View style={{ width: 100, alignItems: "center" }}>
+                    <MaterialCommunityIcons
+                      name={"ghost"}
+                      color={theme.blue()}
+                      size={36}
+                    />
+                    <Text style={[gstyles.p1_50]}>Ad-free</Text>
+                  </View>
+                  <View style={{ width: 100, alignItems: "center" }}>
+                    <AntDesign
+                      name={"star"}
+                      color={theme.yangGold()}
+                      size={36}
+                    />
+                    <Text style={[gstyles.p1_50]}>Free Foreverrr</Text>
+                  </View>
+                </View>
                 <Button
                   style={{ alignSelf: "stretch" }}
-                  text={"Donate"}
-                  onPress={() => {}}
+                  bgColor={theme.red()}
+                  text={"Become a Patron"}
+                  onPress={() => {
+                    dispatch(updateModal("donation", false));
+                    openWebBrowser("https://www.patreon.com/theyangapp", theme);
+                  }}
                 />
               </View>
             </View>

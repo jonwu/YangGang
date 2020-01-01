@@ -27,6 +27,8 @@ import { EVENT_FETCH_ALL } from "utils/AnalyticsUtils";
 import * as Amplitude from "expo-analytics-amplitude";
 import { connectSocket, disconnectSocket } from "modules/chat/actions";
 import Constants from "expo-constants";
+import DonationModal from "./screens/DonationModal";
+import RatingModal from "./screens/RatingModal";
 console.disableYellowBox = true;
 
 const MainStack = createStackNavigator(
@@ -116,9 +118,6 @@ const Root = React.memo(() => {
       console.log("App State", nextAppState);
       if (nextAppState === "active") {
         refresh();
-        // dispatch(connectSocket());
-      } else if (nextAppState === "background") {
-        // disconnectSocket();
       }
     };
 
@@ -129,7 +128,13 @@ const Root = React.memo(() => {
   }, []);
 
   const App = createAppContainer(RootStack);
-  return <App />;
+  return (
+    <>
+      <RatingModal />
+      <DonationModal />
+      <App />
+    </>
+  );
 });
 
 export default Root;

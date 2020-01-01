@@ -1,5 +1,5 @@
 import React from "react";
-import { View, WebView, FlatList, Text, TouchableOpacity } from "react-native";
+import { View, FlatList, Text, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import YoutubeItem from "components/items/YoutubeItem";
 import YoutubeTinyItem from "components/items/YoutubeTinyItem";

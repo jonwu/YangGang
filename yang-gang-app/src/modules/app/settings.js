@@ -35,9 +35,19 @@ function openCount(state = 0, action) {
       return state;
   }
 }
+
+function onboards(state = { donation: false }, actions) {
+  switch (actions.type) {
+    case ActionTypes.UPDATE_ONBOARD:
+      return { ...state, [actions.key]: true };
+    default:
+      return state;
+  }
+}
 export default combineReducers({
   theme,
   expoId,
   user,
-  openCount
+  openCount,
+  onboards
 });

@@ -120,7 +120,10 @@ const DonationModal = () => {
                   text={"Become a Patron!"}
                   onPress={() => {
                     dispatch(updateModal("donation", false));
-                    openWebBrowser("https://www.patreon.com/theyangapp", theme);
+                    openWebBrowser(
+                      "https://www.patreon.com/join/theyangapp",
+                      theme
+                    );
                     Amplitude.logEvent(EVENT_CLICK_PATRON_MODAL);
                   }}
                 />

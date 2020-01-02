@@ -105,6 +105,10 @@ const TabScreen = ({ navigation }) => {
         if (room && room.id) {
           dispatch(updateRoom(room)).then(() => {
             navigation.navigate("Chat", { roomId: room.id });
+            setTimeout(
+              () => setIndex(candidate === "donald_trump" ? 4 : 5),
+              3000
+            );
           });
         }
       }
@@ -134,12 +138,6 @@ const TabScreen = ({ navigation }) => {
       image: <Image source={instagramIcon} style={{ width: 20, height: 20 }} />,
       iconType: "FontAwesome"
     },
-    // {
-    //   key: "settings",
-    //   icon: "md-settings",
-    //   // iconType: "FontAwesome",
-    //   color: theme.text()
-    // },
     {
       key: "settings",
       icon: "three-bars",

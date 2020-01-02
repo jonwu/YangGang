@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Text, View, Animated } from "react-native";
+import { Text, View, Animated, TouchableWithoutFeedback } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 
-class FAQTooltip extends Component {
+class ToolTip extends Component {
   constructor(props) {
     super(props);
   }
@@ -45,17 +45,24 @@ class FAQTooltip extends Component {
 
   render() {
     const { opacity, top } = this.state;
-    const { gstyles, theme } = this.props;
+    const { gstyles, theme, right, tipRight, text, onPress } = this.props;
+
     return (
       <Animated.View
-        style={{ position: "absolute", opacity, top, right: 8, zIndex: 1 }}
+        style={{
+          position: "absolute",
+          opacity,
+          top,
+          right: right || 8,
+          zIndex: 99
+        }}
       >
         <View
           style={{
             width: 0,
             height: 0,
             alignSelf: "flex-end",
-            marginRight: 32,
+            marginRight: tipRight || 32,
             backgroundColor: "transparent",
             borderStyle: "solid",
             borderLeftWidth: 8,
@@ -66,25 +73,27 @@ class FAQTooltip extends Component {
             borderBottomColor: theme.red()
           }}
         />
-        <View
-          style={{
-            backgroundColor: theme.red(),
-            padding: theme.spacing_4,
-            borderRadius: theme.borderRadius
-          }}
-        >
-          <Text style={[gstyles.caption_bold, { color: theme.light() }]}>
-            How the app works?
-          </Text>
-        </View>
+        <TouchableWithoutFeedback onPress={onPress}>
+          <View
+            style={{
+              backgroundColor: theme.red(),
+              padding: theme.spacing_4,
+              borderRadius: theme.borderRadius
+            }}
+          >
+            <Text style={[gstyles.caption_bold, { color: theme.light() }]}>
+              {text}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </Animated.View>
     );
   }
 }
 
-const Tooltip = () => {
+const TooltipContainer = props => {
   const { theme, gstyles } = useThemeKit();
-  return <FAQTooltip theme={theme} gstyles={gstyles} />;
+  return <ToolTip theme={theme} gstyles={gstyles} {...props} />;
 };
 
-export default Tooltip;
+export default TooltipContainer;

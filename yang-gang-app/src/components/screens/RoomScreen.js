@@ -1,24 +1,13 @@
 import React from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StatusBar,
-  Animated,
-  Easing
-} from "react-native";
+import { View, FlatList, TouchableOpacity } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
-import Loading from "components/utils/Loading";
 import Separator from "components/items/Separator";
 import Header from "./Header";
-import OptionBars from "components/items/OptionsBar";
-import moment from "moment";
-import { FontAwesome } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
 import RoomItem from "components/items/RoomItem";
 import ChatLoading from "components/utils/ChatLoading";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { updateTheme } from "modules/app/actions";
 
 const generateStyles = theme => ({});
 
@@ -203,6 +192,19 @@ const RoomScreen = ({ navigation }) => {
         close
         btnColor={theme.text()}
         bgColor={theme.bg3()}
+        renderRight={
+          <TouchableOpacity
+            style={{ padding: 8 }}
+            onPress={() => dispatch(updateTheme(theme.id === 0 ? 1 : 0))}
+          >
+            <MaterialCommunityIcons
+              name="yin-yang"
+              size={24}
+              style={{ marginTop: 2 }}
+              color={theme.text()}
+            />
+          </TouchableOpacity>
+        }
       />
       {rooms.length === 0 ? (
         <ChatLoading />

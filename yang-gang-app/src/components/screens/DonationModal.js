@@ -19,7 +19,7 @@ const OptimizedConfetti = ({ isVisible }) => {
     if (isVisible) {
       confettiTimeout = setTimeout(() => {
         setShowConfetti(true);
-      }, 2000);
+      }, 500);
     } else {
       setShowConfetti(false);
     }
@@ -28,7 +28,7 @@ const OptimizedConfetti = ({ isVisible }) => {
     };
   }, [isVisible]);
   return (
-    showConfetti && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />
+    showConfetti && <ConfettiCannon count={20} origin={{ x: -10, y: 0 }} />
   );
 };
 const DonationModal = () => {
@@ -52,7 +52,6 @@ const DonationModal = () => {
       visible={isVisible}
       style={{ flex: 1 }}
     >
-      <OptimizedConfetti isVisible={isVisible} />
       <TouchableWithoutFeedback
         style={{ flex: 1 }}
         onPress={() => dispatch(updateModal("donation", false))}
@@ -78,7 +77,7 @@ const DonationModal = () => {
             >
               <View style={{ alignItems: "center", width: 300 }}>
                 <Text style={[gstyles.p1_50, gstyles.bottom_2]}>
-                  can you support us?
+                  Pay what you think is fair
                 </Text>
                 <Text style={[gstyles.h4_bold, { textAlign: "center" }]}>
                   Your contribution helps us cover
@@ -126,6 +125,7 @@ const DonationModal = () => {
                   }}
                 />
               </View>
+              <OptimizedConfetti isVisible={isVisible} />
             </View>
           </TouchableWithoutFeedback>
         </View>

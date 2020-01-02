@@ -29,10 +29,11 @@ import {
 } from "modules/chat/actions";
 import RoomItem from "components/items/RoomItem";
 import UsernameModal from "./UsernameModal";
-import { updateModal } from "modules/app/actions";
+import { updateModal, onboard } from "modules/app/actions";
 import ChatLoading from "components/utils/ChatLoading";
 import * as Haptics from "expo-haptics";
 import KeyboardSpacer from "react-native-keyboard-spacer";
+import Tooltip from "components/items/Tooltip";
 
 const dummy = [
   {
@@ -117,6 +118,9 @@ const ChatScreen = ({ navigation }) => {
     state.chat.rooms.find(room => room.id === roomId)
   );
   let messages = useSelector(state => state.chat.messages[roomId]);
+  const onboardedSource = useSelector(
+    state => state.settings.onboards && state.settings.onboards.source
+  );
 
   React.useEffect(() => {
     dispatch(setCurrentRoomId(roomId));
@@ -157,6 +161,17 @@ const ChatScreen = ({ navigation }) => {
       <UsernameModal />
       <View style={{ flex: 1, backgroundColor: theme.bg3() }}>
         {renderHeader}
+        {!onboardedSource && (
+          <View style={{ zIndex: 1 }}>
+            <Tooltip
+              text={"Read it or watch it!"}
+              onPress={() => {
+                Haptics.selectionAsync();
+                dispatch(onboard("source"));
+              }}
+            />
+          </View>
+        )}
         {!messages ? <Loading /> : <Chat messages={messages} roomId={roomId} />}
       </View>
     </>
@@ -260,20 +275,26 @@ const Chat = React.memo(({ messages, roomId }) => {
         renderSend={renderSend}
         renderActions={renderActions}
         renderUsernameOnMessage
-        renderChatEmpty={() => <View style={{ flex: 1, transform: [{scaleY: -1}], alignItems: 'center' }}>
-          <View style={{flex: 1 }}/>
-          <View style={{paddingBottom: 48}}>
-            <Text style={[gstyles.h4_bold, gstyles.bottom_4]}>
-              Ready... Set...
-            </Text>
-            <Text style={gstyles.p1}>
-              This is the beginning of a chat room.
-            </Text>
-            <Text style={gstyles.p1}>
-              Type something to kick it off!
-            </Text>
+        renderChatEmpty={() => (
+          <View
+            style={{
+              flex: 1,
+              transform: [{ scaleY: -1 }],
+              alignItems: "center"
+            }}
+          >
+            <View style={{ flex: 1 }} />
+            <View style={{ paddingBottom: 48 }}>
+              <Text style={[gstyles.h4_bold, gstyles.bottom_4]}>
+                Ready... Set...
+              </Text>
+              <Text style={gstyles.p1}>
+                This is the beginning of a chat room.
+              </Text>
+              <Text style={gstyles.p1}>Type something to kick it off!</Text>
+            </View>
           </View>
-        </View>}
+        )}
         user={{
           _id: user.id
         }}

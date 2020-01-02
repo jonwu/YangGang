@@ -296,7 +296,7 @@ export function possiblyOpenDonationModal() {
       getState().settings.onboards && getState().settings.onboards.donation;
     const currentRoomId = getState().chat.currentRoomId;
 
-    if (true && !currentRoomId) {
+    if (openCount > 7 && !onboarded && !currentRoomId) {
       dispatch(updateModal("donation", true));
       dispatch(onboard("donation"));
       Amplitude.logEvent(EVENT_SHOW_PATRON_AUTO);

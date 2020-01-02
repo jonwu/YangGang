@@ -171,7 +171,7 @@ const SettingsScreen = React.memo(
       /> */}
         {((Constants.manifest.releaseChannel &&
           Constants.manifest.releaseChannel.indexOf("staging") !== -1) ||
-          Constants.installationId === "E9E10F2E-E0CF-4C13-B193-FC6FC7959676" ||
+          Constants.installationId === "60EFB659-FBD2-4FEC-8110-52BF795FAA9A" ||
           __DEV__) && (
           <SettingsRow
             onPress={() => navigation.navigate("PostEvent")}

@@ -36,7 +36,7 @@ function openCount(state = 0, action) {
   }
 }
 
-function onboards(state = { donation: false }, actions) {
+function onboards(state = { donation: false, source: false }, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_ONBOARD:
       return { ...state, [actions.key]: true };

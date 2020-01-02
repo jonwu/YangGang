@@ -12,6 +12,8 @@ import { useThemeKit } from "utils/ThemeUtils";
 import moment from "moment";
 import { FontAwesome, Octicons } from "@expo/vector-icons";
 import { openWebBrowser } from "utils/Utils";
+import { onboard } from "modules/app/actions";
+import { useDispatch } from "react-redux";
 
 const generateStyles = theme => ({});
 
@@ -93,7 +95,7 @@ const RoomItem = React.memo(
       link
     } = room;
     const { theme, gstyles, styles } = useThemeKit(generateStyles);
-
+    const dispatch = useDispatch();
     const COLORS = {
       breaking: theme.red(),
       hype: theme.yangGold(),
@@ -146,20 +148,6 @@ const RoomItem = React.memo(
             <Text style={[gstyles.caption_50]}>
               {moment.utc(created_date).fromNow(true)}
             </Text>
-            <View style={{ flex: 1 }} />
-            {showSource && link != "" && (
-              <TouchableOpacity
-                style={{ alignItems: "center", flexDirection: "row" }}
-                onPress={() => openWebBrowser(link, theme)}
-              >
-                <Octicons
-                  name="link-external"
-                  color={theme.text(0.6)}
-                  style={gstyles.right_5}
-                />
-                <Text style={gstyles.footnote_bold_50}>SOURCE</Text>
-              </TouchableOpacity>
-            )}
           </View>
           <Text style={[gstyles.h5_bold, { fontFamily: "brandon-med" }]}>
             {title}
@@ -187,6 +175,23 @@ const RoomItem = React.memo(
                   : "No messages"}
               </Text>
             </View>
+            <View style={{ flex: 1 }} />
+            {showSource && link != "" && (
+              <TouchableOpacity
+                style={{ alignItems: "center", flexDirection: "row" }}
+                onPress={() => {
+                  dispatch(onboard("source"));
+                  openWebBrowser(link, theme);
+                }}
+              >
+                <Octicons
+                  name="link-external"
+                  color={theme.text(0.6)}
+                  style={gstyles.right_5}
+                />
+                <Text style={gstyles.footnote_bold_50}>SOURCE</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </TouchableOpacity>

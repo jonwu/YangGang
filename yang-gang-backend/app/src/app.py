@@ -27,11 +27,11 @@ def is_exponent_push_token(token):
 
 # Basic arguments. You should extend this function with the push features you
 # want to use, or simply pass in a `PushMessage` object.
-def send_push_message(tokens, message, data=None):
+async def send_push_message(tokens, message, data=None):
     try:
         print('sending message for tokens {}'.format(tokens))
-        message_list = PushMessage(to=tokens, body=message, data=data)
-        responses = PushClient().publish(message_list)
+        message_list = [PushMessage(to=token, body=message, data=data) for token in tokens]
+        responses = await PushClient().publish_multiple(message_list)
         print('response: {}'.format(responses))
     except PushServerError as e:
         print('PushServerError detailed message: {}'.format(e.errors))
@@ -172,7 +172,7 @@ class SimpleGetPushApi(Resource):
             requests.post('http://socket:5000/updateroom', json=room_schema.dump(new_room))
             push_list = [push_id.id for push_id in PushIds.query.all() if is_exponent_push_token(push_id.id)]
             print('number of total push_ids: {}'.format(len(push_list)))
-            increment = 100
+            increment = 5
             i = 0
             try:
                 while i < len(push_list):

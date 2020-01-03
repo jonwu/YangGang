@@ -77,7 +77,7 @@ const DonationModal = () => {
             >
               <View style={{ alignItems: "center", width: 300 }}>
                 <Text style={[gstyles.p1_50, gstyles.bottom_2]}>
-                  Pay what you think is fair
+                  Donate what you think is fair
                 </Text>
                 <Text style={[gstyles.h4_bold, { textAlign: "center" }]}>
                   Your contribution helps us cover

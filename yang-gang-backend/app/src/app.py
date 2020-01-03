@@ -30,8 +30,8 @@ def is_exponent_push_token(token):
 def send_push_message(tokens, message, data=None):
     try:
         print('sending message for tokens {}'.format(tokens))
-        message_list = [PushMessage(to=token, body=message, data=data) for token in tokens]
-        responses = PushClient().publish_multiple(message_list)
+        message_list = PushMessage(to=tokens, body=message, data=data)
+        responses = PushClient().publish(message_list)
         print('response: {}'.format(responses))
     except PushServerError as e:
         print('PushServerError detailed message: {}'.format(e.errors))

@@ -173,7 +173,7 @@ const generateDelta = data => {
         return { ...points, today: stats };
       }
     },
-    { yesterday: 0, latest: 0 }
+    { yesterday: 0, today: 0 }
   );
   return {
     biden:

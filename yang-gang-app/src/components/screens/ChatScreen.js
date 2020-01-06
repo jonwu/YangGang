@@ -247,20 +247,30 @@ const Chat = React.memo(({ messages, roomId }) => {
 
   const renderActions = props => {
     return (
-      <Actions
-        icon={() => (
-          <MaterialCommunityIcons
-            name={"face-profile"}
-            color={theme.text(0.3)}
-            size={24}
-          />
-        )}
-        {...props}
-        onPressActionButton={() => {
-          Keyboard.dismiss();
-          dispatch(updateModal("username", true));
-        }}
-      />
+      <>
+        <Actions
+          icon={() => (
+            <MaterialCommunityIcons
+              name={"face-profile"}
+              color={theme.text(0.3)}
+              size={24}
+            />
+          )}
+          {...props}
+          onPressActionButton={() => {
+            Keyboard.dismiss();
+            dispatch(updateModal("username", true));
+          }}
+        />
+        {/* <Actions
+          icon={() => <Text style={{ fontSize: 20 }}>🐼</Text>}
+          {...props}
+          onPressActionButton={() => {
+            Keyboard.dismiss();
+            dispatch(updateModal("username", true));
+          }}
+        /> */}
+      </>
     );
   };
 

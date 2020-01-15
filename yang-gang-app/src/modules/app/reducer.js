@@ -148,7 +148,7 @@ function showMoneyModal(state = false, actions) {
   }
 }
 
-function modals(state = { username: false, donation: false }, actions) {
+function modals(state = { username: false, donation: true }, actions) {
   switch (actions.type) {
     case ActionTypes.UPDATE_MODAL:
       return { ...state, [actions.key]: actions.show };

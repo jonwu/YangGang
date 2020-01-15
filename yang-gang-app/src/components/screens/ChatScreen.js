@@ -6,7 +6,8 @@ import {
   Keyboard,
   ScrollView,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image
 } from "react-native";
 import { useThemeKit } from "utils/ThemeUtils";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,7 +18,8 @@ import {
   InputToolbar,
   Composer,
   Send,
-  Actions
+  Actions,
+  MessageText
 } from "react-native-gifted-chat";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header, { Back } from "./Header";
@@ -102,6 +104,8 @@ const convertMessageToGifted = message => {
     _id: message.id,
     text: message.message,
     createdAt: new Date(message.created_date),
+    sticker: "panda",
+    // image: "https://i.ibb.co/4g1VzY9/mathpanda.png",
     user: {
       _id: message.user_id,
       name: message.user.username
@@ -161,7 +165,7 @@ const ChatScreen = ({ navigation }) => {
       <UsernameModal />
       <View style={{ flex: 1, backgroundColor: theme.bg3() }}>
         {renderHeader}
-        {!onboardedSource && (
+        {!onboardedSource && room.link != "" && (
           <View style={{ zIndex: 1 }}>
             <Tooltip
               text={"Read it or watch it!"}
@@ -204,6 +208,20 @@ const Chat = React.memo(({ messages, roomId }) => {
   };
   /** render the chat bubble */
   const renderBubble = props => {
+    const { sticker } = props.currentMessage;
+
+    switch (sticker) {
+      case "panda":
+        return (
+          <Image
+            source={{ uri: "https://i.ibb.co/4g1VzY9/mathpanda.png" }}
+            style={{ height: 100, width: 100 }}
+          />
+        );
+      default:
+        break;
+    }
+
     return (
       <Bubble
         {...props}
@@ -241,6 +259,18 @@ const Chat = React.memo(({ messages, roomId }) => {
     );
   };
 
+  const renderMessageText = props => {
+    return (
+      <MessageText
+        {...props}
+        linkStyle={{
+          left: { color: theme.text(), textDecorationLine: "underline" },
+          right: { color: theme.light(), textDecorationLine: "underline" }
+        }}
+      />
+    );
+  };
+
   const renderSend = props => {
     return <Send {...props} textStyle={{ fontFamily: "brandon-semibold" }} />;
   };
@@ -262,14 +292,14 @@ const Chat = React.memo(({ messages, roomId }) => {
             dispatch(updateModal("username", true));
           }}
         />
-        {/* <Actions
+        <Actions
           icon={() => <Text style={{ fontSize: 20 }}>🐼</Text>}
           {...props}
           onPressActionButton={() => {
             Keyboard.dismiss();
             dispatch(updateModal("username", true));
           }}
-        /> */}
+        />
       </>
     );
   };
@@ -311,6 +341,7 @@ const Chat = React.memo(({ messages, roomId }) => {
         text={text}
         isKeyboardInternallyHandled={!(Platform.OS === "android")}
         onInputTextChanged={text => setText(text)}
+        renderMessageText={renderMessageText}
       />
       {Platform.OS === "android" && <KeyboardSpacer />}
     </View>

@@ -144,7 +144,7 @@ const TwitterScreen = React.memo(({ navigation }) => {
         contentContainerStyle={{ paddingBottom: 88 }}
         renderItem={renderItem}
         ItemSeparatorComponent={Separator}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item, i) => i.toString()}
       />
     </>
   );

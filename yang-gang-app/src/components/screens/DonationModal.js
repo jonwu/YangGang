@@ -9,6 +9,7 @@ import { openWebBrowser } from "utils/Utils";
 import * as Amplitude from "expo-analytics-amplitude";
 import { EVENT_CLICK_PATRON_MODAL } from "utils/AnalyticsUtils";
 import ConfettiCannon from "react-native-confetti-cannon";
+import PandaList from "components/items/PandaList";
 
 const generateStyles = theme => ({});
 
@@ -62,77 +63,77 @@ const DonationModal = () => {
             justifyContent: "flex-end",
             backgroundColor: theme.black(0.75)
           }}
-        >
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <View
-              style={{
-                backgroundColor: theme.bg3(),
-                borderTopLeftRadius: 16,
-                borderTopRightRadius: 16,
-                padding: theme.spacing_2,
-                paddingTop: 48,
-                paddingBottom: 64,
-                alignItems: "center"
-              }}
-            >
-              <View style={{ alignItems: "center", width: 300 }}>
-                <Text style={[gstyles.p1_50, gstyles.bottom_2]}>
-                  Donate what you think is fair
-                </Text>
-                <Text style={[gstyles.h4_bold, { textAlign: "center" }]}>
-                  Your contribution helps us cover
-                </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginVertical: theme.spacing_1
-                  }}
-                >
-                  <View style={{ width: 100, alignItems: "center" }}>
-                    <MaterialCommunityIcons
-                      name={"server"}
-                      color={theme.yangRed()}
-                      size={36}
-                    />
-                    <Text style={[gstyles.p1_50]}>Server cost</Text>
-                  </View>
-                  <View style={{ width: 100, alignItems: "center" }}>
-                    <MaterialCommunityIcons
-                      name={"ghost"}
-                      color={theme.blue()}
-                      size={36}
-                    />
-                    <Text style={[gstyles.p1_50]}>Ad-free</Text>
-                  </View>
-                  <View style={{ width: 100, alignItems: "center" }}>
-                    <AntDesign
-                      name={"star"}
-                      color={theme.yangGold()}
-                      size={36}
-                    />
-                    <Text style={[gstyles.p1_50]}>Free Foreverrr</Text>
-                  </View>
-                </View>
-                <Button
-                  style={{ alignSelf: "stretch" }}
-                  bgColor={theme.red()}
-                  text={"Become a Patron!"}
-                  onPress={() => {
-                    dispatch(updateModal("donation", false));
-                    openWebBrowser(
-                      "https://www.patreon.com/join/theyangapp",
-                      theme
-                    );
-                    Amplitude.logEvent(EVENT_CLICK_PATRON_MODAL);
-                  }}
-                />
-              </View>
-              <OptimizedConfetti isVisible={isVisible} />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
+        ></View>
       </TouchableWithoutFeedback>
+
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0
+        }}
+      >
+        <View
+          style={{
+            alignItems: "center",
+            width: 300,
+            width: "100%",
+            backgroundColor: theme.bg3(),
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            padding: theme.spacing_2,
+            paddingBottom: 64
+            // paddingTop: 12
+          }}
+        >
+          <PandaList />
+
+          <Text style={[gstyles.p1_50, gstyles.bottom_2, gstyles.top_1]}>
+            Donate what you think is fair
+          </Text>
+          <Text style={[gstyles.h4_bold, { textAlign: "center" }]}>
+            Your contribution helps us cover
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginVertical: theme.spacing_1
+            }}
+          >
+            <View style={{ width: 100, alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name={"server"}
+                color={theme.yangRed()}
+                size={36}
+              />
+              <Text style={[gstyles.p1_50]}>Server cost</Text>
+            </View>
+            <View style={{ width: 100, alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name={"ghost"}
+                color={theme.blue()}
+                size={36}
+              />
+              <Text style={[gstyles.p1_50]}>Ad-free</Text>
+            </View>
+            <View style={{ width: 100, alignItems: "center" }}>
+              <AntDesign name={"star"} color={theme.yangGold()} size={36} />
+              <Text style={[gstyles.p1_50]}>Free Foreverrr</Text>
+            </View>
+          </View>
+          <Button
+            style={{ alignSelf: "stretch" }}
+            bgColor={theme.red()}
+            text={"Become a Patron!"}
+            onPress={() => {
+              dispatch(updateModal("donation", false));
+              openWebBrowser("https://www.patreon.com/join/theyangapp", theme);
+              Amplitude.logEvent(EVENT_CLICK_PATRON_MODAL);
+            }}
+          />
+        </View>
+        <OptimizedConfetti isVisible={isVisible} />
+      </View>
     </Modal>
   );
 };

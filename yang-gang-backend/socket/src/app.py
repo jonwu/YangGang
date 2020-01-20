@@ -106,6 +106,7 @@ class Message(db.Model):
     user = db.relationship('User')
     room_id = db.Column(db.Integer)
     message = db.Column(db.Text())
+    sticker = db.Column(db.Text())
 
 
 class Room(db.Model):

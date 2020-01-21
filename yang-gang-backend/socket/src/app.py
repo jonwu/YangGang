@@ -53,7 +53,9 @@ def connect():
 def send_message(data):
     try:
         room_id = data['room_id']
-        message = {'user_id': data['user_id'], 'message': data['message']}
+        message = {'user_id': data['user_id'], 'message': data['message'], 'sticker': None}
+        if 'sticker' in data:
+            message['sticker'] = data['sticker']
         try:
             message_schema = MessageSchema()
             room_schema = RoomSchema()

@@ -125,10 +125,16 @@ export default function App() {
       require("assets/icYang.jpg"),
       require("assets/icBernie.png"),
       require("assets/icTrump.jpg"),
-      require("assets/party.png")
+      require("assets/party.png"),
+      require("assets/instagram.png"),
+      require("assets/stickers/yg.png"),
+      require("assets/stickers/math.png"),
+      require("assets/stickers/ubi.png"),
+      require("assets/stickers/lit.png"),
+      require("assets/stickers/andrew.png")
     ]);
 
-    cacheFonts([
+    const expoIcons = cacheFonts([
       AntDesign.font,
       MaterialCommunityIcons.font,
       FontAwesome.font,

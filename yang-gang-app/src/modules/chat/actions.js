@@ -68,6 +68,7 @@ export const initializeChatListeners = () => {
     });
 
     socket.on("broadcast message", message => {
+      console.log("message", message);
       dispatch({
         type: ActionTypes.MESSAGE_RECEIVED,
         roomId: message.room_id,
@@ -88,8 +89,13 @@ export const setCurrentRoomId = roomId => {
   };
 };
 
-export const sendMessage = ({ userId, roomId, message }) => {
-  socket.emit("send message", { user_id: userId, room_id: roomId, message });
+export const sendMessage = ({ userId, roomId, message, sticker }) => {
+  socket.emit("send message", {
+    user_id: userId,
+    room_id: roomId,
+    message,
+    sticker
+  });
 };
 
 export const updateRoom = room => dispatch => {

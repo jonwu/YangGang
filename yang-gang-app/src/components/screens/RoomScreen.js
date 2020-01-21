@@ -6,8 +6,8 @@ import Separator from "components/items/Separator";
 import Header from "./Header";
 import RoomItem from "components/items/RoomItem";
 import ChatLoading from "components/utils/ChatLoading";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { updateTheme } from "modules/app/actions";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { updateTheme, updateModal } from "modules/app/actions";
 
 const generateStyles = theme => ({});
 
@@ -195,13 +195,13 @@ const RoomScreen = ({ navigation }) => {
         renderRight={
           <TouchableOpacity
             style={{ padding: 8 }}
-            onPress={() => dispatch(updateTheme(theme.id === 0 ? 1 : 0))}
+            onPress={() => dispatch(updateModal("username", true))}
           >
-            <MaterialCommunityIcons
-              name="yin-yang"
-              size={24}
-              style={{ marginTop: 2 }}
+            <Ionicons
+              name={"md-person"}
               color={theme.text()}
+              style={{ marginTop: 2 }}
+              size={24}
             />
           </TouchableOpacity>
         }

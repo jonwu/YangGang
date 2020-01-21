@@ -69,7 +69,8 @@ const DonationModal = () => {
       <View
         style={{
           position: "absolute",
-          bottom: 0
+          bottom: 0,
+          width: "100%"
         }}
       >
         <View
@@ -85,7 +86,7 @@ const DonationModal = () => {
             // paddingTop: 12
           }}
         >
-          <PandaList />
+          {/* <PandaList /> */}
 
           <Text style={[gstyles.p1_50, gstyles.bottom_2, gstyles.top_1]}>
             Donate what you think is fair

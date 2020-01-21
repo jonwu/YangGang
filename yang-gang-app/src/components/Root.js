@@ -29,6 +29,8 @@ import { connectSocket, disconnectSocket } from "modules/chat/actions";
 import Constants from "expo-constants";
 import DonationModal from "./screens/DonationModal";
 import RatingModal from "./screens/RatingModal";
+import PandaModal from "./screens/PandaModal";
+import UsernameModal from "./screens/UsernameModal";
 console.disableYellowBox = true;
 
 const MainStack = createStackNavigator(
@@ -132,6 +134,8 @@ const Root = React.memo(() => {
     <>
       <RatingModal />
       <DonationModal />
+      <PandaModal />
+      <UsernameModal />
       <App />
     </>
   );

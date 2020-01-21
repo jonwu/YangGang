@@ -30,12 +30,18 @@ import {
   setCurrentRoomId
 } from "modules/chat/actions";
 import RoomItem from "components/items/RoomItem";
-import UsernameModal from "./UsernameModal";
 import { updateModal, onboard } from "modules/app/actions";
 import ChatLoading from "components/utils/ChatLoading";
 import * as Haptics from "expo-haptics";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import Tooltip from "components/items/Tooltip";
+
+import imgYg from "assets/stickers/yg.png";
+import imgMath from "assets/stickers/math.png";
+import imgUbi from "assets/stickers/ubi.png";
+import imgLit from "assets/stickers/lit.png";
+import imgAndrew from "assets/stickers/andrew.png";
+import ThemedSticker from "utils/ThemedSticker";
 
 const dummy = [
   {
@@ -104,8 +110,7 @@ const convertMessageToGifted = message => {
     _id: message.id,
     text: message.message,
     createdAt: new Date(message.created_date),
-    sticker: "panda",
-    // image: "https://i.ibb.co/4g1VzY9/mathpanda.png",
+    sticker: message.sticker,
     user: {
       _id: message.user_id,
       name: message.user.username
@@ -162,7 +167,6 @@ const ChatScreen = ({ navigation }) => {
 
   return (
     <>
-      <UsernameModal />
       <View style={{ flex: 1, backgroundColor: theme.bg3() }}>
         {renderHeader}
         {!onboardedSource && room.link != "" && (
@@ -204,20 +208,26 @@ const Chat = React.memo(({ messages, roomId }) => {
     }
 
     Haptics.selectionAsync();
-    sendMessage({ userId: user.id, roomId, message: nextMessages[0].text });
+    sendMessage({
+      userId: user.id,
+      roomId,
+      message: nextMessages[0].text
+    });
   };
   /** render the chat bubble */
   const renderBubble = props => {
     const { sticker } = props.currentMessage;
-
     switch (sticker) {
-      case "panda":
-        return (
-          <Image
-            source={{ uri: "https://i.ibb.co/4g1VzY9/mathpanda.png" }}
-            style={{ height: 100, width: 100 }}
-          />
-        );
+      case "yg":
+        return <ThemedSticker source={imgYg} />;
+      case "math":
+        return <ThemedSticker source={imgMath} />;
+      case "ubi":
+        return <ThemedSticker source={imgUbi} />;
+      case "lit":
+        return <ThemedSticker source={imgLit} />;
+      case "andrew":
+        return <ThemedSticker source={imgAndrew} />;
       default:
         break;
     }
@@ -278,7 +288,7 @@ const Chat = React.memo(({ messages, roomId }) => {
   const renderActions = props => {
     return (
       <>
-        <Actions
+        {/* <Actions
           icon={() => (
             <MaterialCommunityIcons
               name={"face-profile"}
@@ -291,13 +301,19 @@ const Chat = React.memo(({ messages, roomId }) => {
             Keyboard.dismiss();
             dispatch(updateModal("username", true));
           }}
-        />
+        /> */}
         <Actions
-          icon={() => <Text style={{ fontSize: 20 }}>🐼</Text>}
+          icon={() => (
+            <MaterialCommunityIcons
+              name="sticker-emoji"
+              size={24}
+              color={theme.blue()}
+            />
+          )}
           {...props}
           onPressActionButton={() => {
             Keyboard.dismiss();
-            dispatch(updateModal("username", true));
+            dispatch(updateModal("panda", true));
           }}
         />
       </>

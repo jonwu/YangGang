@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const generateStyles = theme => ({});
 
-const Button = ({ style, textStyle, text, bgColor, onPress }) => {
+const Button = ({ style, textStyle, buttonStyle, text, bgColor, onPress }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   return (
     <TouchableOpacity style={style} onPress={onPress}>
@@ -18,10 +18,11 @@ const Button = ({ style, textStyle, text, bgColor, onPress }) => {
             borderRadius: 12,
             alignItems: "center",
             justifyContent: "center"
-          }
+          },
+          buttonStyle
         ]}
       >
-        <Text style={[gstyles.h4_bold, { color: theme.light() }, textStyle]}>
+        <Text style={[gstyles.h4_bold, textStyle, { color: theme.light() }]}>
           {text}
         </Text>
       </View>

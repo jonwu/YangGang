@@ -15,12 +15,17 @@ import { updateModal, updateUser } from "modules/app/actions";
 
 const generateStyles = theme => ({});
 
-const UsernameModal = () => {
+
+const UsernameModalContainer = () => {
+  const user = useSelector(state => state.settings.user);
+  return user && <UsernameModal user={user}/>
+}
+const UsernameModal = ({user}) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const isVisible = useSelector(state => state.app.modals.username);
-  const user = useSelector(state => state.settings.user);
-  const [username, setUsername] = React.useState(user.username);
+  const [username, setUsername] = React.useState(user && user.username);
   const dispatch = useDispatch();
+
 
   React.useEffect(() => {
     if (isVisible) {
@@ -102,4 +107,4 @@ const UsernameModal = () => {
   );
 };
 
-export default UsernameModal;
+export default UsernameModalContainer;

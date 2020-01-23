@@ -19,11 +19,11 @@ import { EVENT_CLICK_PATRON_PANDA } from "utils/AnalyticsUtils";
 const generateStyles = theme => ({});
 
 const data = [
-  { id: "yg", sticker: imgYg, patrons: 3 },
-  { id: "math", sticker: imgMath, patrons: 5 },
-  { id: "ubi", sticker: imgUbi, patrons: 10 },
-  { id: "andrew", sticker: imgAndrew, patrons: 15 },
-  { id: "lit", sticker: imgLit, patrons: 20 }
+  { id: "yg", name: "#YANGGANG", sticker: imgYg, patrons: 3 },
+  { id: "math", name: "#MATH", sticker: imgMath, patrons: 5 },
+  { id: "ubi", name: "#UBI", sticker: imgUbi, patrons: 10 },
+  { id: "andrew", name: "#YANG2020", sticker: imgAndrew, patrons: 15 },
+  { id: "lit", name: "#YANG420", sticker: imgLit, patrons: 20 }
 ];
 
 const currentPatron = 3;
@@ -84,7 +84,7 @@ const PandaItem = React.memo(({ item }) => {
               { color: disabled ? theme.text(0.5) : theme.blue() }
             ]}
           >
-            {item.patrons} patrons
+            {disabled ? `${item.patrons} patrons` : `${item.name}`}
           </Text>
         </View>
       </View>

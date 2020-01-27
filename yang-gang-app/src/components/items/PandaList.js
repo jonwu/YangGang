@@ -21,12 +21,12 @@ const generateStyles = theme => ({});
 const data = [
   { id: "yg", name: "#YANGGANG", sticker: imgYg, patrons: 3 },
   { id: "math", name: "#MATH", sticker: imgMath, patrons: 5 },
-  { id: "ubi", name: "#UBI", sticker: imgUbi, patrons: 10 },
+  { id: "ubi", name: "#UBI", sticker: imgUbi, patrons: 8 },
   { id: "andrew", name: "#YANG2020", sticker: imgAndrew, patrons: 15 },
   { id: "lit", name: "#YANG420", sticker: imgLit, patrons: 20 }
 ];
 
-const currentPatron = 3;
+const currentPatron = 5;
 
 const PandaItem = React.memo(({ item }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);

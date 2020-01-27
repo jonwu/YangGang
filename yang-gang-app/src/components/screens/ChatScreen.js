@@ -113,7 +113,11 @@ const convertMessageToGifted = message => {
     sticker: message.sticker,
     user: {
       _id: message.user_id,
-      name: message.user.username
+      name:
+        message.user.username.toLowerCase().includes("andrew yang") ||
+        message.user.username.toLowerCase().includes("andrewyang")
+          ? "#HumanityFirst"
+          : message.user.username
       // avatar: null
     }
   };

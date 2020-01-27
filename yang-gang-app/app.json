@@ -6,7 +6,7 @@
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "icon": "./src/assets/logo-4.png",
     "facebookScheme": "fb392773824728181",
     "facebookAppId": "392773824728181",

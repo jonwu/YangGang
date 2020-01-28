@@ -49,7 +49,7 @@ const PandaItem = React.memo(({ item }) => {
           userId: user.id,
           roomId: currentRoomId,
           message: "{This is a sticker}",
-          sticker: "yg"
+          sticker: item.id
         });
       }}
     >
@@ -145,8 +145,8 @@ const PandaList = () => {
         </View>
         <View style={{ flex: 1 }} />
         <Button
-          text="Donate!"
-          bgColor={theme.green()}
+          text="Become a Patron!"
+          bgColor={theme.blue()}
           buttonStyle={{
             paddingVertical: theme.spacing_5,
             paddingHorizontal: theme.spacing_2

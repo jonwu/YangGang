@@ -10,7 +10,7 @@ def fetch_news(r, candidate_name, candidate_query, api_key):
         'qInTitle': candidate_query,
         'language': 'en',
         'sortBy': 'popularity',
-        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org, slickdeals.net, fark.com, knowyourmeme.com',
+        'excludeDomains': 'pjmedia.com, patheos.com, politifact.com, liveleak.com, rightwingwatch.org, slickdeals.net, fark.com, knowyourmeme.com', 'towleroad.com',
         'from': today_datestring,
         'apiKey': api_key,
         'pageSize': '100',

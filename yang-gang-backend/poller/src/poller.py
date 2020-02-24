@@ -51,14 +51,18 @@ env_configs = config[environment].get()
 def get_api_dict(candidate_name):
     api_dict = {}
     # reddit api
-    reddit = praw.Reddit(client_id=env_configs[candidate_name]['reddit']['client_id'],
-                         client_secret=env_configs[candidate_name]['reddit']['client_secret'],
-                         user_agent=env_configs[candidate_name]['reddit']['user_agent'],
-                         username=env_configs[candidate_name]['reddit']['username'],
-                         password=env_configs[candidate_name]['reddit']['password'])
+    try:
+        reddit = praw.Reddit(client_id=env_configs[candidate_name]['reddit']['client_id'],
+                             client_secret=env_configs[candidate_name]['reddit']['client_secret'],
+                             user_agent=env_configs[candidate_name]['reddit']['user_agent'],
+                             username=env_configs[candidate_name]['reddit']['username'],
+                             password=env_configs[candidate_name]['reddit']['password'])
 
-    api_dict['reddit_api'] = reddit
-    api_dict['subreddit_api'] = reddit.subreddit(env_configs[candidate_name]['reddit']['subreddit_name'])
+        api_dict['reddit_api'] = reddit
+        api_dict['subreddit_api'] = reddit.subreddit(env_configs[candidate_name]['reddit']['subreddit_name'])
+    except:
+        api_dict['reddit_api'] = None
+        api_dict['subreddit_api'] = None
 
     # twitter api
     auth = tweepy.OAuthHandler(env_configs[candidate_name]['twitter']['consumer_key'],
@@ -94,7 +98,7 @@ def fetch_twitter_aggregate():
 
 def fetch_reddit_aggregate():
     for candidate_name, api_dict in candidate_dict.items():
-        if candidate_name != 'donald_trump':
+        if api_dict['subreddit_api'] is not None:
             fetch_hot_reddit(api_dict['subreddit_api'], r, candidate_name)
 
 

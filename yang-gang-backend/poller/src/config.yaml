@@ -58,8 +58,40 @@ dev:
       consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
       access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
       access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Donald Trump'
+    instagram:
+      user_id: '347696668'
+  joe_biden:
+    youtube:
+      api_key1: "AIzaSyBx6Umyin72opc9GbwUSHG9TRxW_7ii4_E"
+      api_key2: "AIzaSyBx6Umyin72opc9GbwUSHG9TRxW_7ii4_E"
+      query: "joe biden"
+    twitter:
+      screen_name: "JoeBiden"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Joe Biden'
+    instagram:
+      user_id: '5511100943'
+  pete_buttigieg:
+    youtube:
+      api_key1: "AIzaSyBx6Umyin72opc9GbwUSHG9TRxW_7ii4_E"
+      api_key2: "AIzaSyBx6Umyin72opc9GbwUSHG9TRxW_7ii4_E"
+      query: "pete buttigieg"
+    twitter:
+      screen_name: "PeteButtigieg"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
     reddit:
-      subreddit_name: 'The_Donald'
+      subreddit_name: 'Pete_Buttigieg'
       client_id: 'UYSG4hyNWC_2vQ'
       client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
       user_agent: 'yang'
@@ -67,9 +99,71 @@ dev:
       password: 'bethankfuleveryday'
     news:
       api_key: 'd09d502864124079b98a360312bfb211'
-      query: 'Donald Trump'
+      query: 'pete buttigieg'
     instagram:
-      user_id: '347696668'
+      user_id: '1909652835'
+  amy_klobuchar:
+    youtube:
+      api_key1: "AIzaSyCG64zaEY5gqRL1P4gflmc2rCZhHzCiqNk"
+      api_key2: "AIzaSyCG64zaEY5gqRL1P4gflmc2rCZhHzCiqNk"
+      query: "amy klobuchar"
+    twitter:
+      screen_name: "amyklobuchar"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'amy klobuchar'
+    instagram:
+      user_id: '3544549933'
+  elizabeth_warren:
+    youtube:
+      api_key1: "AIzaSyCG64zaEY5gqRL1P4gflmc2rCZhHzCiqNk"
+      api_key2: "AIzaSyCG64zaEY5gqRL1P4gflmc2rCZhHzCiqNk"
+      query: "elizabeth warren"
+    twitter:
+      screen_name: "ewarren"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    reddit:
+      subreddit_name: 'ElizabethWarren'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'elizabeth warren'
+    instagram:
+      user_id: '175831102'
+  tulsi_gabbard:
+    youtube:
+      api_key1: "AIzaSyCG64zaEY5gqRL1P4gflmc2rCZhHzCiqNk"
+      api_key2: "AIzaSyCG64zaEY5gqRL1P4gflmc2rCZhHzCiqNk"
+      query: "tulsi gabbard"
+    twitter:
+      screen_name: "TulsiGabbard"
+      consumer_key: "g9PsYjuGFrihOoVOB54Qg2Rdn"
+      consumer_secret: "yvamdANBlEo8DDWG2sLjhshf3bhRZGCGduVSaGEe139QCBv2ay"
+      access_token: "1172390136706789376-6h0qvFK6HELxFEopaAhpTF9AGaxvhH"
+      access_token_secret: "SX0LrAxYy0c1ztVmXZWInIrStsU5dzJTgCt1hnmXtjR7Y"
+    reddit:
+      subreddit_name: 'tulsi'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'tulsi gabbard'
+    instagram:
+      user_id: '21289594'
 
 
 prod:
@@ -130,8 +224,40 @@ prod:
       consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
       access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
       access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Donald Trump'
+    instagram:
+      user_id: '347696668'
+  joe_biden:
+    youtube:
+      api_key1: "AIzaSyDcusXIipgv6u21TgQjQu4PN9OOTPB_uqc"
+      api_key2: "AIzaSyDcusXIipgv6u21TgQjQu4PN9OOTPB_uqc"
+      query: "joe biden"
+    twitter:
+      screen_name: "JoeBiden"
+      consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
+      consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+      access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+      access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'Joe Biden'
+    instagram:
+      user_id: '5511100943'
+  pete_buttigieg:
+    youtube:
+      api_key1: "AIzaSyDcusXIipgv6u21TgQjQu4PN9OOTPB_uqc"
+      api_key2: "AIzaSyDcusXIipgv6u21TgQjQu4PN9OOTPB_uqc"
+      query: "pete buttigieg"
+    twitter:
+      screen_name: "PeteButtigieg"
+      consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
+      consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+      access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+      access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
     reddit:
-      subreddit_name: 'The_Donald'
+      subreddit_name: 'Pete_Buttigieg'
       client_id: 'xuKSovdtrPCrOg'
       client_secret: 'bwMxzy_4Ytpdj8P0VzMhuNeXTGE'
       user_agent: 'yanggangtest'
@@ -139,6 +265,68 @@ prod:
       password: 'pdZ4dF4V8Fbxd3L'
     news:
       api_key: 'd09d502864124079b98a360312bfb211'
-      query: 'Donald Trump'
+      query: 'pete buttigieg'
     instagram:
-      user_id: '347696668'
+      user_id: '1909652835'
+  amy_klobuchar:
+    youtube:
+      api_key1: "AIzaSyDcusXIipgv6u21TgQjQu4PN9OOTPB_uqc"
+      api_key2: "AIzaSyAq1KD7Ui4xlNVDNjkBmgGTJ9f4XrYvYqw"
+      query: "amy klobuchar"
+    twitter:
+      screen_name: "amyklobuchar"
+      consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
+      consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+      access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+      access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'amy klobuchar'
+    instagram:
+      user_id: '3544549933'
+  elizabeth_warren:
+    youtube:
+      api_key1: "AIzaSyAq1KD7Ui4xlNVDNjkBmgGTJ9f4XrYvYqw"
+      api_key2: "AIzaSyAq1KD7Ui4xlNVDNjkBmgGTJ9f4XrYvYqw"
+      query: "elizabeth warren"
+    twitter:
+      screen_name: "ewarren"
+      consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
+      consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+      access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+      access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+    reddit:
+      subreddit_name: 'ElizabethWarren'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'elizabeth warren'
+    instagram:
+      user_id: '175831102'
+  tulsi_gabbard:
+    youtube:
+      api_key1: "AIzaSyAq1KD7Ui4xlNVDNjkBmgGTJ9f4XrYvYqw"
+      api_key2: "AIzaSyAq1KD7Ui4xlNVDNjkBmgGTJ9f4XrYvYqw"
+      query: "tulsi gabbard"
+    twitter:
+      screen_name: "TulsiGabbard"
+      consumer_key: "UgNuDDnG4aD0vuakNHHGzRqHI"
+      consumer_secret: "KD0yJfipBTBJ2tp0nLjGof2zDpSp3o7CEbTvXwKHOEUFiZJg2r"
+      access_token: "885251996608978945-4S2COwbMyG7DnC77ROxYvJERXuvJsS1"
+      access_token_secret: "XmcTgSjOEGo3CVRBzRd54WNJx8TcBF8xnsCdy9xbupYyR"
+    reddit:
+      subreddit_name: 'tulsi'
+      client_id: 'UYSG4hyNWC_2vQ'
+      client_secret: 't-p0-35UmnAHKlK9TrbX2BxYV8M'
+      user_agent: 'yang'
+      username: 'yangapp'
+      password: 'bethankfuleveryday'
+    news:
+      api_key: 'd09d502864124079b98a360312bfb211'
+      query: 'tulsi gabbard'
+    instagram:
+      user_id: '21289594'

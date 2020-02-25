@@ -16,7 +16,7 @@ const InstagramScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
   const instagram = useSelector(
-    state => state.app.instagram[state.app.candidate]
+    state => state.app.instagram[state.settings.defaultCandidate]
   );
   const loadingInstagram = useSelector(state => state.loading.instagram);
   // const expoId = useSelector(state => state.settings.expoId);

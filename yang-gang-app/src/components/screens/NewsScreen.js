@@ -12,7 +12,9 @@ import { useDimensionStore } from "utils/DimensionUtils";
 const NewsScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const news = useSelector(state => state.app.news[state.app.candidate]);
+  const news = useSelector(
+    state => state.app.news[state.settings.defaultCandidate]
+  );
   const loadingNews = useSelector(state => state.loading.news);
   const { deviceWidth } = useDimensionStore();
   const renderItem = ({ item }) => {

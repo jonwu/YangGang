@@ -29,7 +29,7 @@ export function openWebBrowser(url, theme) {
 }
 
 export function useCandidateResources() {
-  const candidate = useSelector(state => state.app.candidate);
+  const candidate = useSelector(state => state.settings.defaultCandidate);
 
   switch (candidate) {
     case "andrew_yang":

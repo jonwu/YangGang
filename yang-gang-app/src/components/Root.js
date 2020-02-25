@@ -1,6 +1,10 @@
 import * as React from "react";
-import { AppState } from "react-native";
-import { createAppContainer, createStackNavigator } from "react-navigation";
+import { AppState, View } from "react-native";
+import {
+  createAppContainer,
+  createStackNavigator,
+  createSwitchNavigator
+} from "react-navigation";
 import TabScreen from "components/screens/TabScreen";
 import PhotoScreen from "components/screens/PhotoScreen";
 import DescriptionScreen from "components/screens/DescriptionScreen";
@@ -31,7 +35,19 @@ import DonationModal from "./screens/DonationModal";
 import RatingModal from "./screens/RatingModal";
 import PandaModal from "./screens/PandaModal";
 import UsernameModal from "./screens/UsernameModal";
+import OnboardScreen from "./screens/OnboardScreen";
+import ChatLoading from "./utils/ChatLoading";
+
 console.disableYellowBox = true;
+
+const LoadingScreen = React.memo(({ navigation }) => {
+  const candidate = useSelector(state => state.settings.defaultCandidate);
+  React.useEffect(() => {
+    navigation.navigate(candidate ? "App" : "Onboard");
+  }, [candidate]);
+
+  return <ChatLoading />;
+});
 
 const MainStack = createStackNavigator(
   {
@@ -51,6 +67,7 @@ const ChatroomStack = createStackNavigator(
     headerMode: "none"
   }
 );
+
 const RootStack = createStackNavigator(
   {
     Main: {
@@ -73,6 +90,9 @@ const RootStack = createStackNavigator(
     },
     PostEvent: {
       screen: PostEventsScreen
+    },
+    Onboard: {
+      screen: OnboardScreen
     }
   },
   {
@@ -85,8 +105,8 @@ const Root = React.memo(() => {
   const refreshStats = useRefreshStats();
   const dispatch = useDispatch();
   const fetchEvents = useEventsStore(state => state.fetchEvents);
-  const candidate = useSelector(state => state.app.candidate);
-
+  const candidate = useSelector(state => state.settings.defaultCandidate);
+  console.log("candidate ----", candidate);
   const fetchAll = candidate => {
     Amplitude.logEvent(EVENT_FETCH_ALL);
     fetchEvents();
@@ -117,7 +137,6 @@ const Root = React.memo(() => {
   };
   React.useEffect(() => {
     const handleAppStateChange = nextAppState => {
-      console.log("App State", nextAppState);
       if (nextAppState === "active") {
         refresh();
       }
@@ -141,4 +160,15 @@ const Root = React.memo(() => {
   );
 });
 
-export default Root;
+const SwitchStack = createSwitchNavigator(
+  {
+    Loading: LoadingScreen,
+    Onboard: OnboardScreen,
+    App: Root
+  },
+  {
+    initialRouteName: "Loading"
+  }
+);
+
+export default createAppContainer(SwitchStack);

@@ -79,7 +79,7 @@ const renderIcon = ({ route }) => {
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
-  const candidate = useSelector(state => state.app.candidate);
+  const candidate = useSelector(state => state.settings.defaultCandidate);
   const dispatch = useDispatch();
 
   React.useEffect(() => {

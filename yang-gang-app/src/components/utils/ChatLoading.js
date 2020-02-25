@@ -11,7 +11,7 @@ const placeholderRowWidth = () => {
   return (n - Math.floor(n)) * 40 + 60;
 };
 
-const ChatLoading = () => {
+const ChatLoading = ({ style }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const rows = new Array(21).fill(undefined);
   const rowOpacity = React.useRef(new Animated.Value(0.7));
@@ -36,11 +36,14 @@ const ChatLoading = () => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.bg3(),
-        paddingHorizontal: theme.spacing_2
-      }}
+      style={[
+        {
+          flex: 1,
+          backgroundColor: theme.bg3(),
+          paddingHorizontal: theme.spacing_2
+        },
+        style
+      ]}
     >
       {rows.map((_, i) => {
         return (

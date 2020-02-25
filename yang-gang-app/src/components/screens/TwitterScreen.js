@@ -100,7 +100,9 @@ export const EventList = React.memo(({ navigation, events, onPressEvent }) => {
 const TwitterScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const tweets = useSelector(state => state.app.tweets[state.app.candidate]);
+  const tweets = useSelector(
+    state => state.app.tweets[state.settings.defaultCandidate]
+  );
   const loadingTweets = useSelector(state => state.loading.tweets);
   const events = useEventsStore(state => state.events);
   const fetchEvents = useEventsStore(state => state.fetchEvents);

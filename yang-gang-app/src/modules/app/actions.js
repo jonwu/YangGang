@@ -41,7 +41,7 @@ export function updateAllYoutubes() {
 export function updateReddit() {
   Amplitude.logEvent(EVENT_FETCH_REDDIT);
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "reddit",
@@ -65,7 +65,7 @@ export function updateReddit() {
 export function updateTweets() {
   Amplitude.logEvent(EVENT_FETCH_TWITTER);
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "tweets",
@@ -84,7 +84,7 @@ export function updateTweets() {
 }
 export function updateYoutube() {
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "youtube",
@@ -103,7 +103,7 @@ export function updateYoutube() {
 }
 export function updateYoutubeDay() {
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "youtubeDay",
@@ -122,7 +122,7 @@ export function updateYoutubeDay() {
 }
 export function updateYoutube3Days() {
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "youtube3Days",
@@ -141,7 +141,7 @@ export function updateYoutube3Days() {
 }
 export function updateYoutubeAllTime() {
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "youtubeAllTime",
@@ -161,7 +161,7 @@ export function updateYoutubeAllTime() {
 export function updateInstagram() {
   Amplitude.logEvent(EVENT_FETCH_INSTAGRAM);
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "instagram",
@@ -188,7 +188,7 @@ export function updateInstagram() {
 export function updateNews() {
   Amplitude.logEvent(EVENT_FETCH_NEWS);
   return (dispatch, getState) => {
-    const { candidate } = getState().app;
+    const { defaultCandidate: candidate } = getState().settings;
     return dispatch(
       load(
         "news",

@@ -14,6 +14,7 @@ import bureaucracySrc from "assets/bureaucracy.png";
 import loanSrc from "assets/loan.png";
 import lobbySrc from "assets/lobby.png";
 import wallSrc from "assets/wall.png";
+import ChatLoading from "./ChatLoading";
 
 const generateStyles = theme => ({});
 const empties = {
@@ -87,6 +88,7 @@ const Loading = ({ error, errorKey, errorRefresh, forceLight }) => {
       </View>
     );
   }
+  return <ChatLoading />;
   return (
     <View
       style={{

@@ -23,7 +23,7 @@ const Header = connectActionSheet(
   ({ navigation, showActionSheetWithOptions, setFilter, filter }) => {
     const { theme, gstyles, styles } = useThemeKit(styles);
     const youtube_day = useSelector(
-      state => state.app.youtubeDay[state.app.candidate]
+      state => state.app.youtubeDay[state.settings.defaultCandidate]
     );
 
     const renderItemTiny = ({ item: youtube, showActionSheetWithOptions }) => {
@@ -91,12 +91,14 @@ const Header = connectActionSheet(
 const YoutubeScreen = React.memo(({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const youtube = useSelector(state => state.app.youtube[state.app.candidate]);
+  const youtube = useSelector(
+    state => state.app.youtube[state.settings.defaultCandidate]
+  );
   const youtubeAllTime = useSelector(
-    state => state.app.youtubeAllTime[state.app.candidate]
+    state => state.app.youtubeAllTime[state.settings.defaultCandidate]
   );
   const youtube3Days = useSelector(
-    state => state.app.youtube3Days[state.app.candidate]
+    state => state.app.youtube3Days[state.settings.defaultCandidate]
   );
   const { deviceWidth } = useDimensionStore();
   const loadingFetchYoutube = useSelector(state => state.loading.fetchYoutube);

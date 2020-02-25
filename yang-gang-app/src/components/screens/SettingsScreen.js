@@ -27,6 +27,7 @@ import {
 import * as Amplitude from "expo-analytics-amplitude";
 import { useCandidateResources } from "utils/Utils";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
+import { data } from "./OnboardScreen";
 
 const generateStyles = theme => ({});
 
@@ -75,18 +76,11 @@ const SettingsScreen = React.memo(
       <ScrollView>
         <SettingsRow
           onPress={() => {
-            const cancelButtonIndex = 3;
-            const options = [
-              "Andrew Yang",
-              "Bernie Sanders",
-              "Donald Trump",
-              "Cancel"
-            ];
-            const optionsKeys = [
-              "andrew_yang",
-              "bernie_sanders",
-              "donald_trump"
-            ];
+            // navigation.navigate("Onboard");
+
+            const cancelButtonIndex = data.length;
+            const options = [...data.map(d => d.name), "Cancel"];
+            const optionsKeys = data.map(d => d.key);
             showActionSheetWithOptions(
               { options, cancelButtonIndex },
               buttonIndex => {

@@ -44,10 +44,20 @@ function onboards(state = { donation: false, source: false }, actions) {
       return state;
   }
 }
+
+function defaultCandidate(state = null, action) {
+  switch (action.type) {
+    case ActionTypes.UPDATE_CANDIDATE:
+      return action.candidate;
+    default:
+      return state;
+  }
+}
 export default combineReducers({
   theme,
   expoId,
   user,
   openCount,
-  onboards
+  onboards,
+  defaultCandidate
 });

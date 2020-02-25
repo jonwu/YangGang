@@ -39,7 +39,9 @@ export const NewsList = React.memo(({ navigation, news }) => {
 const RedditScreen = React.memo(({ navigation }) => {
   const { styles } = useThemeKit(styles);
   const dispatch = useDispatch();
-  const reddit = useSelector(state => state.app.reddit[state.app.candidate]);
+  const reddit = useSelector(
+    state => state.app.reddit[state.settings.defaultCandidate]
+  );
   const loadingReddit = useSelector(state => state.loading.reddit);
   const renderItem = ({ item: reddit }) => {
     return <RedditItem item={reddit} navigation={navigation} />;

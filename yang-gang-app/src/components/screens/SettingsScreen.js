@@ -95,13 +95,13 @@ const SettingsScreen = React.memo(
           }}
           Icon={
             <Image
-              source={resource.avatar}
+              source={{ uri: resource.instagram_avatar }}
               style={{ width: 24, height: 24, borderRadius: 12 }}
             />
           }
           label={"Swap Candidates"}
         />
-        <SettingsRow
+        {/* <SettingsRow
           onPress={() => {
             Amplitude.logEvent(EVENT_OPEN_STATS);
             navigation.navigate("Progress");
@@ -114,7 +114,7 @@ const SettingsScreen = React.memo(
             />
           }
           label={"Stats"}
-        />
+        /> */}
         <SettingsRow
           onPress={() => dispatch(updateTheme(nextThemeId))}
           Icon={

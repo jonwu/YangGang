@@ -31,13 +31,19 @@ import {
   Feather
 } from "@expo/vector-icons";
 import pngLogoYang from "assets/logo-yang.png";
-import { updateTheme, updateShowMoneyModal } from "modules/app/actions";
+import {
+  updateTheme,
+  updateShowMoneyModal,
+  updateCandidate
+} from "modules/app/actions";
 import { useSelector, useDispatch } from "react-redux";
 import * as Haptics from "expo-haptics";
 import Header from "./Header";
 import { useCandidateResources } from "utils/Utils";
 import { Notifications } from "expo";
 import { updateRoom } from "modules/chat/actions";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
+import { data } from "./OnboardScreen";
 
 const generateStyles = theme => ({
   tabbar: {
@@ -76,6 +82,7 @@ const renderIcon = ({ route }) => {
   }
 };
 
+const EXCLUDE_REDDIT = ["donald_trump", "joe_biden", "amy_klobuchar"];
 const TabScreen = ({ navigation }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const [index, setIndex] = React.useState(0);
@@ -106,7 +113,7 @@ const TabScreen = ({ navigation }) => {
           dispatch(updateRoom(room)).then(() => {
             navigation.navigate("Chat", { roomId: room.id });
             setTimeout(
-              () => setIndex(candidate === "donald_trump" ? 4 : 5),
+              () => setIndex(EXCLUDE_REDDIT.includes(candidate) ? 4 : 5),
               3000
             );
           });
@@ -146,7 +153,7 @@ const TabScreen = ({ navigation }) => {
     }
   ];
 
-  if (candidate === "donald_trump") {
+  if (EXCLUDE_REDDIT.includes(candidate)) {
     routes = routes.filter(route => route.key !== "reddit");
   }
 
@@ -206,83 +213,163 @@ const TabScreen = ({ navigation }) => {
   );
 };
 
-const MoreIcon = React.memo(({ navigation }) => {
-  const { theme, gstyles, styles } = useThemeKit(generateStyles);
-  const dispatch = useDispatch();
-  const candidateResource = useCandidateResources();
-  const avatarTranslateY = React.useRef(new Animated.Value(-56));
+const MoreIcon = connectActionSheet(
+  React.memo(({ navigation, showActionSheetWithOptions }) => {
+    const { theme, gstyles, styles } = useThemeKit(generateStyles);
+    const dispatch = useDispatch();
+    const candidateResource = useCandidateResources();
+    const avatarTranslateY = React.useRef(new Animated.Value(-56));
 
-  React.useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(avatarTranslateY.current, {
-          delay: 2000,
-          duration: 100,
-          toValue: 0,
-          useNativeDriver: true
-        }),
-        Animated.timing(avatarTranslateY.current, {
-          delay: 4000,
-          duration: 100,
-          toValue: -56,
-          useNativeDriver: true
-        }),
-        Animated.delay(60000)
-      ]),
-      { useNativeDriver: true }
-    ).start();
-  }, [candidateResource]);
+    React.useEffect(() => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(avatarTranslateY.current, {
+            delay: 2000,
+            duration: 100,
+            toValue: 0,
+            useNativeDriver: true
+          }),
+          Animated.timing(avatarTranslateY.current, {
+            delay: 4000,
+            duration: 100,
+            toValue: -56,
+            useNativeDriver: true
+          }),
+          Animated.delay(60000)
+        ]),
+        { useNativeDriver: true }
+      ).start();
+    }, [candidateResource]);
 
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        Haptics.selectionAsync();
-        navigation.navigate("Room");
-        // dispatch(updateShowMoneyModal(true));
-      }}
-      style={{
-        position: "absolute",
-        bottom: theme.spacing_2,
-        right: theme.spacing_2
-      }}
-    >
-      <SafeAreaView>
-        <View
-          style={{
-            height: 56,
-            width: 56,
-            borderRadius: 56,
-            backgroundColor: theme.fab,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.8,
-            shadowRadius: 2,
-            elevation: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden"
-          }}
-        >
-          <Ionicons name="ios-chatbubbles" color={theme.light()} size={36} />
-          <Animated.View
-            source={candidateResource.avatar}
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Haptics.selectionAsync();
+          const cancelButtonIndex = data.length;
+          const options = [...data.map(d => d.name), "Cancel"];
+          const optionsKeys = data.map(d => d.key);
+          showActionSheetWithOptions(
+            { options, cancelButtonIndex },
+            buttonIndex => {
+              if (buttonIndex !== cancelButtonIndex) {
+                dispatch(updateCandidate(optionsKeys[buttonIndex]));
+              }
+            }
+          );
+        }}
+        style={{
+          position: "absolute",
+          bottom: theme.spacing_2,
+          right: theme.spacing_2
+        }}
+      >
+        <SafeAreaView>
+          <View
             style={{
-              position: "absolute",
-              backgroundColor: theme.blue(),
-              width: "100%",
-              height: "100%",
+              height: 56,
+              width: 56,
+              borderRadius: 56,
+              backgroundColor: theme.fab,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.8,
+              shadowRadius: 2,
+              elevation: 1,
               alignItems: "center",
               justifyContent: "center",
-              transform: [{ translateY: avatarTranslateY.current }]
+              overflow: "hidden"
             }}
           >
-            <Image source={partyIcon} style={{ height: 30, width: 30 }}></Image>
-          </Animated.View>
-        </View>
-      </SafeAreaView>
-    </TouchableOpacity>
-  );
-});
+            <Ionicons name="ios-star" color={theme.light()} size={26} />
+
+            {/* <Image
+              source={{ uri: candidateResource.instagram_avatar }}
+              style={{ height: "100%", width: "100%" }}
+            ></Image> */}
+          </View>
+        </SafeAreaView>
+      </TouchableOpacity>
+    );
+  })
+);
+
+// const MoreIcon = React.memo(({ navigation }) => {
+//   const { theme, gstyles, styles } = useThemeKit(generateStyles);
+//   const dispatch = useDispatch();
+//   const candidateResource = useCandidateResources();
+//   const avatarTranslateY = React.useRef(new Animated.Value(-56));
+
+//   React.useEffect(() => {
+//     Animated.loop(
+//       Animated.sequence([
+//         Animated.timing(avatarTranslateY.current, {
+//           delay: 2000,
+//           duration: 100,
+//           toValue: 0,
+//           useNativeDriver: true
+//         }),
+//         Animated.timing(avatarTranslateY.current, {
+//           delay: 4000,
+//           duration: 100,
+//           toValue: -56,
+//           useNativeDriver: true
+//         }),
+//         Animated.delay(60000)
+//       ]),
+//       { useNativeDriver: true }
+//     ).start();
+//   }, [candidateResource]);
+
+//   return (
+//     <TouchableOpacity
+//       onPress={() => {
+//         Haptics.selectionAsync();
+//         navigation.navigate("Room");
+//         // dispatch(updateShowMoneyModal(true));
+//       }}
+//       style={{
+//         position: "absolute",
+//         bottom: theme.spacing_2,
+//         right: theme.spacing_2
+//       }}
+//     >
+//       <SafeAreaView>
+//         <View
+//           style={{
+//             height: 56,
+//             width: 56,
+//             borderRadius: 56,
+//             backgroundColor: theme.fab,
+//             shadowColor: "#000",
+//             shadowOffset: { width: 0, height: 1 },
+//             shadowOpacity: 0.8,
+//             shadowRadius: 2,
+//             elevation: 1,
+//             alignItems: "center",
+//             justifyContent: "center",
+//             overflow: "hidden"
+//           }}
+//         >
+//           <Ionicons name="ios-chatbubbles" color={theme.light()} size={36} />
+//           <Animated.View
+//             source={{ uri: candidateResource.instagram_avatar }}
+//             style={{
+//               position: "absolute",
+//               backgroundColor: theme.blue(),
+//               width: "100%",
+//               height: "100%",
+//               alignItems: "center",
+//               justifyContent: "center",
+//               transform: [{ translateY: avatarTranslateY.current }]
+//             }}
+//           >
+//             <Image source={partyIcon} style={{ height: 30, width: 30 }}></Image>
+//           </Animated.View>
+//         </View>
+//       </SafeAreaView>
+//     </TouchableOpacity>
+//   );
+// });
 const YangLogo = () => {
   const { styles } = useThemeKit(generateStyles);
   return <Image source={pngLogoYang} style={styles.logo} />;

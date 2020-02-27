@@ -215,7 +215,7 @@ const MoreModal = connectActionSheet(
                     label={"SWAP"}
                     icon={
                       <Image
-                        source={resource.avatar}
+                        source={{ uri: resource.instagram_avatar }}
                         style={{ width: 48, height: 48, borderRadius: 24 }}
                       />
                     }

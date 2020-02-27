@@ -17,6 +17,7 @@ import buttigiegImg from "assets/buttigieg.jpg";
 import bidenImg from "assets/biden.jpg";
 import gabbardImg from "assets/gabbard.jpg";
 import trumpImg from "assets/trump.jpg";
+import amyImg from "assets/amy.jpg";
 import white_house from "assets/white_house.png";
 
 import lodash from "lodash";
@@ -127,6 +128,11 @@ export const data = [
     key: "tulsi_gabbard"
   },
   {
+    name: "Amy Klobuchar",
+    image: amyImg,
+    key: "amy_klobuchar"
+  },
+  {
     name: "Donald Trump",
     image: trumpImg,
     key: "donald_trump"
@@ -183,7 +189,10 @@ const OnboardScreen = ({ navigation }) => {
         data={chunks}
         ListHeaderComponent={renderHeader}
         ItemSeparatorComponent={renderSeparator}
-        contentContainerStyle={{ paddingHorizontal: theme.spacing_2 }}
+        contentContainerStyle={{
+          paddingHorizontal: theme.spacing_2,
+          paddingBottom: theme.spacing_1 * 2
+        }}
         renderItem={({ item }) => (
           <DuoCandidate item={item} navigation={navigation} />
         )}

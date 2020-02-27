@@ -116,6 +116,7 @@ export default function App() {
       require("assets/gabbard.jpg"),
       require("assets/trump.jpg"),
       require("assets/russia.png"),
+      require("assets/amy.jpg"),
       require("assets/bureaucracy.png"),
       require("assets/loan.png"),
       require("assets/lobby.png"),
@@ -131,7 +132,8 @@ export default function App() {
       require("assets/stickers/math.png"),
       require("assets/stickers/ubi.png"),
       require("assets/stickers/lit.png"),
-      require("assets/stickers/andrew.png")
+      require("assets/stickers/andrew.png"),
+      require("assets/white_house.png")
     ]);
 
     const expoIcons = cacheFonts([

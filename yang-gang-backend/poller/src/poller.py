@@ -258,7 +258,7 @@ scheduler.add_job(fetch_reddit_aggregate, 'interval', minutes=13, id='fetch_redd
 scheduler.add_job(fetch_instagram_aggregate, 'interval', minutes=10, id='fetch_instagram')
 scheduler.add_job(fetch_twitter_aggregate, 'interval', minutes=7, id='fetch_twitter')
 scheduler.add_job(fetch_news_aggregate, 'interval', minutes=30, id='fetch_news')
-scheduler.add_job(fetch_youtube_aggregate, 'interval', minutes=60, id='fetch_youtube')
+scheduler.add_job(fetch_youtube_aggregate, 'interval', minutes=90, id='fetch_youtube')
 
 # stats
 fill_stats_instagram()

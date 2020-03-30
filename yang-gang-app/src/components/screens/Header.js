@@ -54,7 +54,8 @@ const Navigator = ({
   title,
   close,
   btnColor,
-  children
+  children,
+  style
 }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const Left = (
@@ -123,7 +124,8 @@ const Navigator = ({
           shadowRadius: 2,
           elevation: 1,
           backgroundColor: bgColor || theme.bgHeader()
-        }
+        },
+        style
       ]}
     >
       {Header}

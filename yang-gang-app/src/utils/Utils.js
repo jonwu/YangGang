@@ -98,6 +98,22 @@ export function useCandidateResources() {
         twitter_name: "Amy Klobuchar",
         avatar: icTrump
       };
+    case "michael_bloomberg":
+      return {
+        instagram_avatar:
+          "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/82337838_608363853283387_4829352031820972032_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=BdCVi9AQq2YAX_f_qCv&oh=59c5c58d96ab34638c5d462371c95cf2&oe=5E8DD85C",
+        instagram_name: "mikebloomberg",
+        twitter_name: "Mike Bloomber",
+        avatar: icTrump
+      };
+    case "barack_obama":
+      return {
+        instagram_avatar:
+          "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s150x150/16123627_1826526524262048_8535256149333639168_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=SNBjZ24HCBUAX-QPNe_&oh=6cf7b6f8669c1fac0486357c3a43f100&oe=5E8F77A8",
+        instagram_name: "barackobama",
+        twitter_name: "Barack Obama",
+        avatar: icTrump
+      };
     default:
       return {};
   }

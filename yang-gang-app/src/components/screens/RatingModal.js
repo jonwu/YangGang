@@ -49,7 +49,7 @@ const RatingModal = () => {
           <View style={{ alignItems: "center", justifyContent: "center" }}>
             <Image source={boba} style={{ height: 200, width: 200 }} />
             <Text style={[gstyles.p1, gstyles.top_2, { color: theme.dark() }]}>
-              Enjoying Andrew Yang?
+              OwO
             </Text>
           </View>
           <TouchableOpacity

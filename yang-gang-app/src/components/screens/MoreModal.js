@@ -129,7 +129,7 @@ const MoreModal = connectActionSheet(
                       onDismissAction.current = () => {
                         MailComposer.composeAsync({
                           recipients: ["theyangapp@gmail.com"],
-                          subject: "My thoughts on Yang: Humanity First app..."
+                          subject: "My thoughts on Politics app..."
                         }).catch(() => {
                           Alert.alert(
                             "Mail Error",

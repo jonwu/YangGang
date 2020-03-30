@@ -1,20 +1,20 @@
 {
   "expo": {
-    "name": "Andrew Yang",
+    "name": "Politics",
     "slug": "yang",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
-    "version": "1.1.9",
-    "icon": "./src/assets/logo-4.png",
+    "version": "1.2.0",
+    "icon": "./src/assets/1024-logo.png",
     "facebookScheme": "fb392773824728181",
     "facebookAppId": "392773824728181",
     "facebookDisplayName": "Yang: Humanity First App",
     "splash": {
-      "image": "./src/assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#E7E7E7"
+      "image": "./src/assets/1024-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -26,14 +26,14 @@
       "appStoreUrl": "https://itunes.apple.com/us/app/yang-humanity-first/id1477732890"
     },
     "android": {
-      "versionCode": 13,
+      "versionCode": 14,
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.jonwu.yang",
       "package": "com.jonwu.yang",
       "permissions": [],
-      "icon": "./src/assets/logo-4.png",
+      "icon": "./src/assets/1024-logo.png",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/foreground-logo.png",
-        "backgroundColor": "#133467"
+        "foregroundImage": "./src/assets/1024-logo.png",
+        "backgroundColor": "#000000"
       }
     },
     "androidStatusBar": {
@@ -41,8 +41,8 @@
       "backgroundColor": "#000000"
     },
     "notification": {
-      "icon": "./src/assets/greyscale.png",
-      "color": "#DA3248"
+      "icon": "./src/assets/greyscale-logo.png",
+      "color": "#FFFFFF"
     }
   }
 }

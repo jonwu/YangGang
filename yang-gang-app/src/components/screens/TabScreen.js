@@ -20,6 +20,7 @@ import InstagramScreen from "./InstagramScreen";
 import MoneyDropModal from "./MoneyDropModal";
 import instagramIcon from "assets/instagram.png";
 import partyIcon from "assets/party.png";
+import logo from "assets/transparent-logo.png";
 
 import { TabView, TabBar } from "react-native-tab-view";
 import {
@@ -244,18 +245,19 @@ const MoreIcon = connectActionSheet(
     return (
       <TouchableOpacity
         onPress={() => {
-          Haptics.selectionAsync();
-          const cancelButtonIndex = data.length;
-          const options = [...data.map(d => d.name), "Cancel"];
-          const optionsKeys = data.map(d => d.key);
-          showActionSheetWithOptions(
-            { options, cancelButtonIndex },
-            buttonIndex => {
-              if (buttonIndex !== cancelButtonIndex) {
-                dispatch(updateCandidate(optionsKeys[buttonIndex]));
-              }
-            }
-          );
+          navigation.navigate("Onboard");
+          // Haptics.selectionAsync();
+          // const cancelButtonIndex = data.length;
+          // const options = [...data.map(d => d.name), "Cancel"];
+          // const optionsKeys = data.map(d => d.key);
+          // showActionSheetWithOptions(
+          //   { options, cancelButtonIndex },
+          //   buttonIndex => {
+          //     if (buttonIndex !== cancelButtonIndex) {
+          //       dispatch(updateCandidate(optionsKeys[buttonIndex]));
+          //     }
+          //   }
+          // );
         }}
         style={{
           position: "absolute",
@@ -269,7 +271,8 @@ const MoreIcon = connectActionSheet(
               height: 56,
               width: 56,
               borderRadius: 56,
-              backgroundColor: theme.fab,
+              backgroundColor:
+                theme.id === 0 ? theme.text(0.8) : theme.text(0.1),
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.8,
@@ -280,12 +283,12 @@ const MoreIcon = connectActionSheet(
               overflow: "hidden"
             }}
           >
-            <Ionicons name="ios-star" color={theme.light()} size={26} />
+            {/* <Ionicons name="ios-star" color={theme.light()} size={26} /> */}
 
-            {/* <Image
-              source={{ uri: candidateResource.instagram_avatar }}
-              style={{ height: "100%", width: "100%" }}
-            ></Image> */}
+            <Image
+              source={logo}
+              style={{ height: 24, width: 24, tintColor: theme.light() }}
+            ></Image>
           </View>
         </SafeAreaView>
       </TouchableOpacity>

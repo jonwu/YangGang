@@ -37,6 +37,7 @@ import PandaModal from "./screens/PandaModal";
 import UsernameModal from "./screens/UsernameModal";
 import OnboardScreen from "./screens/OnboardScreen";
 import ChatLoading from "./utils/ChatLoading";
+import OnboardMainScreen from "./screens/OnboardMainScreen";
 
 console.disableYellowBox = true;
 
@@ -92,7 +93,7 @@ const RootStack = createStackNavigator(
       screen: PostEventsScreen
     },
     Onboard: {
-      screen: OnboardScreen
+      screen: OnboardMainScreen
     }
   },
   {

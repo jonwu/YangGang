@@ -13,7 +13,6 @@ import {
 } from "expo-av/build/Audio";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import silence from "assets/silence.mp3";
-import splash from "assets/splash.png";
 import { AppLoading } from "expo";
 import * as Amplitude from "expo-analytics-amplitude";
 import Constants from "expo-constants";
@@ -34,14 +33,15 @@ const onBeforeLift = () => {};
 const Splash = ({}) => {
   return (
     <View
-      style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
-    >
-      <Image
-        source={splash}
-        resizeMode={"cover"}
-        style={{ height: "100%", width: "100%" }}
-      />
-    </View>
+      style={{
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: "black"
+      }}
+    ></View>
   );
 };
 
@@ -117,6 +117,8 @@ export default function App() {
       require("assets/trump.jpg"),
       require("assets/russia.png"),
       require("assets/amy.jpg"),
+      require("assets/bloomberg.jpg"),
+      require("assets/obama.jpg"),
       require("assets/bureaucracy.png"),
       require("assets/loan.png"),
       require("assets/lobby.png"),
@@ -133,7 +135,18 @@ export default function App() {
       require("assets/stickers/ubi.png"),
       require("assets/stickers/lit.png"),
       require("assets/stickers/andrew.png"),
-      require("assets/white_house.png")
+      require("assets/white_house.png"),
+      require("assets/transparent-logo.png"),
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/83746795_178533293367951_5905284615559446528_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=pp1hqOAXAqgAX_0qMah&oh=95b0d5e3acccfd32d5b4be3b4ca0c528&oe=5E894AEC",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/51662345_553471575157171_318595189344043008_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=V4AoGK6p8GQAX9KCUIf&oh=015bb1e14e2019707cb76625d1e5c324&oe=5E85D7C3",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/23823676_515039535523575_7479748231031685120_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=18-BdVJD-JcAX9wdlPa&oh=d6cb946e16dd25ce52387b050dd3accb&oe=5E8015F5",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/80842301_496254071023747_5420149689901121536_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=mum9XSfE1Z0AX9rBHT9&oh=efacb00a5c0d0efc55450630d3dec7d5&oe=5E833234",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/81478153_779322202547330_1405455484143534080_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=i5RX6tIMFoEAX8psJNT&oh=9f06ec4a5be9d0d1d2a5b260ae8ce77d&oe=5E81A4BE",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/81941969_493924511236410_2499232037794217984_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=wDNTX1GPF58AX9dtZKM&oh=1962d3aaa0dd8f92611afa76c59678f4&oe=5E878854",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/87542407_190013032223132_6612337159917535232_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=R7dtXNUGEFUAX89DkEN&oh=929c6bdcd3db0540e9a4d7f08134ab56&oe=5E86E4F1",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/43913743_1939021533069790_3412901903846080512_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=nnbfTPVvBD8AX-zWeLu&oh=cb7aeb337374193d3f1ae5386a5ad6d9&oe=5E89F88A",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s320x320/82337838_608363853283387_4829352031820972032_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=BdCVi9AQq2YAX_f_qCv&oh=59c5c58d96ab34638c5d462371c95cf2&oe=5E8DD85C",
+      "https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-19/s150x150/16123627_1826526524262048_8535256149333639168_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_ohc=SNBjZ24HCBUAX-QPNe_&oh=6cf7b6f8669c1fac0486357c3a43f100&oe=5E8F77A8"
     ]);
 
     const expoIcons = cacheFonts([

@@ -18,6 +18,8 @@ import bidenImg from "assets/biden.jpg";
 import gabbardImg from "assets/gabbard.jpg";
 import trumpImg from "assets/trump.jpg";
 import amyImg from "assets/amy.jpg";
+import obamaImg from "assets/obama.jpg";
+import bloombergImg from "assets/bloomberg.jpg";
 import white_house from "assets/white_house.png";
 
 import lodash from "lodash";
@@ -39,7 +41,7 @@ const Candidate = ({ candidate, navigation }) => {
     <TouchableOpacity
       onPress={() => {
         dispatch(updateCandidate(key));
-        navigation.navigate("App");
+        navigation.pop ? navigation.pop() : navigation.navigate("App");
       }}
     >
       <View
@@ -98,24 +100,14 @@ const DuoCandidate = ({ item, navigation }) => {
 
 export const data = [
   {
-    name: "Andrew Yang",
-    image: yangImg,
-    key: "andrew_yang"
-  },
-  {
     name: "Bernie Sanders",
     image: sandersImg,
     key: "bernie_sanders"
   },
   {
-    name: "Elizabeth Warren",
-    image: warrenImg,
-    key: "elizabeth_warren"
-  },
-  {
-    name: "Pete Buttigieg",
-    image: buttigiegImg,
-    key: "pete_buttigieg"
+    name: "Donald Trump",
+    image: trumpImg,
+    key: "donald_trump"
   },
   {
     name: "Joe Biden",
@@ -123,9 +115,14 @@ export const data = [
     key: "joe_biden"
   },
   {
-    name: "Tulsi Gabbard",
-    image: gabbardImg,
-    key: "tulsi_gabbard"
+    name: "Andrew Yang",
+    image: yangImg,
+    key: "andrew_yang"
+  },
+  {
+    name: "Elizabeth Warren",
+    image: warrenImg,
+    key: "elizabeth_warren"
   },
   {
     name: "Amy Klobuchar",
@@ -133,9 +130,24 @@ export const data = [
     key: "amy_klobuchar"
   },
   {
-    name: "Donald Trump",
-    image: trumpImg,
-    key: "donald_trump"
+    name: "Pete Buttigieg",
+    image: buttigiegImg,
+    key: "pete_buttigieg"
+  },
+  {
+    name: "Tulsi Gabbard",
+    image: gabbardImg,
+    key: "tulsi_gabbard"
+  },
+  {
+    name: "Michael Bloomberg",
+    image: bloombergImg,
+    key: "michael_bloomberg"
+  },
+  {
+    name: "Barack Obama",
+    image: obamaImg,
+    key: "barack_obama"
   }
 ];
 
@@ -152,7 +164,7 @@ const renderHeader = () => {
     >
       <View
         style={{
-          height: 160,
+          height: 140,
           overflow: "hidden",
           alignItems: "center",
           justifyContent: "center"
@@ -178,12 +190,12 @@ const renderHeader = () => {
 const renderSeparator = () => {
   return <View style={{ height: 16 }} />;
 };
-const OnboardScreen = ({ navigation }) => {
+const OnboardScreen = ({ navigation, nosafe }) => {
   const { theme, gstyles, styles } = useThemeKit(generateStyles);
   const chunks = lodash.chunk(data, 2);
   return (
-    <View style={{ flex: 1, backgroundColor: theme.dark() }}>
-      <SafeAreaView />
+    <View style={{ flex: 1, backgroundColor: theme.black() }}>
+      {!nosafe && <SafeAreaView />}
       <StatusBar barStyle="light-content" />
       <FlatList
         data={chunks}
@@ -191,7 +203,8 @@ const OnboardScreen = ({ navigation }) => {
         ItemSeparatorComponent={renderSeparator}
         contentContainerStyle={{
           paddingHorizontal: theme.spacing_2,
-          paddingBottom: theme.spacing_1 * 2
+          paddingBottom: theme.spacing_1 * 2,
+          paddingTop: nosafe ? 0 : theme.spacing_1
         }}
         renderItem={({ item }) => (
           <DuoCandidate item={item} navigation={navigation} />

@@ -76,22 +76,22 @@ const SettingsScreen = React.memo(
       <ScrollView>
         <SettingsRow
           onPress={() => {
-            // navigation.navigate("Onboard");
+            navigation.navigate("Onboard");
 
-            const cancelButtonIndex = data.length;
-            const options = [...data.map(d => d.name), "Cancel"];
-            const optionsKeys = data.map(d => d.key);
-            showActionSheetWithOptions(
-              { options, cancelButtonIndex },
-              buttonIndex => {
-                if (buttonIndex !== cancelButtonIndex) {
-                  Amplitude.logEventWithProperties(EVENT_SWAP, {
-                    candidate: optionsKeys[buttonIndex]
-                  });
-                  dispatch(updateCandidate(optionsKeys[buttonIndex]));
-                }
-              }
-            );
+            // const cancelButtonIndex = data.length;
+            // const options = [...data.map(d => d.name), "Cancel"];
+            // const optionsKeys = data.map(d => d.key);
+            // showActionSheetWithOptions(
+            //   { options, cancelButtonIndex },
+            //   buttonIndex => {
+            //     if (buttonIndex !== cancelButtonIndex) {
+            //       Amplitude.logEventWithProperties(EVENT_SWAP, {
+            //         candidate: optionsKeys[buttonIndex]
+            //       });
+            //       dispatch(updateCandidate(optionsKeys[buttonIndex]));
+            //     }
+            //   }
+            // );
           }}
           Icon={
             <Image
@@ -132,7 +132,7 @@ const SettingsScreen = React.memo(
           onPress={() =>
             MailComposer.composeAsync({
               recipients: ["theyangapp@gmail.com"],
-              subject: "My thoughts on Yang: Humanity First app..."
+              subject: "My thoughts on Politics app..."
             }).catch(() => {
               Alert.alert(
                 "Mail Error",
@@ -158,11 +158,11 @@ const SettingsScreen = React.memo(
           label={"Send feedback"}
         />
 
-        {/* <SettingsRow
-        onPress={StoreReview.requestReview}
-        Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
-        label={"Rate the app!"}
-      /> */}
+        <SettingsRow
+          onPress={StoreReview.requestReview}
+          Icon={<FontAwesome name="star" size={24} color={theme.text()} />}
+          label={"Rate the app!"}
+        />
         {((Constants.manifest.releaseChannel &&
           Constants.manifest.releaseChannel.indexOf("staging") !== -1) ||
           Constants.installationId === "A4468395-DEFB-4137-B819-EDAC5E036BC7" ||
